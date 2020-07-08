@@ -8,158 +8,216 @@ ocp.birth = {
 
     // Private: Data for all birthsigns
     _data: {
-        "The Mage": {
-            attributes: { mag:50 },
-            specials: []
-        },
-
-        "The Apprentice": {
+        'The Apprentice': {
             attributes: { mag:100 },
-            specials: [ "Weakness to Magicka 100%" ]
+            specials: [ 'Weakness to Magic 100%' ],
+            image: 'apprentice.gif',
+            description: 'The Apprentice ability confers a 100-point bonus to your Magicka ' +
+                'attribute, but gives you a 100% Weakness to Magic.'
         },
 
-        "The Warrior": {
-            attributes: { str:10, end:10 },
-            specials: []
-        },
-
-        "The Thief": {
-            attributes: { agi:10, spe:10, luc:10 },
-            specials: []
-        },
-
-        "The Shadow": {
-            attributes: {},
-            specials: [ "Inivisibility (duration 60) once a day" ]
-        },
-
-        "The Lover": {
-            attributes: {},
-            specials: [ "Paralyze (touch, duration 10) and lose 120 points of Fatigue once a day" ]
-        },
-
-        "The Ritual": {
-            attributes: {},
-            specials: [
-                "Restore Health (magnitude 200, instant) once a day",
-                "Turn Undead (magnitude 100, duration 30)"
-            ]
-        },
-
-        "The Tower": {
-            attributes: {},
-            specials: [
-                "Open Average lock once a day",
-                "Reflect Damage (magnitude 5, duration 120)"
-            ]
-        },
-
-        "The Serpent": {
-            attributes: {},
-            specials: [
-                "Four effects, all at once, once a day -- " +
-                    "Damage Health (touch, magnitude 3, duration 20), " +
-                    "Dispel (magnitude 90), " +
-                    "Cure Poison, " +
-                    "Damage Fatigue (self, magnitude 100)"
-            ]
-        },
-
-        "The Atronach": {
+        'The Atronach': {
             attributes: { mag:150 },
             specials: [
-                "Spell Absorption 50%",
-                "No Magicka regeneration"
-            ]
+                'Spell Absorption 50%',
+                'No Magicka regeneration'
+            ],
+            image: 'atronach.gif',
+            description: 'With the Atronach ability you don\'t regain Magicka over time. ' +
+                'Instead you have a permanent 50% Spell Absorption to recharge your Magicka. ' +
+                'Your base Magicka is also increased by 150 points.'
         },
 
-        "The Lady": {
+        'The Lady': {
             attributes: { wil:10, end:10 },
-            specials: []
+            specials: [],
+            image: 'lady.gif',
+            description: 'The Lady\'s Blessing confers bonuses of 10 points to your ' +
+                'Willpower and Endurance attributes.'
         },
 
-        "The Steed": {
-            attributes: { spe:20 },
-            specials: []
-        },
-
-        "The Lord": {
+        'The Lord': {
             attributes: {},
             specials: [
-                "Restore Health (duration 15, magnitude 6)",
-                "Weakness to Fire 25% all the time"
-            ]
+                'Restore Health (magnitude 6, duration 15, once a day)',
+                'Weakness to Fire 25%'
+            ],
+            image: 'lord.gif',
+            description: 'Being born under the Lord gives you the Blood of the North ' +
+                'lesser power to regenerate up to 90 points of Health. However, you also ' +
+                'gain the Trollkin curse, a permanent 25% Weakness to Fire.'
+        },
+
+        'The Lover': {
+            attributes: {},
+            specials: [ 'Paralyze (touch, duration 10) and lose 120 points of Fatigue once a day' ],
+            image: 'lover.gif',
+            description: 'Use the Lover\'s Kiss power once a day to paralyze an opponent for ' +
+                '10 seconds at the cost of 120 points of Fatigue.'
+        },
+
+        'The Mage': {
+            attributes: { mag:50 },
+            specials: [],
+            image: 'mage.gif',
+            description: 'The Mage ability confers a permanent bonus of 50 points to your Magicka.'
+        },
+
+        'The Ritual': {
+            attributes: {},
+            specials: [
+                'Restore Health (magnitude 200, once a day)',
+                'Turn Undead (target, magnitude 100, duration 30, once a day)'
+            ],
+            image: 'ritual.gif',
+            description: 'Those born under the Ritual use the Mara\'s Gift power once a ' +
+                'day as a powerful Restore Health spell. The Blessed Word can turn the undead.'
+        },
+
+        'The Serpent': {
+            attributes: {},
+            specials: [
+                'Four effects, all at once, once a day -- ' +
+                    'Damage Health (touch, magnitude 3, duration 20), ' +
+                    'Dispel (magnitude 90), ' +
+                    'Cure Poison, ' +
+                    'Damage Fatigue (self, magnitude 100)'
+            ],
+            image: 'serpent.gif',
+            description: 'Gain the Serpent spell to cause a slow but potent poison on touch, ' +
+                'while simultaneously curing yourself and dispelling magic on yourself. ' +
+                'Casting this spell costs 100 points of Fatigue.'
+        },
+
+        'The Shadow': {
+            attributes: {},
+            specials: [ 'Inivisibility (duration 60, once a day)' ],
+            image: 'shadow.gif',
+            description: 'Use the Moonshadow power once a day to become Invisible for 60 seconds.'
+        },
+
+        'The Steed': {
+            attributes: { spe:20 },
+            specials: [],
+            image: 'steed.gif',
+            description: 'The Steed ability grants a bonus of 20 to your Speed attribute.'
+        },
+
+        'The Thief': {
+            attributes: { agi:10, spe:10, luc:10 },
+            specials: [],
+            image: 'thief.gif',
+            description: 'The Thief ability grants a 10-point bonus to your Agility, Speed, ' +
+                'and Luck attributes.'
+        },
+
+        'The Tower': {
+            attributes: {},
+            specials: [
+                'Open Average lock (once a day)',
+                'Reflect Damage (magnitude 5, duration 120, once a day)'
+            ],
+            image: 'tower.gif',
+            description: 'With the Tower Key power, once a day open a door or container of ' +
+                'Average lock level or less. The Tower Warden reflects five points of damage ' +
+                'for 120 seconds once a day.'
+        },
+
+        'The Warrior': {
+            attributes: { str:10, end:10 },
+            specials: [],
+            image: 'warrior.gif',
+            description: 'The Warrior ability grants a bonus of 10 points to your ' +
+                'Strength and Endurance attributes.'
         }
     },
 
 
     // Private: Currently selected birthsign
-    _birth: "<none>",
+    _birth: '-none-',
 
 
-    // Private: Gets an attribute value for a birth or returns 0 if none
+    // Private: Gets an attribute value for a birthsign or returns 0 if none
     _getAttr: function (birth, attr) {
-        return (attr in this._data[birth].attributes
-            ? this._data[birth].attributes[attr]
-            : 0);
+        var attrs = this._data[birth].attributes;
+        return (attr in attrs ? attrs[attr] : 0);
     },
 
 
     // Public: getters for all data of the currently selected race and gender
-    get str () { return this._getAttr(this._birth, "str"); },
-    get int () { return this._getAttr(this._birth, "int"); },
-    get wil () { return this._getAttr(this._birth, "wil"); },
-    get agi () { return this._getAttr(this._birth, "agi"); },
-    get spe () { return this._getAttr(this._birth, "spe"); },
-    get end () { return this._getAttr(this._birth, "end"); },
-    get per () { return this._getAttr(this._birth, "per"); },
-    get luc () { return this._getAttr(this._birth, "luc"); },
+    get str () { return this._getAttr(this._birth, 'str'); },
+    get int () { return this._getAttr(this._birth, 'int'); },
+    get wil () { return this._getAttr(this._birth, 'wil'); },
+    get agi () { return this._getAttr(this._birth, 'agi'); },
+    get spe () { return this._getAttr(this._birth, 'spe'); },
+    get end () { return this._getAttr(this._birth, 'end'); },
+    get per () { return this._getAttr(this._birth, 'per'); },
+    get luc () { return this._getAttr(this._birth, 'luc'); },
 
-    get hea () { return this._getAttr(this._birth, "hea"); },
-    get mag () { return this._getAttr(this._birth, "mag"); },
-    get fat () { return this._getAttr(this._birth, "fat"); },
+    get hea () { return this._getAttr(this._birth, 'hea'); },
+    get mag () { return this._getAttr(this._birth, 'mag'); },
+    get fat () { return this._getAttr(this._birth, 'fat'); },
+    get enc () { return this._getAttr(this._birth, 'enc'); },
 
     get specials () { return this._data[this._birth].specials; },
 
 
-    // Public: Initialize
-    initialize: function() {
-        // Create any one-time contents
-        this._initializeDropdown();
-
-        // Select an initial birthsign
-        this._select("The Mage");
+    // Public: Returns the max possible value for an attribute
+    attrMax: function (attr) {
+        var max = 0;
+        for each (var birth in this._data) {
+            if ((attr in birth.attributes) && (birth.attributes[attr] > max)) {
+                max = birth.attributes[attr];
+            }
+        }
+        return max;
     },
 
 
-    // Private: Populate the dropdown used to select Birthsign
-    _initializeDropdown: function() {
+    // Public: Initialize
+    initialize: function() {
+        // Hook the race dialog to initialize it the first time it's shown
+        var handle = dojo.connect(dijit.byId('birthDialog'), 'onShow',
+            function (/* event */) {
+                // Using handle from closure, disconnect so we only do this once
+                dojo.disconnect(handle);
+                handle = null;
+                ocp.birth._initializeDialog();
+        });
 
-        // Use a hidden menu for the dropdown
-        var menu = new dijit.Menu({ style: "display: none;"});
+        // Select an initial birthsign
+        this._select('The Apprentice');
+    },
 
-        // Create a menu entry for each birthsign
+
+    // Private: Initialize the birthsign dialog
+    _initializeDialog: function() {
+        console.log('entered ocp.birth._initializeDialog');
+
+        // Build a div for each birthsign
+        // Track the count so we can put two per row (one left, other right)
+        var det = '';
+        var count = 0;
         for (var birth in this._data) {
-            menu.addChild(new dijit.MenuItem({
-                label: birth,
-                onClick: new Function("ocp.birth.select('" + birth + "')")
-            }));
+            det +=
+                '<div class="birthDetails birthDetails' + (++count % 2 > 0 ? 'Left' : 'Right') + '">' +
+                    '<img src="images/birth/' + this._data[birth].image + '" class="birthImage" ' +
+                        'alt="[' + birth + ' Image]" ' +
+                        'title="Select ' + birth + '" ' +
+                        'onClick="ocp.birth.select(\'' + birth + '\')"/>' +
+                    '<div class="birthName">' + birth + '</div>' +
+                    '<div class="birthDescription">' + this._data[birth].description + '</div>' +
+                '</div>';
         }
 
-        // Now create the actual button and insert it into the container
-        var button = new dijit.form.DropDownButton({
-            label: "Birthsign",
-            name: "dropdown", // *** What does this do?
-            dropDown: menu,
-            id: "birthDropdown"
-        });
-        dojo.byId("birthDropdownContainer").appendChild(button.domNode);
-     },
+        // Insert the results
+        dojo.place(det, 'birthContainer', 'last');
+    },
 
 
     // Private: Select birthsign without error checking or notification
     _select: function(birth) {
-        console.log("entered ocp.birth._select:", birth);
+        console.log('entered ocp.birth._select:', birth);
 
         // Set the current birthsign
         this._birth = birth;
@@ -167,9 +225,9 @@ ocp.birth = {
 
 
     // Public: Validate args, select birthsign, and notify of a change
-    //         Should only be called from the selection dropdown
+    //         Should only be called from the selection dialog
     select: function(birth) {
-        console.log("entered ocp.birth.select:", birth);
+        console.log('entered ocp.birth.select:', birth);
 
         // Validate the selection
         if (birth in this._data) {
@@ -178,8 +236,11 @@ ocp.birth = {
 
             // Notify that something has changed
             ocp.notifyChanged();
+
+            // Close the dialog
+            dijit.byId('birthDialog').hide();
         } else {
-            alert("Unknown Birthsign '" + birth + "' selected.");
+            alert('Unknown Birthsign "' + birth + '" selected.');
         }
     },
 
@@ -194,19 +255,18 @@ ocp.birth = {
     _update: function() {
 
         // Update selected label
-        dojo.byId("selectedBirthName").innerHTML = this._birth;
+        dojo.place('<span>' + this._birth + '</span>', 'birthValue', 'only');
 
         // Fill in the selected specials
-        var specNode = dojo.byId("selectedBirthSpecials");
+        var list = '';
         var specs = this.specials;
         if (specs.length == 0) {
-            specNode.innerHTML = '<span class="specialDescItem">No special abilities.</span>';
+            list = '<span class="specialDescItem">No special abilities.</span>';
         } else {
-            var list = '';
             for each (var spec in specs) {
                 list += '<span class="specialDescItem">' + spec + '</span>';
             }
-            specNode.innerHTML = list;
         }
+        dojo.place(list, 'birthSpecials', 'only');
     }
 };

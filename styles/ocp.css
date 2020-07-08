@@ -1,34 +1,121 @@
 @charset "utf-8";
 
-/*
-** ocp.css
-*/
+/*===========================================================================*\
+|* ocp.css
+|*
+|* Oblivion Character Planner styles
+|*
+|* *** This is getting large -- split into smaller files?
+\*===========================================================================*/
 
 
 /* Set the font info for everything */
 html, body {
 /*
-    width: 100%;  height: 100%;
-    padding: 5px;  border: 0;  margin: 0;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    border: 0;
+    margin: 0;
 */
     font-family: Verdana, Helvetica, Times;
     font-size: 12px;
 }
 
 
-/*
-** Styles specific to the main page only
-*/
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the main page only
+\*---------------------------------------------------------------------------*/
 
 /* Set up the main pane for the planner */
 #plannerPane {
-    width: 900px;  height: 650px;
+    width: 900px;
+    height: 680px;
     border: 1px solid #ccc
 }
 
-/* Set the starting height of the input area */
-#plannerInputPane {
-    height: 205px;
+
+/*
+** Planner input pane
+*/
+
+/* Center content to make multi-line cells look decent */
+#plannerInputPane td {
+    vertical-align: middle;
+}
+
+/* The name of something you can select */
+#plannerInputPane .selectedName {
+    font-weight: bold;
+}
+
+/* The value of selected things */
+#plannerInputPane .selectedValue {
+    font-weight: bold;
+    white-space: nowrap;
+    padding-left: 1em;
+}
+
+/* A special description as a list item */
+#plannerInputPane .specialDescItem {
+    display: list-item;
+    margin-left: 3em;
+    font-size: 75%;
+}
+
+/* Give the level value room to grow into a two digit number without shifting the slider */
+#plannerInputPane #levelValue {
+    width: 2em;
+}
+
+/* The slider to select the level of an existing character */
+#plannerInputPane #levelSlider {
+    width: 500px;
+    margin-left: 1em;
+}
+
+/* A list of attribute details */
+/* *** All 100's for the coreAttrs exceeds one line */
+#plannerInputPane .attrList {
+    margin: 0 0 0 1em;
+    padding: 0;
+}
+
+/* Make this a horizontal list */
+#plannerInputPane .attrList li {
+    display: inline;
+    font-size: 75%;
+}
+
+/* Put a comma between entries in this horizontal list */
+#plannerInputPane .attrList li + li:before {
+    content: ', ';
+}
+
+/* Major skills get highlighted */
+#plannerInputPane .attrList .majorSkill {
+    font-weight: bold;
+}
+
+
+/*
+** Planner order pane
+*/
+
+/* Set a starting width so the center input pane can size itself */
+#plannerOrderPane {
+    width: 150px;
+}
+
+
+/*
+** Planner results pane
+*/
+
+/* Set the starting height of the results area,
+** which allows the center input pane to size itself. */
+#plannerResultsPane {
+    height: 438px;
 }
 
 /* Align starting pane's content side-by-side */
@@ -42,26 +129,6 @@ html, body {
     margin-left: 50px;
 }
 
-
-/* Allow for multi-line specials in the input table */
-#inputTable td {
-    vertical-align: top;
-}
-
-/* A special description as a list item */
-.specialDescItem {
-    display: list-item;
-    margin-left: 30px;
-    font-size: 75%;
-}
-
-/* The names of selected things */
-.selectedLabel {
-    font-weight: bold;
-    white-space: nowrap;
-    padding-left: 15px;
-    padding-top: 7px;
-}
 
 /* Add some spacing between cells in the starting stats pane */
 #resultsStartingPane th + th {
@@ -106,8 +173,308 @@ html, body {
 }
 
 
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the race dialog
+\*---------------------------------------------------------------------------*/
+
 /*
-** Generic styles for all content
+** Common race dialog styles
+*/
+
+/* When the race dialog is shown, color the main page to focus attention */
+#raceDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#raceTabContainer {
+    width: 770px;
+    height: 387px;
+    overflow: auto;
+}
+
+
+/*
+** Race overview specific styles
+*/
+
+/* Add some space between the overview of each race */
+#raceOverviewPane .raceOverview + .raceOverview {
+    margin-top: 1em;
+}
+
+/* Align the image and details side-by-side */
+/* Note, the images are natively 220px wide and 300px+ long */
+#raceOverviewPane .raceImage {
+    display: inline-block;
+    width: 110px;
+    vertical-align: top;
+}
+
+/* The details -- set an explicit width to fit side-by-side with the image */
+/* *** Is there any way to let this auto-size without dropping below the image? */
+#raceOverviewPane .raceDetails {
+    display: inline-block;
+    width: 620px;
+    margin-left: 0.5em;
+}
+
+/* The name of the race gets fancy treatment to stand out */
+#raceOverviewPane .raceName {
+    font-size: larger;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* The description isn't that important */
+#raceOverviewPane .raceDescription {
+    font-size: smaller;
+}
+
+/* A header naming a list */
+#raceOverviewPane .raceListHeader {
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+/* The list of special abilities */
+#raceOverviewPane .raceSpecialList {
+    margin-top: 0;
+    padding-left: 1.5em;
+}
+
+/* An item in the special abilities list */
+#raceOverviewPane .raceSpecialItem {
+}
+
+
+/*
+** Race details specific styles
+*/
+
+/* Crunch the td.numeric padding a little inside this dense table */
+#raceDetailsTable td.numeric {
+    padding-right: 0.5em;
+}
+
+/* Evenly size all race column data in the details table */
+/* *** This doesn't work, but the th setting does...
+#raceDetailsTable colgroup.raceData {
+    width: 165px;
+}
+*/
+/* *** Oddly, many columns are a little smaller than this.... */
+#raceDetailsTable th.raceName {
+    width: 65px;
+}
+
+/* Compress the default spacing between the race selection buttons */
+#raceDetailsTable .dijitButton {
+    margin: 0;
+}
+#raceDetailsTable .dijitButtonNode {
+    padding: 0;
+}
+
+/* Since skill rows span two columns, pad them a little more */
+#raceDetailsTable tr.skill td.numeric {
+    padding-right: 2em;
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the birthsign dialog
+\*---------------------------------------------------------------------------*/
+
+/* When the birth dialog is shown, color the main page to focus attention */
+#birthDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#birthContainer {
+    width: 730px;
+    height: 350px;
+    overflow: auto;
+}
+
+/* The intro text needs to stand out */
+#birthIntro {
+    padding-bottom: 0.5em;
+    border-bottom: 2px solid #aaa;
+    margin-right: 1em;
+}
+
+/* Each birthsign is a fixed sized block that can be placed side-by-side */
+#birthContainer .birthDetails {
+    width: 350px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 1.5em;
+}
+
+/* Two blocks per "row", pad them to prevent text from colliding in the middle */
+#birthContainer .birthDetailsLeft {
+    margin-right: 0.5em;
+    text-align: left;
+}
+#birthContainer .birthDetailsRight {
+    margin-left: 0.5em;
+    text-align: right;
+}
+
+/* Make all images look selectable */
+#birthContainer .birthImage {
+    border: 2px solid #8D7758;
+    cursor: pointer;
+}
+
+/* Place and pad images for the side they are on */
+/* Note, the images are natively 130px wide and 134px+ long */
+#birthContainer .birthDetailsLeft .birthImage {
+    float: left;
+    width: 130px;
+    margin-right: 0.5em;
+}
+#birthContainer .birthDetailsRight .birthImage {
+    float: right;
+    width: 130px;
+    margin-left: 0.5em;
+}
+
+/* The name of the birthsign gets fancy treatment to stand out */
+#birthContainer .birthName {
+    font-size: larger;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* The description of each birthsign */
+#birthContainer .birthDescription {
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the existing character's attributes dialog
+\*---------------------------------------------------------------------------*/
+
+/* When the attributes dialog is shown, color the main page to focus attention */
+#attrDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#attrContainer {
+    width: 720px;
+    overflow: auto;
+}
+
+/* Align attribute slider contents side-by-side */
+#attrContainer #coreAttrContainer, #attrContainer #derivedAttrContainer {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Attribute slider divs get a little spacing */
+#attrContainer #derivedAttrContainer {
+    margin-left: 1em;
+}
+
+/* Header for a list of attributes */
+#attrContainer th {
+    font-size: larger;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 1em;
+}
+
+/* The name of something you can select */
+#attrContainer .selectedName {
+    font-weight: bold;
+}
+
+/* The value of selected things */
+/* Specify a width so it doesn't change when going from a 1 to 3 digit number */
+#attrContainer .selectedValue {
+/*    font-weight: bold; */
+    padding-left: 1em;
+    width: 3em;
+}
+
+/* The slider to set an attribute */
+#attrContainer .attrSlider {
+    width: 200px;
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the existing character's skills dialog
+\*---------------------------------------------------------------------------*/
+
+/* When the skills dialog is shown, color the main page to focus attention */
+#skillDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#skillContainer {
+    width: 690px;
+    overflow: auto;
+}
+
+/* Align skill input groups side-by-side */
+#skillContainer .skillSpecContainer {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Skill input groups get a little spacing */
+#skillContainer .skillSpecContainer + .skillSpecContainer {
+    margin-left: 2em;
+}
+
+/* Header for a list of skills */
+#skillContainer th {
+    border-bottom: 2px solid #ccc;
+}
+
+/* The header text for the table headers */
+#skillContainer .specHeader {
+    font-size: larger;
+}
+#skillContainer .majorHeader {
+    font-size: smaller;
+}
+
+/* Put a little padding between each skill */
+#skillContainer tbody td {
+    padding-top: 0.5em;
+}
+
+/* The name of something you can select */
+/* *** delete this? */
+#skillContainer .selectedName {
+/*    font-weight: bold; */
+}
+
+/* The number spinner to set a skill */
+#skillContainer .skillSpinner {
+    margin-left: 0.5em;
+    width: 70px;
+}
+
+/* The major skill designation checkbox's container */
+#skillContainer .majorCheckContainer {
+    text-align: center;
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Generic styles for all content
+\*---------------------------------------------------------------------------*/
+
+/*
+** Dijit stack container and controller styles
 */
 
 /* Add a little space between buttons in every StackController */
@@ -127,6 +494,76 @@ html, body {
 }
 
 
+/*
+** OCP custom titled content pane widget styles
+*/
+
+/* No space between a titled content pane and it's contents */
+.soria .ocpTitledContentPane {
+    padding: 0;
+}
+
+/* The title bar is basically dijitDialogTitleBar without the moveable/button stuff */
+.soria .ocpTitledPaneTitleBar {
+    background: #FAFAFA url(../dojotoolkit/dijit/themes/soria/images/titleBar.png) repeat-x scroll left top;
+    border: 1px solid #cccccc;
+    padding: 5px 6px 3px;
+}
+
+/* The title is basically identical to the dijitDialogTitle style */
+.soria .ocpTitledPaneTitle {
+    font-size: 0.9em;
+    font-weight: bold;
+    padding: 0 4px;
+}
+
+/* Add some space around the contents of the titled pane */
+.soria .ocpTitledContentPaneContent {
+    padding: 5px;
+}
+
+
+/*
+** Common slider styles
+*/
+
+/* All sliders get a little top margin to center them with their rules/labels below */
+.soria .dijitSlider {
+    margin-top: 0.5em;
+}
+
+/* Horizontal slider rule markings */
+.sliderHorRules {
+    height: 0.5em;
+}
+
+/* Horizontal slider labels */
+/* The height of 1.5em includes 1em for the label and the 0.5 for the rules */
+.sliderHorLabels {
+    height: 1.5em;
+    font-size: 75%;
+    color: gray;
+}
+
+
+/*
+** Styles for the buttons at the footer of a dialog
+*/
+
+/* The footer section that contains the buttons */
+.dialogButtonFooter {
+    text-align: center;
+    margin-top: 0.5em;
+    border-top: 2px solid #ccc;
+    padding-top: 0.5em;
+}
+
+
+
+/*
+** Table styles
+*/
+
 /* Do detailed row/column styling on all tables */
 table {
     border-collapse: collapse;
@@ -137,7 +574,7 @@ th {
     vertical-align: bottom;
 }
 
-/* The first column in a table */
+/* The first column group in a table */
 table > colgroup:first-child {
     border-right: 1px solid blue;
 }
@@ -146,20 +583,39 @@ table > colgroup:first-child {
 colgroup.first {
     border-left: 1px dashed blue;
 }
+colgroup.firstMajor {
+    border-left: 1px solid blue;
+}
 
 /* A header in the first column */
 tr > th:first-child {
     text-align: left;
 }
 
-/* The first row in a new section */
-tr.first {
+/* Add a divider to the first row of a subsequent body's rows */
+tbody + tbody > tr:first-child {
     border-top: 1px dashed blue;
 }
 
-/* The last row of a section */
+/* The first and last rows of a section */
+/* Mark borders important to override any from default section rules */
+tr.first {
+    border-top: 1px solid blue !important;
+}
 tr.last {
-    border-bottom: 1px solid blue;
+    border-bottom: 1px solid blue !important;
+}
+
+/* A row with secondary "header" information dividing two sections */
+/* Mark borders important to override any from default section rules */
+tr.divider {
+    font-weight: bold;
+    text-align: center;
+    border-top: 1px solid blue !important;
+    border-bottom: 1px solid blue !important;
+}
+tr.divider > td:first-child {
+    text-align: left;
 }
 
 /* Right justify and somewhat center numeric cells */
@@ -191,4 +647,80 @@ td.vertical, th.vertical {
     white-space: pre;
     text-align: center;
     font-weight: bold;
+}
+
+
+/*
+** Drag and drop styles
+**
+** Pulled from http://dojocampus.org/explorer/featureexplorer/Dojo/Drag%20And%20Drop/dndDefault.css
+** as used in http://dojocampus.org/explorer/#Dojo_Drag And Drop_Lists
+**
+** I changed "radius" to "border-radius", changed from using "pt" to "px"
+** and added the webkit styles for Mac compatibility.
+*/
+
+.dndContainer {
+    border: 3px solid #ccc;
+    padding: 0.5em 1em;
+    cursor: default;
+    background: #fff;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+}
+
+.dojoDndContainerOver {
+    border: 3px solid #aaa;
+}
+
+.dojoDndItem {
+    margin: 1px;
+    padding: 2px;
+    border: 1px dotted #ccc;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+}
+
+.dojoDndItemOver {
+    background: #ededed;
+    cursor: pointer;
+    border: 1px solid #ccc;
+}
+
+.dojoDndItemSelected {
+    background: #ddf;
+    color: #444;
+    border: 1px solid #ccc;
+}
+
+.dojoDndItemAnchor {
+    background: #ddf;
+    color: black;
+}
+
+.dojoDndItemOver .dojoDndItemSelected {
+    background: #ededed;
+}
+
+.dojoDndItemOver .dojoDndItemAnchor {
+    background: #ededed;
+}
+
+.dojoDndAvatar {
+    border: 2px solid #ccc;
+    font-size: 75%;
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+}
+
+.dojoDndAvatarHeader {
+    background: #aaa;
+}
+
+.dojoDndAvatarItem {
+    background: #fff;
+    border-bottom: 1px solid #666;
 }

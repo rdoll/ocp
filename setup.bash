@@ -1,19 +1,25 @@
-# Start up the editor on all files
-alias nedit-all="nedit-nc -g 111x40 \
+#!/bin/echo Must be sourced via .
+
+# Define the files for the project
+export SRC_FILES="\
     OblivCharPlanner.html \
-    scripts/ocp.js \
     styles/ocp.css \
-    dialogs/race.html \
-    styles/race.css \
+    scripts/ocp.js \
+    scripts/ocp-widget.js \
     scripts/ocp-race.js \
     scripts/ocp-birth.js \
-    scripts/ocp-class.js \
+    scripts/ocp-cclass.js \
+    scripts/ocp-existing.js \
+    scripts/ocp-order.js \
     scripts/ocp-level.js \
     scripts/ocp-results.js \
     "
 
+# Start up the editor on all files
+alias nedit-all="nedit-nc -g 111x40 $SRC_FILES"
+
 # Quick backup
-alias backupcwd="tar cvzf backup-`date '+%Y%m%d'`.tar.gz --exclude=\*.tar.gz *"
+alias backupcwd="tar cvzf backup-\`date '+%Y%m%d'\`.tar.gz --exclude=\*.tar.gz *"
 
 # Print list of text files excluding .svn dirs
 # -- Does not follow links so dojotoolkit is not found
@@ -81,3 +87,8 @@ function countdir {
         awk -F: '{total += $2; print} END { print "Total Lines =", total}'
 }
 alias countcwd='countdir .'
+
+# Count with plain wc
+alias wccwd="find_text_files . | \
+    grep -v setup.bash | \
+    xargs wc --chars --max-line-length --lines"

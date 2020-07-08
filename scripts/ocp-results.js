@@ -41,41 +41,44 @@ ocp.results = {
             '<thead>' +
                 '<tr class="last">' +
                     '<th>Attribute</th>' +
-                    '<th title="Starting values for the selected Race.">Race</th>' +
+                    '<th title="Starting values for the selected Race and Gender.">Race</th>' +
                     '<th title="Bonuses for the selected Birthsign.">Birth</th>' +
                     '<th title="Bonuses for selected class Favored Attributes.">Fav</th>' +
                     '<th>Total</th>' +
                 '</tr>' +
-            '</thead>' +
-            '<tbody>';
+            '</thead>';
 
         // Create a row for each core attribute
+        res += '<tbody>';
         for (var attr in ocp.coreAttrs) {
-            res += '<tr>' +
-                '<td>' + ocp.coreAttrs[attr].name + '</td>' +
-                '<td class="numeric">' + (ocp.race[attr] > 0 ? ocp.race[attr] : '') + '</td>' +
-                '<td class="numeric">' + (ocp.birth[attr] > 0 ? ocp.birth[attr] : '') + '</td>' +
-                '<td class="numeric">' + (ocp.class[attr] > 0 ? ocp.class[attr] : '') + '</td>' +
-                '<td class="numeric">' + totals[attr] + '</td>' +
+            res +=
+                '<tr>' +
+                    '<td>' + ocp.coreAttrs[attr].name + '</td>' +
+                    '<td class="numeric">' + (ocp.race[attr] > 0 ? ocp.race[attr] : '') + '</td>' +
+                    '<td class="numeric">' + (ocp.birth[attr] > 0 ? ocp.birth[attr] : '') + '</td>' +
+                    '<td class="numeric">' + (ocp.cclass[attr] > 0 ? ocp.cclass[attr] : '') + '</td>' +
+                    '<td class="numeric">' + totals[attr] + '</td>' +
                 '</tr>';
         }
+        res += '</tbody>';
 
         // Create a row for each derived attribute
-        var firstAttr = true;
+        res += '<tbody>';
         for (var attr in ocp.derivedAttrs) {
-            res += '<tr ' + (firstAttr ? 'class="first"' : '') + '>' +
-                '<td>' + ocp.derivedAttrs[attr] + '</td>' +
-                '<td class="numeric">' + (ocp.race[attr] > 0 ? ocp.race[attr] : '') + '</td>' +
-                '<td class="numeric">' + (ocp.birth[attr] > 0 ? ocp.birth[attr] : '') + '</td>' +
-                '<td class="numeric">' + (ocp.class[attr] > 0 ? ocp.class[attr] : '') + '</td>' +
-                '<td class="numeric">' + totals[attr] + '</td>' +
+            res +=
+                '<tr>' +
+                    '<td>' + ocp.derivedAttrs[attr].name + '</td>' +
+                    '<td class="numeric">' + (ocp.race[attr] > 0 ? ocp.race[attr] : '') + '</td>' +
+                    '<td class="numeric">' + (ocp.birth[attr] > 0 ? ocp.birth[attr] : '') + '</td>' +
+                    '<td class="numeric" />' +
+                    '<td class="numeric">' + totals[attr] + '</td>' +
                 '</tr>';
-            firstAttr = false;
         }
+        res += '</tbody>';
 
         // Complete the table and insert it
-        res += '</tbody></table>';
-        dojo.byId("resultsStartingAttributes").innerHTML = res;
+        res += '</table>';
+        dojo.place(res, 'resultsStartingAttributes', 'only');
     },
 
 
@@ -94,51 +97,53 @@ ocp.results = {
             '<thead>' +
                 '<tr class="last">' +
                     '<th colspan="2">Skill</th>' +
-                    '<th title="Base skill values for the selected class: 25 for Majors and 5 for Minors.">Base</th>' +
+                    '<th title="Base skill values for the selected class: ' + ocp.SKILL_MAJOR_MIN +
+                        ' for Majors and ' + ocp.SKILL_MIN + ' for Minors.">Base</th>' +
                     '<th title="Bonuses for the selected class Specialization.">Spec</th>' +
                     '<th title="Bonuses for the selected Race.">Race</th>' +
                     '<th>Total</th>' +
                 '</tr>' +
-            '</thead>' +
-            '<tbody>';
+            '</thead>';
 
         // Create a row for each skill
-        var firstAttr = true;
         for (var attr in ocp.coreAttrs) {
-            var firstSkill = true;
-            for each (var skill in ocp.coreAttrs[attr].skills) {
+            if (ocp.coreAttrs[attr].skills.length > 0) {
+                res += '<tbody>';
+                var firstSkill = true;
+                for each (var skill in ocp.coreAttrs[attr].skills) {
 
-                // The first skill marks a section unless this is the first attr
-                res += '<tr ' + (firstSkill && !firstAttr ? 'class="first"' : '') + '>';
+                    // Start the row
+                    res += '<tr>';
 
-                // The first skill means we need to create a vertical skill "header"
-                if (firstSkill) {
-                    res += '<td rowspan="' + ocp.coreAttrs[attr].skills.length +
-                            '" class="vertical" title="Skills that affect ' +
-                            ocp.coreAttrs[attr].name + '.">' +
-                        ocp.verticalize(attr) + '</td>';
+                    // The first skill means we need to create a vertical skill "header"
+                    if (firstSkill) {
+                        res += '<td rowspan="' + ocp.coreAttrs[attr].skills.length +
+                                '" class="vertical" title="Skills that affect ' +
+                                ocp.coreAttrs[attr].name + '.">' +
+                            ocp.verticalize(attr) + '</td>';
+                    }
+
+                    // Class info for this skill
+                    var base = ocp.cclass.skillBase(skill);
+                    var spec = ocp.cclass.skillSpec(skill);
+
+                    // The rest of the data
+                    res += '<td>' + ocp.skills[skill].name + '</td>' +
+                        '<td class="numeric">' + (base > 0 ? base : '') + '</td>' +
+                        '<td class="numeric">' + (spec > 0 ? spec : '') + '</td>' +
+                        '<td class="numeric">' + (ocp.race[skill] > 0 ? ocp.race[skill] : '') + '</td>' +
+                        '<td class="numeric">' + totals[skill] + '</td>' +
+                        '</tr>';
+
+                    firstSkill = false;
                 }
-
-                // Class info for this skill
-                var base = ocp.class.skillBase(skill);
-                var spec = ocp.class.skillSpec(skill);
-
-                // The rest of the data
-                res += '<td>' + ocp.skills[skill].name + '</td>' +
-                    '<td class="numeric">' + (base > 0 ? base : '') + '</td>' +
-                    '<td class="numeric">' + (spec > 0 ? spec : '') + '</td>' +
-                    '<td class="numeric">' + (ocp.race[skill] > 0 ? ocp.race[skill] : '') + '</td>' +
-                    '<td class="numeric">' + totals[skill] + '</td>' +
-                    '</tr>';
-
-                firstSkill = false;
+                res += '</tbody>';
             }
-            firstAttr = false;
         }
 
         // Complete the table and insert it
-        res += '</tbody></table>';
-        dojo.byId("resultsStartingSkills").innerHTML = res;
+        res += '</table>';
+        dojo.place(res, 'resultsStartingSkills', 'only');
     },
 
 
@@ -150,14 +155,14 @@ ocp.results = {
             '<table id="levelDetailsTable">' +
                 '<colgroup />' +
                 '<colgroup span="8" />' +
-                '<colgroup span="3" class="first"/>' +
-                '<colgroup span="3" class="first"/>' +
-                '<colgroup span="3" class="first"/>' +
-                '<colgroup span="3" class="first"/>' +
-                '<colgroup span="3" class="first"/>' +
-                '<colgroup span="3" class="first"/>' +
-                '<colgroup span="3" class="first"/>' +
-                '<colgroup span="3" class="first"/>' +
+                '<colgroup span="4" class="first" />' +
+                '<colgroup span="3" class="firstMajor" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
             '<thead>' +
                 '<tr>' +
                     '<th></th>' +
@@ -175,7 +180,7 @@ ocp.results = {
 
         // Add a vertical header for each derived attribute
         for (var attr in ocp.derivedAttrs) {
-            lev += '<th class="vertical" title="' + ocp.derivedAttrs[attr].name + ' attribute">' +
+            lev += '<th class="vertical" title="' + ocp.derivedAttrs[attr].name + ' derived attribute">' +
                 ocp.verticalize(attr) + '</th>';
         }
 
@@ -210,9 +215,9 @@ ocp.results = {
 
             // Core attributes first
             for (var attr in ocp.coreAttrs) {
-                var class = 'numeric' + (attr in wasted ? ' worse' :
+                var styleClass = 'numeric' + (attr in wasted ? ' worse' :
                     (current[attr] != previous[attr] ? ' changed' : ''));
-                lev += '<td class="' + class + '"' +
+                lev += '<td class="' + styleClass + '"' +
                     (attr in wasted ? ' title="' + wasted[attr] + '"' : '') +
                     '>' + current[attr] + '</td>';
             }
@@ -230,7 +235,7 @@ ocp.results = {
             for (var skill in ocp.skills) {
                 var class = 'numeric' + (skill in wasted ? ' worse' :
                     (current[skill] != previous[skill] ? ' changed' : '')) +
-                    (ocp.class.isMajor(skill) ? ' major' : '');
+                    (ocp.cclass.isMajor(skill) ? ' major' : '');
                 lev += '<td class="' + class + '"' +
                     (skill in wasted ? ' title="' + wasted[skill] + '"' : '') +
                     '>' + current[skill] + '</td>';
@@ -244,7 +249,6 @@ ocp.results = {
         lev += '</tbody></table>';
 
         // If there was an error during leveling, note it
-        // *** Need to note this in analysis pane too (if this is permanent)
         if (ocp.level.hadError) {
             // *** Move to styles if this is permanent
             lev += '<p><i><b><span style="color: red">Warning</span></b>: ' +
@@ -253,9 +257,9 @@ ocp.results = {
 
         // Add a final footnote and set it
         // *** Use styles if this is permanent
-        lev += "<p><i><b>Note</b>: All leveling tries to achieve the maximum of +5 per attribute " +
-            "per level (except for Luck's fixed +1).</i></p>";
-        dojo.byId("resultsLevelingPane").innerHTML = lev;
+        lev += '<p><i><b>Note</b>: All leveling tries to achieve the maximum of +5 per attribute ' +
+            'per level (except for Luck\'s fixed +1).</i></p>';
+        dojo.place(lev, 'resultsLevelingPane', 'only');
     },
 
 
@@ -283,7 +287,8 @@ ocp.results = {
                         level: level,
                         avail: 0,
                         used: 0,
-                        spare: 0
+                        spare: 0,
+                        major: 0
                     };
                 }
             }
@@ -291,12 +296,12 @@ ocp.results = {
 
         // Check the attributes of every level
         for (var level = ocp.level.minLevel; level <= ocp.level.maxLevel; level++) {
-            var totals = ocp.level.levelTotals(level);
+            var levelTotals = ocp.level.levelTotals(level);
             for (var attr in ocp.coreAttrs) {
-                data.check(attr, totals[attr], level);
+                data.check(attr, levelTotals[attr], level);
             }
             for (var attr in ocp.derivedAttrs) {
-                data.check(attr, totals[attr], level);
+                data.check(attr, levelTotals[attr], level);
             }
         }
 
@@ -305,16 +310,44 @@ ocp.results = {
         var lastTotals  = ocp.level.levelTotals(ocp.level.maxLevel);
         for (var attr in ocp.coreAttrs) {
             for each (var skill in ocp.coreAttrs[attr].skills) {
-                data[attr].avail += ocp.SMAX - firstTotals[skill];
+                data[attr].avail += ocp.SKILL_MAX - firstTotals[skill];
                 data[attr].used += lastTotals[skill] - firstTotals[skill];
+                if (ocp.cclass.isMajor(skill)) {
+                    data[attr].major += ocp.SKILL_MAX - lastTotals[skill];
+                }
             }
             data[attr].spare = data[attr].avail - data[attr].used;
+        }
+
+        // Using the skill data, calculate totals
+        var totals = { avail:0, used:0, spare:0, major:0 };
+        for (var attr in ocp.coreAttrs) {
+            for (var key in totals) {
+                totals[key] += data[attr][key];
+            }
         }
 
 
         /*
         ** Now generate the HTML for the new analysis
         */
+
+        // Helper function that returns the number of spare skill
+        // points per level until the associated attr is leveled to max.
+        // Return value is a string padded to two decimal places
+        function sparePerLevel(spare, maxAtLevel) {
+
+            // Number of levels this attr will be raised (min of 1)
+            var numLevels = maxAtLevel - ocp.level.minLevel;
+            numLevels = (numLevels > 0 ? numLevels : 1);
+
+            // Pad to two decimal places
+            var splv = Math.round((spare / numLevels) * 100);
+            splv = splv.toString().replace(/(..)$/, '.$1');
+            splv = splv.replace(/^\./, '0.');
+
+            return splv;
+        }
 
         // The new analysis contents (tee-hee :D)
         // Start with a table of attribute info
@@ -325,9 +358,9 @@ ocp.results = {
                 '<colgroup span="3" class="first" />' +
             '<thead>' +
                 '<tr>' +
-                    '<th></th>' +
-                    '<th colspan="3"></th>' +
-                    '<th colspan="4">Skill Points</th>' +
+                    '<th />' +
+                    '<th colspan="3" />' +
+                    '<th colspan="5">Skill Points</th>' +
                 '</tr>' +
                 '<tr class="last">' +
                     '<th>Attribute</th>' +
@@ -337,49 +370,71 @@ ocp.results = {
                     '<th title="Total skill points you can level up for this attribute.">Avail</th>' +
                     '<th title="Skill points required to reach the maximum value.">Used</th>' +
                     '<th title="Spare skill points not required to level this attribute.">Spare</th>' +
-                    '<th title="Skill points you can waste each level (assuming this exact leveling pattern).">Sp/Lv</th>' +
+                    '<th title="Spare skill points that are for major skills">Sp Maj</th>' +
+                    '<th title="Skill points you can waste each level (assuming this exact leveling ' +
+                        'pattern).">Sp/Lv</th>' +
                 '</tr>' +
-            '</thead>' +
-            '<tbody>';
+            '</thead>';
 
         // Add the details for every core attribute
+        anal += '<tbody>';
         for (var attr in ocp.coreAttrs) {
-            // Force spare per level to two decimal
-            var splv = Math.round((data[attr].spare / data[attr].level) * 100);
-            splv = splv.toString().replace(/(..)$/, '.$1');
-            splv = splv.replace(/^\./, '0.');
             anal +=
                 '<tr>' +
                     '<td>' + ocp.coreAttrs[attr].name + '</td>' +
                     '<td class="numeric">' + data[attr].start + '</td>' +
-                    '<td class="numeric">' + data[attr].max + '</td>' +
+                    '<td class="numeric' +
+                        (data[attr].max < ocp.coreAttrs[attr].max ? ' worse' : '') + '">' +
+                            data[attr].max +
+                    '</td>' +
                     '<td class="numeric">' + data[attr].level + '</td>' +
                     '<td class="numeric">' + data[attr].avail + '</td>' +
                     '<td class="numeric">' + data[attr].used + '</td>' +
                     '<td class="numeric">' + data[attr].spare + '</td>' +
-                    '<td class="numeric">' + splv + '</td>' +
+                    '<td class="numeric">' + data[attr].major + '</td>' +
+                    '<td class="numeric">' +
+                        sparePerLevel(data[attr].spare, data[attr].level) +
+                    '</td>' +
                 '</tr>';
         }
+        anal += '</tbody>';
 
-        // Add the details for every derived attribute
-        var firstAttr = true;
+        // Add the details for every derived attribute in a new section
+        anal += '<tbody>';
         for (var attr in ocp.derivedAttrs) {
             anal +=
-                '<tr' + (firstAttr ? ' class="first"' : '') + '>' +
-                    '<td>' + ocp.derivedAttrs[attr] + '</td>' +
+                '<tr>' +
+                    '<td>' + ocp.derivedAttrs[attr].name + '</td>' +
                     '<td class="numeric">' + data[attr].start + '</td>' +
                     '<td class="numeric">' + data[attr].max + '</td>' +
                     '<td class="numeric">' + data[attr].level + '</td>' +
-                    '<td colspan="4"></td>' +
+                    '<td colspan="5"></td>' +
                 '</tr>';
-            firstAttr = false;
         }
+        anal += '</tbody>';
+
+        // Finally add a footer Totals row in a new section
+        // Make it a tbody since it contains data and it should never repeat
+        anal +=
+            '<tbody>' +
+                '<tr class="first">' +
+                    '<th>Totals</th>' +
+                    '<td colspan="2" />' +
+                    '<td class="numeric">' + ocp.level.maxLevel + '</td>' +
+                    '<td class="numeric">' + totals.avail + '</td>' +
+                    '<td class="numeric">' + totals.used + '</td>' +
+                    '<td class="numeric">' + totals.spare + '</td>' +
+                    '<td class="numeric">' + totals.major + '</td>' +
+                    '<td class="numeric">' +
+                        sparePerLevel(totals.spare, ocp.level.maxLevel) +
+                    '</td>' +
+                '</tr>' +
+            '</body>';
 
         // End the table
-        anal += '</tbody></table>';
+        anal += '</table>';
 
         // If there was an error during leveling, note it
-        // *** Need to note this in analysis pane too (if this is permanent)
         if (ocp.level.hadError) {
             // *** Move to styles if this is permanent
             anal += '<p><i><b><span style="color: red">Warning</span></b>: ' +
@@ -387,6 +442,6 @@ ocp.results = {
         }
 
         // Set the content and we're done
-        dojo.byId("resultsAnalysisPane").innerHTML = anal;
+        dojo.place(anal, 'resultsAnalysisPane', 'only');
     }
 };
