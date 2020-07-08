@@ -41,6 +41,7 @@ dojo.declare('ocp.widget.TitledContentPane',
 );
 
 
+
 /*
 ** Define a horizontal slider that automatically updates a label when the value changes.
 */
@@ -87,54 +88,128 @@ dojo.declare('ocp.widget.LabeledHorizontalSlider',
 );
 
 
+
 /*
-** Define a checkbox that supports validation.
-** Obviously you cannot validate the checkbox alone, but when something external
-** marks this checkbox as invalid, the form will recognize it as a problem.
+** Define a form that also validates major skill checkboxes
+** It's identical to a dijit.form.Form plus counting the number of major skill checkboxes checked.
 */
 
 // Note what we provide
-dojo.provide('ocp.widget.ValidatedCheckBox');
+dojo.provide('ocp.widget.SkillForm');
 
 // We must have access to our parents and mixins
-dojo.require('dijit.form.CheckBox');
+dojo.require('dijit.form.Form');
 
 // Define the widget
-dojo.declare('ocp.widget.ValidatedCheckBox',
+dojo.declare('ocp.widget.SkillForm',
 
-    // We are basically a checkbox
-    dijit.form.CheckBox,
+    // We are basically a Form
+    dijit.form.Form,
 
     // Our class properties
     {
 
-        // Public: Whether this checkbox is valid or not
-        //         Use .attr('valid' [, newValid]) to access
-        valid: true,
+        // Invalid reason
+        invalidReason: '',
 
-        // Public: [Readonly] Our current state
-        //         Only used to set the "Error" state when invalid
 
-        // Private: Support .attr('valid', newValid)
-        _setValidAttr: function(newValid) {
-            // Set our new validity
-            this.valid = newValid;
-
-            // The state is either nothing or invalid.
-            // This will be picked up by a parent's _setStateClass and
-            // apply the appropriate "Error" styles to our main node
-            // *** All of this works, but the checkbox itself is an image so no background colors work!
-            this.state = (newValid ? '' : 'Error');
+        // Returns the list of descendants that are checkboxes
+        getDescendantsCheckboxes: function() {
+            // A checkbox is something toggle-able (i.e. has a boolean "checked" property)
+            return dojo.filter(this.getDescendants(), function (widget) {
+                return (typeof widget.checked == 'boolean');
+            });
         },
 
-        // Private: Support .attr('valid')
-        _getValidAttr: function() {
-            return this.valid;
+
+        // Returns the number of checked checkboxes we contain
+        _numChecked: function() {
+            var checkedCount = 0;
+
+            // Examine all child checkboxes
+            dojo.forEach(this.getDescendantsCheckboxes(), function (widget) {
+                // From closure: checkedCount
+                if (widget.checked) {
+                    checkedCount++;
+                }
+            });
+
+            console.log('leaving ocp.widget.SkillForm:', checkedCount);
+            return checkedCount;
         },
 
-        // Public: Validate this checkbox
+
+        // Based on the form's validation, validate the checkboxes
+        validateCheckboxes: function (isFormValid) {
+
+            // Start with the form's validity
+            var isValid = isFormValid;
+
+            if (isFormValid) {
+                // Form is valid, so examine checkboxes
+                var numChecked = this._numChecked();
+                isValid = (numChecked == ocp.MAJORS_NUM);
+                if (isValid) {
+                    // Checkboxes are valid too
+                    // Clear the invalid reason and pass thru success
+                    this.invalidReason = '';
+                } else {
+                    // Checkboxes are invalid
+                    // Set the reason for being invalid and let the failure pass thru
+                    this.invalidReason = 'Exactly ' + ocp.MAJORS_NUM +
+                        ' major skills must be selected (you have ' + numChecked + ').';
+                }
+            } else {
+                // Form is invalid, so don't bother looking at checkboxes
+                // Set the reason for being invalid and let the failure pass thru
+                this.invalidReason = 'One or more skills have invalid values.';
+            }
+
+            // Return results
+            return isValid;
+        },
+
+
+        // Also check the major count when asked if valid
+        isValid: function() {
+            // Let the form validate inputs that support validation
+            var isFormValid = this.inherited(arguments);
+
+            // Based on the form's validity, also validate the checkboxes
+            return this.validateCheckboxes(isFormValid);
+        },
+
+
+        // Also check the major count when asked to validate
         validate: function() {
-            return this.valid;
+            // Validate the form (changing focus to first invalid input)
+            var isFormValid = this.inherited(arguments);
+
+            // Based on the form's validity, also validate the checkboxes
+            return this.validateCheckboxes(isFormValid);
+        },
+
+
+        // Connect events to our children
+        // In addition to validity methods, capture changes to all checkboxes
+        // This way, when a checkbox changes, we'll revalidate
+        connectChildren: function() {
+
+            // First, let the form do the normal connections
+            this.inherited(arguments);
+
+            // Now connect onChange to all checkboxes
+            var _this = this;
+            var conns = this._changeConnections;
+            dojo.forEach(this.getDescendantsCheckboxes(), function (widget) {
+                // From closure: _this, conns
+                conns.push(_this.connect(widget, 'onChange',
+                    // Cheat and pass null as the widget
+                    // This causes the form to revalidate via isValid which
+                    // will detect any problems with the checkbox count
+                    // *** Better way to do this?
+                    dojo.hitch(_this, '_widgetChange', null)));
+            });
         }
     }
 );

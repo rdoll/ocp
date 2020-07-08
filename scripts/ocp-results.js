@@ -330,6 +330,8 @@ ocp.results = {
 
         /*
         ** Now generate the HTML for the new analysis
+        ** *** Add "key level snapshots"? e.g. level 10 stats, level 15 stats, level 20 stats, etc...
+        ** *** How to handle this for existing characters that may be past some key levels?
         */
 
         // Helper function that returns the number of spare skill
@@ -359,7 +361,7 @@ ocp.results = {
             '<thead>' +
                 '<tr>' +
                     '<th />' +
-                    '<th colspan="3" />' +
+                    '<th colspan="3">Summary</th>' +
                     '<th colspan="5">Skill Points</th>' +
                 '</tr>' +
                 '<tr class="last">' +
@@ -384,8 +386,9 @@ ocp.results = {
                     '<td>' + ocp.coreAttrs[attr].name + '</td>' +
                     '<td class="numeric">' + data[attr].start + '</td>' +
                     '<td class="numeric' +
-                        (data[attr].max < ocp.coreAttrs[attr].max ? ' worse' : '') + '">' +
-                            data[attr].max +
+                        (data[attr].max < ocp.coreAttrs[attr].max ?
+                            ' worse" title="Failed to reach the maximum possible value"' : '"') + '>' +
+                        data[attr].max +
                     '</td>' +
                     '<td class="numeric">' + data[attr].level + '</td>' +
                     '<td class="numeric">' + data[attr].avail + '</td>' +

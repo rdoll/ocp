@@ -2,9 +2,14 @@
 ** ocp.js
 **
 ** Main controller, overall namespace for everything, and cool Robocop reference :P.
+**
+** *** Nice set of images (and nice credit page) at http://www.elderstats.com/about/?p=credits
 */
 
 var ocp = {
+
+    // Public: The version of the entire OCP package
+    VERSION: 0.20,
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)

@@ -391,11 +391,10 @@ ocp.existing.skillDialog = {
     _initializeDialog: function() {
         console.log('entered ocp.existing.skillDialog._initializeDialog');
 
-        // Hook into the methods that can close the dialog
-        dojo.connect(this._form, 'onSubmit', function (event) {
-            ocp.existing.skillDialog.submit(event);
-        });
+        // Hook into the methods that manipulate the form controlling this dialog
+        dojo.connect(this._form, 'onSubmit', this, 'submit');
         dojo.connect(this._form, 'onCancel', this, 'cancel');
+        dojo.connect(this._form, 'onValidStateChange', this, '_formValidityChanged');
 
         // For lack of a better mechanism to divide up the skills,
         // do one section per arts specialization.
@@ -430,12 +429,12 @@ ocp.existing.skillDialog = {
                             '<input dojoType="dijit.form.NumberSpinner" ' +
                                 'id="skillSpinner_' + skill + '" class="skillSpinner" ' +
                                 'name="' + skill + '" ' +
-                                'value="' + min + '" smallDelta="10" ' +
-                                'intermediateChanges="false" ' +
+                                'value="' + min + '" intermediateChanges="false" ' +
+                                'timeoutChangeRate="0.6" smallDelta="1" largeDelta="10" ' +
                                 'constraints="{min:' + min + ', max:' + max + ', places:0}" />' +
                         '</td>' +
                         '<td class="majorCheckContainer">' +
-                            '<input dojoType="ocp.widget.ValidatedCheckBox" type="checkbox" ' +
+                            '<input dojoType="dijit.form.CheckBox" type="checkbox" ' +
                                 'id="majorCheck_' + skill + '" ' +
                                 'name="majors" value="' + skill + '" ' +
                                 (isMajor ? 'checked="checked" ' : '') +
@@ -451,12 +450,70 @@ ocp.existing.skillDialog = {
 
         // Insert the results (parsing the code for Dojo markups)
         dojo.html.set(dojo.byId('skillInputsContainer'), ski, { parseContent: true });
+
+        // Connect the form to the new children we injected
+        this._form.connectChildren();
+    },
+
+
+    // Private: Called whenever the validity of our form's contents changes
+    _formValidityChanged: function (isValid) {
+        console.log('entered ocp.existing.skillDialog._formValidityChanged', isValid);
+
+        // The submit button and validity status message
+        var submitButton = dijit.byId('skillDialogSubmit');
+        var msgDom = dojo.byId('skillDialogValidity');
+
+        // *** Crap -- this won't change the message when the reason for being
+        // ***         invalid changes (e.g. spinner and majors wrong shows spinner wrong
+        // ***         messsage, but fix spinner and since form is still invalid, spinner
+        // ***         is wrong message won't be shown).
+        if (isValid) {
+            // We are now valid
+            // Enable the submit button and set a good status message
+            submitButton.attr('disabled', false);
+            // *** styles
+            dojo.place('<span>All valid.</span>', msgDom, 'only');
+        } else {
+            // We are now invalid
+            // Diable the button and display the reason
+            submitButton.attr('disabled', true);
+            // *** styles
+            dojo.place('<span style="color:red">' + this._form.invalidReason + '</span>',
+                msgDom, 'only');
+        }
     },
 
 
     // Public: A major skill checkbox changed
     checkboxChanged: function (skill) {
-        console.log('checkboxChanged', skill);
+        console.log('entered ocp.existing.skillDialog.checkboxChanged', skill);
+
+        // The spinner and checkbox for this skill
+        var checkbox = dijit.byId('majorCheck_' + skill);
+        var spinner = dijit.byId('skillSpinner_' + skill);
+
+        // Set the spinners new min value
+        var wasValid = spinner.isValid();  // Need to store since we're changing constaints
+        var min = (checkbox.checked ? ocp.SKILL_MAJOR_MIN : ocp.SKILL_MIN);
+        var constrain = spinner.attr('constraints');
+        constrain.min = min;
+        spinner.attr('constraints', constrain);
+
+        // If the spinner had a valid value based on the old min, adjust it to the new min
+        if (wasValid) {
+            var value = spinner.attr('value');
+            if (value < min) {
+                // Bump up the value to at least the min
+                spinner.attr('value', min);
+            } else {
+                // Special case: If value was major min and we just changed to minor,
+                // assume the user wants the minor min and reduce the value accordingly.
+                if ((min == ocp.SKILL_MIN) && (value == ocp.SKILL_MAJOR_MIN)) {
+                    spinner.attr('value', min);
+                }
+            }
+        }
     },
 
 
@@ -492,7 +549,8 @@ ocp.existing.skillDialog = {
 
             // Erm... This should never happen...
             // Gracefully tell the user something is invalid and inhibit the submission.
-            console.warn('Cannot submit with invalid data!');
+            console.debug('Cannot submit with invalid data!',
+                this._form._numChecked(), this._form._invalidWidgets);
             alert('Cannot submit changes until all skill values are valid\n' +
                 'and exactly seven major skills are selected.');
             return false;
@@ -512,6 +570,26 @@ ocp.existing.skillDialog = {
 
         // Then just to be careful, validate the contents
         this._form.validate();
+    },
+
+
+    // Public: Reset everything to initial values
+    reset: function() {
+        console.log('entered ocp.existing.skillDialog.reset');
+
+        // Reset any constraints we changed when a checkbox was toggled
+        for (var skill in ocp.skills) {
+                
+            // The spinner and checkbox for this skill
+            var checkbox = dijit.byId('majorCheck_' + skill);
+            var spinner = dijit.byId('skillSpinner_' + skill);
+
+            // Set the spinners new min value based on the checkboxes reset value
+            var min = (checkbox._resetValue ? ocp.SKILL_MAJOR_MIN : ocp.SKILL_MIN);
+            var constrain = spinner.attr('constraints');
+            constrain.min = min;
+            spinner.attr('constraints', constrain);
+        }
     },
 
 

@@ -29,7 +29,7 @@ html, body {
 
 /* Set up the main pane for the planner */
 #plannerPane {
-    width: 900px;
+    width: 920px;
     height: 680px;
     border: 1px solid #ccc
 }
@@ -550,14 +550,17 @@ html, body {
 ** Styles for the buttons at the footer of a dialog
 */
 
-/* The footer section that contains the buttons */
-.dialogButtonFooter {
-    text-align: center;
+/* The footer section of a dialog */
+.dialogFooter {
     margin-top: 0.5em;
     border-top: 2px solid #ccc;
     padding-top: 0.5em;
 }
 
+/* The buttons to control the dialog */
+.dialogFooterButtons {
+    text-align: center;
+}
 
 
 /*
