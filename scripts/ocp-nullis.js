@@ -30,8 +30,8 @@ ocp.nullis = {
 
         ocp.birth._select('The Thief');
 
-        ocp.clazz._selectCustom('Stealth', ['end', 'luc'],
-            ['blu', 'con', 'des', 'mar', 'ath', 'hvy', 'ill']);
+        ocp.clazz._selectCustom('Stealth', { end:true, luc:true },
+            { blu:true, con:true, des:true, mar:true, ath:true, hvy:true, ill:true });
         if (ocp.clazz.classDialog._dialogInitialized) {
             ocp.clazz.classDialog.undo();
         }
@@ -99,8 +99,8 @@ ocp.nullis = {
         });
         wasted[6] = { bla:'', mer:'', spc:'' };
 
-        // Tested with end at level 7, hp at level 10=212, 15=298, 20=348, etc.
-        // Tested with no end at level 7, hp at level 10=200, 15=294, 20=344, etc.
+        // Tested with    end at level 7, hp at level 10=212, 15=298, 20=348, etc.
+        // Tested withOUT end at level 7, hp at level 10=200, 15=294, 20=344, etc.
         totals[7] = nextLevel(totals[totals.length - 1], {
             agi:5, spe:5, end:5, hea:16, mag:0, fat:10, enc:0,
             mar:7, sec:1, sne:2, acr:2, ath:3, lig:5, arm:10, mer:2, spc:1
@@ -137,6 +137,12 @@ ocp.nullis = {
         });
         wasted[12] = { bla:'', mer:'', spc:'' };
 
+        totals[13] = nextLevel(totals[totals.length - 1], {
+            str:5, end:5, luc:1, hea:19, mag:0, fat:10, enc:25,
+            bla:5, blu:5, mar:3, sec:1, sne:2, acr:2, ath:2, lig:10, arm:4, blo:6, mer:2, spc:2
+        });
+        wasted[13] = { mer:'', spc:'' };
+
         var maxLevel = totals.length - 1;
 
         for (var level = 1; level <= maxLevel; level++) {
@@ -149,22 +155,7 @@ ocp.nullis = {
             }
         }
 
-        dijit.byId('levelSlider').attr('value', maxLevel);
-        delete ocp.existing._totals;
-        ocp.existing._totals = totals[maxLevel];
-        delete ocp.existing._majors;
-        ocp.existing._majors = [];
-        var classMajors = ocp.clazz.majors;
-        for (var skillIndex in classMajors) {
-            ocp.existing._majors.push(classMajors[skillIndex]);
-        }
-        if (ocp.existing.attrDialog._dialog._alreadyInitialized) {
-            ocp.existing.attrDialog.undo();
-        }
-        if (ocp.existing.skillDialog._dialogInitialized) {
-            ocp.existing.skillDialog.undo();
-        }
-
+        ocp.existing._selectCustom(maxLevel, totals[maxLevel], ocp.clazz.majors);
         ocp.input.isNewChar = false;
         ocp.notifyChanged();
 
@@ -180,6 +171,23 @@ ocp.nullis = {
         ocp.existing._level = maxLevel;
         ocp.level._totals = saveTotals;
         ocp.level._wasted = saveWasted;
+
+        // To prevent the historical levels from being selected in the Leveling Details,
+        // delete the links for them. Yes, this is very hacky, but it's better than hacking
+        // ocp.level._updateLeveling for this just-for-fun code.
+        dojo.query('#levelDetailsTable tbody tr').forEach(function (trNode) {
+            // From closure: maxLevel
+            var tdNode = trNode.firstChild;
+            var aNode = tdNode.firstChild;
+            var textNode = aNode.firstChild;
+            var level = parseInt(textNode.textContent);
+            if (level < maxLevel) {
+                // This is historical level data, so remove the link
+                aNode.removeChild(textNode);
+                tdNode.replaceChild(textNode, aNode);
+                delete aNode;
+            }
+        });
     },
 
 

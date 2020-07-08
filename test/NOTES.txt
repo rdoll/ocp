@@ -1,12 +1,14 @@
+- advice
+- rel notes expand/collapse (make ocp.faqExpandAll generic)
+
+Maybe change bug/function/feature in Known Issues and Change Log to
+    bug/feature for the type and minor/major/critical for the impact.
+
 Migrate the hacks in the SetNullis* functions into their
 appropriate files; e.g. add an ocp.order.setOrder(newOrder) ??
 
-Like I did in ocp.level._nextLevel, is it worth creating an
-object for quicker isMajor lookups instead of doing an indexOf?
-If this was done to ocp.clazz.isMajor and ocp.existing.isMajor,
-I'd never need to worry about calling ocp.input.isMajor.
-
 Is some memory leaking after each page reload?
+This may be a leak in FireBug -- not OCP or Dojo!
 
 Allow http://.../index.html?debug to enable debugging?
 Or unnecessary since FireBug works regardless of djConfig.debug value?
@@ -17,25 +19,27 @@ Water Breathing (derived from Endurance? -- check USEP Water Breathing
 discussion page) in derived attributes?
 Magicka regeneration rate (derived from Magicka and Willpower)?
 
-Should have an Advice top-level page?
-
-Can make planner resize-able with min-width/height?
-
 Select a http://creativecommons.org/ license, add it to file headers,
 and add an icon to the footer for it.
 
 In Change Log, tag each release as public release or dev release and
 use a top level toggle to control showing/hiding them?
 
-Ok that faq's TitlePane title="" attrs go really long?
-
 FAQ's non-expanded titles are a little gray. Override to black?
 
-Keep home.roadrunner.com/~foaminator as home page in about?
-
-Replace all innerHTML references with "content" for compatibility?
-
 Standardize all race and birthsign specials with their real name and their exact effects.
+
+Would be nice if I could support HTML markup in Rel Notes XML descriptions.
+This would be most useful if 0.7.4's new home change could have links.
+-----
+
+In ocp.results._updateLeveling, I cache the ocp.input.isMajor results saving 1,000 calls.
+In ocp.level._nextLevel, there are 20ish ocp.input.isMajor calls (the same number there
+    would be if I cached the results like I did in ocp.results._updateLeveling), but
+    because ocp.level._nextLevel is called 50 times, it results in 1,000 calls again.
+    If this matters, I either need to move the cache up to ocp.level._updateLeveling or
+    I need to use ocp.input.majors in _nextLevel instead of ocp.input.isMajor.
+
 -----
 
 Neal Notes:
@@ -70,6 +74,15 @@ wrench for improvement
 
 Could embed tick on other items to create "solved" versions of bugs, limitations, etc
 
+Current icons:
+OCP name             Fugue name
+bug-change.png       fugue-icons-2.2.2/icons/overlay/bandaid--plus.png
+bug-issue.png        fugue-icons-2.2.2/icons/overlay/bandaid--exclamation.png
+feature-change.png   fugue-icons-2.2.2/icons/overlay/application--plus.png
+feature-issue.png    fugue-icons-2.2.2/icons/overlay/application--exclamation.png
+function-change.png  fugue-icons-2.2.2/icons/overlay/gear--plus.png
+function-issue.png   fugue-icons-2.2.2/icons/overlay/gear--exclamation.png
+
 -----
 For JavaScript browser compatibility per
 http://en.wikipedia.org/wiki/Comparison_of_layout_engines_(ECMAScript)
@@ -91,6 +104,7 @@ TODO: Nice set of images (and nice credit page) at http://www.elderstats.com/abo
 &apos; unsupported in IE?!? Standardize on something for all HTML apostrophes.
 
 Is it ok to split HTML attribute values across lines? (e.g. index.html's meta content='s)
+The W3C Markup validator says it is XHTML 1.0 Strict valid, but will it work in all browsers?
 
 ------
 <!-- TODO: Probably can never use these.
@@ -109,12 +123,38 @@ Is it ok to split HTML attribute values across lines? (e.g. index.html's meta co
     </a>
 </div>
 -->
+
+---------
+
+Without the ocp._initializeResizeHooks, the instructions nested Tab container was not
+resizing properly. Here are the old comments describing the issue:
+
+<!-- TODO: ocpStackContainer is sized via the dimensions of instructionsOverview and
+     TODO: does not resize when a different tab is selected resulting in scrollbars. -->
+<!-- TODO: Switching from Home/Planner/expanded FAQ/Release Notes to Instructions puts a
+     TODO: horizontal scrollbar in Instructions. Oddly, collapsed FAQ and About don't.
+     TODO: I think it's related to having the scrollbar on the RHS of the browser window.
+     TODO: Can fix it by a dijit.byId('instructionsContentPane').resize() after
+     TODO: Instructions has been selected and has the horizontal scrollbar.
+     TODO: Is the root cause the doLayout=false? -->
+<!-- TODO: Also the instructions are not resized when the browser is resized. -->
+
+With ocp._initializeResizeHooks the browser resize problems are gone, but the Planner does
+resize a little more than it should; e.g. when you shrink the browser's width, the planner's
+input area gets taller instead of remaining the same and using a horizontal scrollbar.
+
+However, the switching from Release Notes (with a vertical scrollbar) to Instructions (that
+should be without a vertical scrollbar) still results in the Instructions having a horizontal
+scrollbar. Two dijit.byId('instructionsContentPane').resize()'s fixes it, but connecting to
+instructionsContentPane's onShow or ocpStackController's onSelectChild and doing the two
+resizes never worked (the content had no size and only the min-height for loader messages
+was honored).
+
 =========
 Publishing Checklist:
 
 - Version number is correct and ocp._initializeVersions's beta literal is correct
 - relnotes.xml has the correct info for this version including the release date
-- images/icons converted to real files instead of links
 - index.html and ocp.css uses o.aolcdn.com instead of local dojotoolkit
     + includes djConfig baseUrl and modulePaths changes
 - Comment out ocp.loader.hookManagedContainer's preventing caching

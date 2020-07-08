@@ -33,8 +33,8 @@ ocp.clazz = {
     _data: {
         'Acrobat': {
             specialization: 'Stealth',
-            favoredAttrs:   [ 'agi', 'end' ],
-            majorSkills:    [ 'acr', 'bla', 'blo', 'mar', 'sec', 'sne', 'spc' ],
+            favoredAttrs:   { agi:true, end:true },
+            majorSkills:    { acr:true, bla:true, blo:true, mar:true, sec:true, sne:true, spc:true },
             image:          'acrobat.jpg',
             description:    'The kind of person that uses agility and endurance to their ' +
                 'advantage. Unafraid of jumping long distances.'
@@ -42,16 +42,16 @@ ocp.clazz = {
 
         'Agent': {
             specialization: 'Stealth',
-            favoredAttrs:   [ 'per', 'agi' ],
-            majorSkills:    [ 'acr', 'ill', 'mar', 'mer', 'sec', 'sne', 'spc' ],
+            favoredAttrs:   { per:true, agi:true },
+            majorSkills:    { acr:true, ill:true, mar:true, mer:true, sec:true, sne:true, spc:true },
             image:          'agent.jpg',
             description:    'Charming when they can be seen, and nearly invisible when in shadow.'
         },
 
         'Archer': {
             specialization: 'Combat',
-            favoredAttrs:   [ 'agi', 'str' ],
-            majorSkills:    [ 'arm', 'bla', 'blu', 'han', 'lig', 'mar', 'sne' ],
+            favoredAttrs:   { agi:true, str:true },
+            majorSkills:    { arm:true, bla:true, blu:true, han:true, lig:true, mar:true, sne:true },
             image:          'archer.jpg',
             description:    'A marksman, adept at combat at great distances. Able to take down ' +
                 'most foes before they have a chance to draw sword.'
@@ -59,8 +59,8 @@ ocp.clazz = {
 
         'Assassin': {
             specialization: 'Stealth',
-            favoredAttrs:   [ 'spe', 'itl' ],
-            majorSkills:    [ 'acr', 'alc', 'bla', 'lig', 'mar', 'sec', 'sne' ],
+            favoredAttrs:   { spe:true, itl:true },
+            majorSkills:    { acr:true, alc:true, bla:true, lig:true, mar:true, sec:true, sne:true },
             image:          'assassin.jpg',
             description:    'Nimble and quiet, they move in darkness to strike at the ' +
                 'unsuspecting. Locks hold no doors shut for them.'
@@ -68,8 +68,8 @@ ocp.clazz = {
 
         'Barbarian': {
             specialization: 'Combat',
-            favoredAttrs:   [ 'str', 'spe' ],
-            majorSkills:    [ 'arm', 'ath', 'bla', 'blo', 'blu', 'han', 'lig' ],
+            favoredAttrs:   { str:true, spe:true },
+            majorSkills:    { arm:true, ath:true, bla:true, blo:true, blu:true, han:true, lig:true },
             image:          'barbarian.jpg',
             description:    'Fearsome brutes who inspire fear and dread in the hearts of ' +
                 'their enemies. Like a storm, swift and powerful. Finding little use for ' +
@@ -78,8 +78,8 @@ ocp.clazz = {
 
         'Bard': {
             specialization: 'Stealth',
-            favoredAttrs:   [ 'per', 'itl' ],
-            majorSkills:    [ 'alc', 'bla', 'blo', 'ill', 'lig', 'mer', 'spc' ],
+            favoredAttrs:   { per:true, itl:true },
+            majorSkills:    { alc:true, bla:true, blo:true, ill:true, lig:true, mer:true, spc:true },
             image:          'bard.jpg',
             description:    'Intelligent and personable, they prefer to accomplish tasks ' +
                 'with their words first, and sword second.'
@@ -87,8 +87,8 @@ ocp.clazz = {
 
         'Battlemage': {
             specialization: 'Magic',
-            favoredAttrs:   [ 'str', 'itl' ],
-            majorSkills:    [ 'alc', 'alt', 'bla', 'blu', 'con', 'des', 'mys' ],
+            favoredAttrs:   { str:true, itl:true },
+            majorSkills:    { alc:true, alt:true, bla:true, blu:true, con:true, des:true, mys:true },
             image:          'battlemage.jpg',
             description:    'Able to resolve most conflicts with either spell or sword. ' +
                 'They are a deadly mix of scholar and soldier.'
@@ -96,8 +96,8 @@ ocp.clazz = {
 
         'Crusader': {
             specialization: 'Combat',
-            favoredAttrs:   [ 'str', 'wil' ],
-            majorSkills:    [ 'ath', 'bla', 'blu', 'des', 'han', 'hvy', 'res' ],
+            favoredAttrs:   { str:true, wil:true },
+            majorSkills:    { ath:true, bla:true, blu:true, des:true, han:true, hvy:true, res:true },
             image:          'crusader.jpg',
             description:    'A combatant who wields the power of brute strength and ' +
                 'medicinal knowledge. Cheating death after every fight, they rely on ' +
@@ -106,8 +106,8 @@ ocp.clazz = {
 
         'Healer': {
             specialization: 'Magic',
-            favoredAttrs:   [ 'per', 'wil' ],
-            majorSkills:    [ 'alc', 'alt', 'des', 'ill', 'mer', 'res', 'spc' ],
+            favoredAttrs:   { per:true, wil:true },
+            majorSkills:    { alc:true, alt:true, des:true, ill:true, mer:true, res:true, spc:true },
             image:          'healer.jpg',
             description:    'Fighters of poison and illness. The ancient art of ' +
                 'restoration is their ally, and the deadly art of destruction is their weapon.'
@@ -115,16 +115,16 @@ ocp.clazz = {
 
         'Knight': {
             specialization: 'Combat',
-            favoredAttrs:   [ 'str', 'per' ],
-            majorSkills:    [ 'bla', 'blo', 'blu', 'han', 'hvy', 'ill', 'spc' ],
+            favoredAttrs:   { str:true, per:true },
+            majorSkills:    { bla:true, blo:true, blu:true, han:true, hvy:true, ill:true, spc:true },
             image:          'knight.jpg',
             description:    'The most noble of all combatants. Strong in body and in character.'
         },
 
         'Mage': {
             specialization: 'Magic',
-            favoredAttrs:   [ 'itl', 'wil' ],
-            majorSkills:    [ 'alc', 'alt', 'con', 'des', 'ill', 'mys', 'res' ],
+            favoredAttrs:   { itl:true, wil:true },
+            majorSkills:    { alc:true, alt:true, con:true, des:true, ill:true, mys:true, res:true },
             image:          'mage.jpg',
             description:    'Prefering to use their extensive knowledge of all things ' +
                 'magical, they wield a might more powerful than the sharpest blade.'
@@ -132,8 +132,8 @@ ocp.clazz = {
 
         'Monk': {
             specialization: 'Stealth',
-            favoredAttrs:   [ 'agi', 'wil' ],
-            majorSkills:    [ 'acr', 'alt', 'ath', 'han', 'mar', 'sec', 'sne' ],
+            favoredAttrs:   { agi:true, wil:true },
+            majorSkills:    { acr:true, alt:true, ath:true, han:true, mar:true, sec:true, sne:true },
             image:          'monk.jpg',
             description:    'Quick and cunning with the empty hand, they are strong in ' +
                 'spirit. They prefer to solve conflict by arrow or by fist.'
@@ -141,8 +141,8 @@ ocp.clazz = {
 
         'Nightblade': {
             specialization: 'Magic',
-            favoredAttrs:   [ 'wil', 'spe' ],
-            majorSkills:    [ 'acr', 'alt', 'ath', 'bla', 'des', 'lig', 'res' ],
+            favoredAttrs:   { wil:true, spe:true },
+            majorSkills:    { acr:true, alt:true, ath:true, bla:true, des:true, lig:true, res:true },
             image:          'nightblade.jpg',
             description:    'Spell and shadow are their friends. By darkness they move ' +
                 'with haste, casting magic to benefit their circumstances.'
@@ -150,8 +150,8 @@ ocp.clazz = {
 
         'Pilgrim': {
             specialization: 'Stealth',
-            favoredAttrs:   [ 'per', 'end' ],
-            majorSkills:    [ 'arm', 'blo', 'blu', 'lig', 'mer', 'sec', 'spc' ],
+            favoredAttrs:   { per:true, end:true },
+            majorSkills:    { arm:true, blo:true, blu:true, lig:true, mer:true, sec:true, spc:true },
             image:          'pilgrim.jpg',
             description:    'Hearty folk, well-versed in the tomes of old. They profit ' +
                 'in life by bartering in the market, or by persuading the weak-minded.'
@@ -159,8 +159,8 @@ ocp.clazz = {
 
         'Rogue': {
             specialization: 'Combat',
-            favoredAttrs:   [ 'spe', 'per' ],
-            majorSkills:    [ 'alc', 'ath', 'bla', 'blo', 'ill', 'lig', 'mer' ],
+            favoredAttrs:   { spe:true, per:true },
+            majorSkills:    { alc:true, ath:true, bla:true, blo:true, ill:true, lig:true, mer:true },
             image:          'rogue.jpg',
             description:    'They use speed in combat rather than brute force. ' +
                 'Persuasive in conversation, their tongues are as sharp as blades.'
@@ -168,8 +168,8 @@ ocp.clazz = {
 
         'Scout': {
             specialization: 'Combat',
-            favoredAttrs:   [ 'spe', 'end' ],
-            majorSkills:    [ 'acr', 'alc', 'arm', 'ath', 'bla', 'blo', 'lig' ],
+            favoredAttrs:   { spe:true, end:true },
+            majorSkills:    { acr:true, alc:true, arm:true, ath:true, bla:true, blo:true, lig:true },
             image:          'scout.jpg',
             description:    'Preferring the rolling countryside to the city life, ' +
                 'they are gifted with the ability to evade, guard and protect ' +
@@ -178,8 +178,8 @@ ocp.clazz = {
 
         'Sorcerer': {
             specialization: 'Magic',
-            favoredAttrs:   [ 'itl', 'end' ],
-            majorSkills:    [ 'alc', 'alt', 'con', 'des', 'hvy', 'mys', 'res' ],
+            favoredAttrs:   { itl:true, end:true },
+            majorSkills:    { alc:true, alt:true, con:true, des:true, hvy:true, mys:true, res:true },
             image:          'sorcerer.jpg',
             description:    'Besting the most well-equipped fighters, they rely on ' +
                 'the spells of the mystic arts. Unique to these mages is the bodily ' +
@@ -188,8 +188,8 @@ ocp.clazz = {
 
         'Spellsword': {
             specialization: 'Magic',
-            favoredAttrs:   [ 'wil', 'end' ],
-            majorSkills:    [ 'alt', 'bla', 'blo', 'des', 'hvy', 'ill', 'res' ],
+            favoredAttrs:   { wil:true, end:true },
+            majorSkills:    { alt:true, bla:true, blo:true, des:true, hvy:true, ill:true, res:true },
             image:          'spellsword.jpg',
             description:    'More nimble and athletic than the sorcerer, and better ' +
                 'suited for spell-casting than the knight, their attacks are unpredictable. ' +
@@ -198,8 +198,8 @@ ocp.clazz = {
 
         'Thief': {
             specialization: 'Stealth',
-            favoredAttrs:   [ 'spe', 'agi' ],
-            majorSkills:    [ 'acr', 'lig', 'mar', 'mer', 'sec', 'sne', 'spc' ],
+            favoredAttrs:   { spe:true, agi:true },
+            majorSkills:    { acr:true, lig:true, mar:true, mer:true, sec:true, sne:true, spc:true },
             image:          'thief.jpg',
             description:    'Profiting from the losses of others is their love. Able to be ' +
                 'swift in shadow, and crafty in bartering. Locks are enemies, and lock-picks ' +
@@ -208,8 +208,8 @@ ocp.clazz = {
 
         'Warrior': {
             specialization: 'Combat',
-            favoredAttrs:   [ 'str', 'end' ],
-            majorSkills:    [ 'arm', 'ath', 'bla', 'blo', 'blu', 'han', 'hvy' ],
+            favoredAttrs:   { str:true, end:true },
+            majorSkills:    { arm:true, ath:true, bla:true, blo:true, blu:true, han:true, hvy:true },
             image:          'warrior.jpg',
             description:    'Unafraid of light weaponry, they plow into the fray with ' +
                 'little regard for injury. Masters of all melee tools, they put little faith ' +
@@ -218,8 +218,8 @@ ocp.clazz = {
 
         'Witchhunter': {
             specialization: 'Magic',
-            favoredAttrs:   [ 'itl', 'agi' ],
-            majorSkills:    [ 'alc', 'ath', 'con', 'des', 'mar', 'mys', 'sec' ],
+            favoredAttrs:   { itl:true, agi:true },
+            majorSkills:    { alc:true, ath:true, con:true, des:true, mar:true, mys:true, sec:true },
             image:          'witchhunter.jpg',
             description:    'Swift on foot, and clever with spells, they use distance ' +
                 'as their ally. Slower adversaries are fodder for their arrows.'
@@ -232,12 +232,11 @@ ocp.clazz = {
 
     // Private: Currently selected custom class info
     //          When _custom is true, this data supercedes _predefined
-    // Note:    No rhyme or reason behind default values
     _custom: false,
     _customData: {
         specialization: '',
-        favoredAttrs: [],
-        majorSkills: [],
+        favoredAttrs: {},
+        majorSkills: {},
     },
 
 
@@ -253,15 +252,13 @@ ocp.clazz = {
     // Private: Return the value of a favored attr
     //          Favorites get a 5 point bonus, others get 0
     _getAttr: function (attr) {
-        return (dojo.indexOf(this._getCurrent().favoredAttrs, attr) == -1
-            ? 0 : ocp.ATTR_BONUS_FAV);
+        return (this._getCurrent().favoredAttrs[attr] ? ocp.ATTR_BONUS_FAV : 0);
     },
 
     // Private: Get the major/minor base value for a skill
     //          Major skills start at 25 and minor skills at 5
     _getSkillBase: function (skill) {
-        return (dojo.indexOf(this._getCurrent().majorSkills, skill) == -1
-            ? ocp.SKILL_MIN : ocp.SKILL_MAJOR_MIN);
+        return (this.isMajor(skill) ? ocp.SKILL_MAJOR_MIN : ocp.SKILL_MIN);
     },
 
     // Private: Get the skill specialization value for a skill
@@ -318,7 +315,7 @@ ocp.clazz = {
 
     // Public: Returns if a given skill is a major skill for the current class
     isMajor: function (skill) {
-        return (dojo.indexOf(this._getCurrent().majorSkills, skill) == -1 ? false : true);
+        return (this._getCurrent().majorSkills[skill] ? true : false);
     },
 
     // Public: Return the base and specialization values of each skill
@@ -340,6 +337,7 @@ ocp.clazz = {
 
 
     // Private: Initialize the custom data
+    // Note:    No particular rhyme or reason behind the default values used
     _initializeCustomData: function() {
 
         var data = this._customData;
@@ -353,7 +351,7 @@ ocp.clazz = {
         // Pick favored attrs from the list
         var favCount = 0;
         for (var attr in ocp.coreAttrs) {
-            data.favoredAttrs.push(attr);
+            data.favoredAttrs[attr] = true;
             if (++favCount >= ocp.CLASS_FAV_ATTR_NUM) {
                 break;
             }
@@ -361,11 +359,12 @@ ocp.clazz = {
 
         // There's no real method to pick initial major skills, so just go through the skills
         // per spec until we reach the number we need (which should be all for the first spec).
+        var majorsCount = 0;
         for (var spec in ocp.specs) {
             var skills = ocp.specs[spec].skills;
             for (var skillIndex in skills) {
-                data.majorSkills.push(skills[skillIndex]);
-                if (data.majorSkills.length >= ocp.MAJOR_NUM) {
+                data.majorSkills[skills[skillIndex]] = true;
+                if (++majorsCount >= ocp.MAJOR_NUM) {
                     return;
                 }
             }
@@ -631,8 +630,7 @@ ocp.clazz.classDialog = {
             // For each attribute, list a bonus or nothing
             // TODO: Could use a check mark or other icon here instead?
             for (var attr in ocp.coreAttrs) {
-                var bonus =
-                    (dojo.indexOf(data.favoredAttrs, attr) == -1 ? 0 : ocp.ATTR_BONUS_FAV);
+                var bonus = (data.favoredAttrs[attr] ? ocp.ATTR_BONUS_FAV : 0);
                 det +=
                     '<td class="numeric' + (bonus > 0 ? ' bonus' : '') + '">' +
                         (bonus > 0 ? bonus : '' )+
@@ -641,7 +639,7 @@ ocp.clazz.classDialog = {
 
             // For each skill, list a bonus or nothing
             for (var skill in ocp.skills) {
-                var isMajor = (dojo.indexOf(data.majorSkills, skill) == -1 ? false : true);
+                var isMajor = (data.majorSkills[skill] ? true : false);
                 var majorBonus = (isMajor ? ocp.SKILL_BONUS_MAJOR : 0);
                 var specBonus = (dojo.indexOf(ocp.specs[data.specialization].skills, skill) == -1
                     ? 0 : ocp.SKILL_BONUS_SPEC);
@@ -701,7 +699,7 @@ ocp.clazz.classDialog = {
         // Initialize the favored attributes
         var cus = '<div class="customInputHeader">Favored Attributes:</div>';
         for (var attr in ocp.coreAttrs) {
-            var isFav = (dojo.indexOf(customData.favoredAttrs, attr) == -1 ? false : true);
+            var isFav = (customData.favoredAttrs[attr] ? true : false);
             var inputId = 'favCheck_' + attr;
             cus +=
                 '<input dojoType="dijit.form.CheckBox" type="checkbox" ' +
@@ -750,8 +748,7 @@ ocp.clazz.classDialog = {
                 // Build a row for each skill
                 for (var skillIndex in coreAttr.skills) {
                     var skill = coreAttr.skills[skillIndex];
-                    var isMajor = (dojo.indexOf(customData.majorSkills, skill) == -1
-                        ? false : true);
+                    var isMajor = (customData.majorSkills[skill] ? true : false);
                     var inputId = 'classMajorCheck_' + skill;
                     cus +=
                         '<tr>' +
@@ -800,6 +797,8 @@ ocp.clazz.classDialog = {
         // Instead, do nothing and wait until the big operation is done.
         if (!this._doingManyChanges) {
 
+            // No need to validate specialization since they are radio buttons
+
             // Count the number of favorite attribute checkboxes checked
             var favAttrsChecked = 0;
             for (var attr in ocp.coreAttrs) {
@@ -807,8 +806,6 @@ ocp.clazz.classDialog = {
                     favAttrsChecked++;
                 }
             }
-
-            // No need to validate specialization since they are radio buttons
 
             // Count the number of major skill checkboxes checked
             var majorsChecked = 0;
@@ -913,10 +910,10 @@ ocp.clazz.classDialog = {
         if (this._isValid) {
 
             // Gather the favored attributes
-            var favs = [];
+            var favs = {};
             for (var attr in ocp.coreAttrs) {
                 if (this._favCheckbox[attr].checked) {
-                    favs.push(attr);
+                    favs[attr] = true;
                 }
             }
 
@@ -930,10 +927,10 @@ ocp.clazz.classDialog = {
             }
 
             // Gather the major skills
-            var majors = [];
+            var majors = {};
             for (var skill in ocp.skills) {
                 if (this._majorCheckbox[skill].checked) {
-                    majors.push(skill);
+                    majors[skill] = true;
                 }
             }
 
@@ -963,7 +960,7 @@ ocp.clazz.classDialog = {
         var customData = ocp.clazz._customData;
         for (var attr in ocp.coreAttrs) {
             this._favCheckbox[attr].attr('value',
-                (dojo.indexOf(customData.favoredAttrs, attr) == -1 ? false : true));
+                (customData.favoredAttrs[attr] ? true : false));
         }
         for (var spec in ocp.specs) {
             this._specRadio[spec].attr('value',
@@ -971,7 +968,7 @@ ocp.clazz.classDialog = {
         }
         for (var skill in ocp.skills) {
             this._majorCheckbox[skill].attr('value',
-                (dojo.indexOf(customData.majorSkills, skill) == -1 ? false : true));
+                (customData.majorSkills[skill] ? true : false));
         }
 
         // Done with the many changes, so update validity

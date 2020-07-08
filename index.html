@@ -105,6 +105,9 @@
             addOnLoad: function () {
                 //console.log('First addOnLoad initialization...');
 
+                // With Dojo loaded, hide the message about Dojo not being loaded
+                dojo.style('dojoLoading', 'display', 'none');
+
                 // Since the page's contents (including the ocp*.js files) have been loaded
                 // and executed, the ocp top-level variable/namespace has been created
                 // so we can load the ocp.widget.* resources into it.
@@ -117,6 +120,30 @@
                 // do another addOnLoad hook.
                 dojo.addOnLoad(function () {
                     //console.log('Second addOnLoad initialization...');
+
+                    // With all OCP content loaded, validate that every object/class exists
+                    if (!((typeof ocp == 'object') &&
+                        ocp.loader && ocp.loader.relnotes && ocp.loader.ManagedModule &&
+                        ocp.contact && ocp.contact.letterDecoder &&
+                        ocp.input &&
+                        ocp.race &&
+                        ocp.birth &&
+                        ocp.clazz && ocp.clazz.classDialog &&
+                        ocp.existing && ocp.existing.attrDialog && ocp.existing.skillDialog &&
+                        ocp.order &&
+                        ocp.level &&
+                        ocp.results &&
+                        ocp.widget &&
+                            ocp.widget.LabeledHorizontalSlider &&
+                            ocp.widget.TitledContentPane))
+                    {
+                       // An OCP object/class wasn't defined probably because of a JavaScript
+                       // incompatibility with this browser. Give the user a warning that
+                       // things are going to be broken, but let them go on in hopes that
+                       // the functionality they want still works.
+                       dojo.style('ocpNotLoaded', 'display', 'block');
+                    }
+
                     // With our custom widgets now defined in the ocp.* namespace,
                     // parse everything and initialize OCP
                     dojo.parser.parse();
@@ -153,13 +180,48 @@
     </div>
 
 
-    <!-- Notify browsers that can't run the scripts causing this page to look broken -->
+    <!-- Notify browsers that can't run any JavaScript causing this page to look broken -->
     <noscript>
-        <div>
-            <div>The JavaScript scripts required to operate OCP cannot be executed.</div>
-            <div>Either your browser does not support JavaScript or you need to enable it.</div>
+        <div class="scriptFailWarning">
+            <p>JavaScript is not enabled.</p>
+            <p>
+                OCP requires JavaScript to execute. Either your browser does not support
+                JavaScript or you need to enable it for this server.
+            </p>
         </div>
     </noscript>
+
+    <!--
+         Notify users that JavaScript is enabled, but Dojo wasn't loaded (because NoScript
+         blocked it perhaps?). This will get hidden by the first addOnLoad.
+     -->
+    <div id="dojoLoading" class="scriptFailWarning">
+        <p>If this message remains, then the Dojo Toolkit has failed to load.</p>
+        <p>
+            For faster loading, OCP uses the Dojo Toolkit from the AOL CDN. Make sure your browser
+            is configured to allow execution of JavaScript scripts from the o.aolcdn.com server.
+        </p>
+    </div>
+
+    <!--
+         Notify users that JavaScript is enabled, but OCP wasn't completely loaded. Most likely
+         this occurred because some JavaScript constructs in OCP files aren't supported by this
+         browser. Start hidden and display in second addOnLoad validation if necessary.
+     -->
+    <div id="ocpNotLoaded" class="scriptFailWarning" style="display: none">
+        <p>There was an error loading/parsing the OCP JavaScript scripts.</p>
+        <p>
+            Assuming your browser is configured to execute JavaScript scripts from this server,
+            this usually means your browser's JavaScript support is incompatible with OCP.
+        </p>
+        <p>
+            While OCP is being designed with browser portability in mind, it only officially runs
+            on FireFox 3.0/3.5 because OCP is being developed on it. All other standards compliant
+            browsers may or may not work, but no version of IE works yet. In future OCP versions,
+            the major releases of Internet Explorer, Opera, Safari, and Google Chrome will be
+            explicitly supported.
+        </p>
+    </div>
 
 
     <!-- The main interface -->
@@ -172,7 +234,7 @@
 
         <!--
              The main stack container to show one module at a time.
-             All modules are loaderManagedContainers so the loader can catch errors.
+             All modules are loaderManagedContainers so the loader can cleanly handle errors.
         -->
         <div dojoType="dijit.layout.StackContainer" id="ocpStackContainer" doLayout="false">
 

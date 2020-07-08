@@ -36,16 +36,6 @@ html, body {
 |* Styles specific to the main page only
 \*---------------------------------------------------------------------------*/
 
-/* Make the no scripts supported warning message stand out */
-noscript > div:first-child {
-    color: red;
-    font-weight: bold;
-    font-size: 125%;
-    border: 1px solid red;
-    padding: 0.25em;
-    background-color: #ddd;
-}
-
 /* The main title block */
 #title {
     margin: 0.5em 0 1em 0;
@@ -60,6 +50,28 @@ noscript > div:first-child {
 #title div {
     font-size: 75%;
 }
+
+
+/* Make the script failure warning messages stand out */
+.scriptFailWarning {
+    color: red;
+    margin: 1em;
+    border: 2px solid red;
+    padding: 0 0.5em;
+    background-color: #ddd;
+}
+
+/* Reduce the spacing between paragraphs in a warning message */
+.scriptFailWarning p {
+    margin: 0.5em 0;
+}
+
+/* The first child paragraph in warning messages are the error reason */
+.scriptFailWarning > p:first-child {
+    font-weight: bold;
+    font-size: 125%;
+}
+
 
 /* The main page footer with about information */
 #aboutFooter {

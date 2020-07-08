@@ -24,10 +24,9 @@
 
 /* Set up the main pane for the planner */
 /* TODO: With all attrs and skills at max, leveling details gets a horizontal scrollbar */
-/* TODO: Change to min-width and min-height to allow larger sizes? */
 #planner {
-    width: 920px;
-    height: 670px;
+    min-width: 920px;
+    min-height: 670px;
     border: 1px solid #ccc
 }
 

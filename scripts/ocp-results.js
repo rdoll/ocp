@@ -241,6 +241,15 @@ ocp.results = {
         // Complete the header and start the body
         lev += '</tr></thead><tbody>';
 
+        // When displaying the skills, we need to know if they are major skills or not.
+        // For 50 levels and the 21 skills, that's easily over 1,000 ocp.input.isMajor calls.
+        // ocp.input.isMajor is very fast, but 1,000 calls of anything has a fair amount of
+        // CPU overhead. To cut it down, simply cache the majors once here.
+        var isMajor = {};
+        for (var skill in ocp.skills) {
+            isMajor[skill] = ocp.input.isMajor(skill);
+        }
+
         // The current level's data
         // Start it with the first level's info so when it becomes
         // previous and is compared to itself, no changes will be found
@@ -259,7 +268,16 @@ ocp.results = {
             var wasted = ocp.level.levelWasted(level);
 
             // Start the data
-            lev += '<tr><td class="numeric">' + level + '</td>';
+            lev +=
+                '<tr>' +
+                    '<td class="numeric">' +
+                        '<a href="javascript:ocp.level.setExisting(' + level + ')" ' +
+                            'title="Set existing character details to these level ' +
+                                level + ' values"' +
+                        '>' +
+                            level +
+                        '</a>' +
+                    '</td>';
 
             // Core attributes first
             for (var attr in ocp.coreAttrs) {
@@ -283,7 +301,7 @@ ocp.results = {
             for (var skill in ocp.skills) {
                 var class = 'numeric' + (skill in wasted ? ' worse' :
                     (current[skill] != previous[skill] ? ' changed' : '')) +
-                    (ocp.input.isMajor(skill) ? ' majorSkill' : '');
+                    (isMajor[skill] ? ' majorSkill' : '');
                 lev += '<td class="' + class + '"' +
                     (skill in wasted ? ' title="' + wasted[skill] + '"' : '') +
                     '>' + current[skill] + '</td>';

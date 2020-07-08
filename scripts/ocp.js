@@ -22,7 +22,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.7.3',
+    VERSION: '0.7.4',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -169,26 +169,32 @@ var ocp = {
 
 
     // Public: Returns a pretty list of full core attribute names from an
-    //         input array with abbreviations
-    prettyAttrList: function (arr, prep) {
+    //         input object whose properties are attribute abbreviations
+    prettyAttrList: function (obj, prep) {
 
-        // Create a new array with each abbreviation converted to it's name
-        var newArr = dojo.map(arr, function (attr) { return ocp.coreAttrs[attr].name; });
+        // Create an array with each abbreviation converted to it's name
+        var arr = [];
+        for (var attr in obj) {
+            arr.push(ocp.coreAttrs[attr].name);
+        }
 
         // Return the results of pretty-ing the new array
-        return this.prettyList(newArr, prep);
+        return this.prettyList(arr, prep);
     },
 
 
     // Public: Returns a pretty list of full skill names from an
-    //         input array with abbreviations
-    prettySkillList: function (arr, prep) {
+    //         input object whose properties are skill abbreviations
+    prettySkillList: function (obj, prep) {
 
-        // Create a new array with each abbreviation converted to it's name
-        var newArr = dojo.map(arr, function (skill) { return ocp.skills[skill].name; });
+        // Create an array with each abbreviation converted to it's name
+        var arr = [];
+        for (var skill in obj) {
+            arr.push(ocp.skills[skill].name);
+        }
 
         // Return the results of pretty-ing the new array
-        return this.prettyList(newArr, prep);
+        return this.prettyList(arr, prep);
     },
 
 
@@ -261,6 +267,9 @@ var ocp = {
         // Initialize the min/max stats for attributes
         this._initializeAttrs();
 
+        // Initialize resize event trapping
+        this._initializeResizeHooks();
+
         // Initialize our main page children
         ocp.loader.initialize();
         ocp.contact.initialize();
@@ -312,6 +321,30 @@ var ocp = {
         // Magicka is an exception since races and birthsigns can give bonuses.
         // Add these bonuses to the max derived from the core attributes.
         this.derivedAttrs.mag.max += ocp.race.attrMax('mag') + ocp.birth.attrMax('mag');
+    },
+
+
+    // Private: Initializes hooks to propagate resize events to modules.
+    //          We are using doLayout=false to let children size themselves, but that also
+    //          inhibits the propagation of resize events to children, so do it ourselves.
+    _initializeResizeHooks: function () {
+
+        // The main module container
+        var mainContainer = dijit.byId('ocpStackContainer');
+
+        // After the main module container calls it's resize, we get called
+        dojo.connect(mainContainer, 'resize', function () {
+            // Closure: mainContainer
+            //console.log('mainContainer resize');
+
+            // Resize the currently selected child
+            // The first resize does most of the work, but if we started with a vertical scrollbar
+            // that was removed after the first resize, the space for where the scrollbar was
+            // remains. So we do a second resize to handle this case. It's a little expensive,
+            // but we shouldn't be getting lots of resize events so it's acceptable.
+            mainContainer.selectedChildWidget.resize();
+            mainContainer.selectedChildWidget.resize();
+        });
     },
 
 

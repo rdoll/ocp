@@ -130,9 +130,7 @@ ocp.level = {
 
         // If we don't have enough points in all major skills combined, we can't level
         var points = 0;
-        var majors = ocp.input.majors;
-        for (var skillIndex in majors) {
-            var skill = majors[skillIndex];
+        for (var skill in ocp.input.majors) {
             if (totals[skill] < ocp.SKILL_MAX) {
                 points += ocp.SKILL_MAX - totals[skill];
                 if (points >= ocp.LEVELUP_MAJOR_POINTS) {
@@ -159,17 +157,6 @@ ocp.level = {
 
         // The order we will level the attributes
         var attrOrder = ocp.order.attrs;
-
-        // Since every isMajor call does an indexOf operation,
-        // create an object cache for all major skills
-        var isMajor = {};
-        for (var skill in ocp.skills) {
-            isMajor[skill] = false;
-        }
-        var majors = ocp.input.majors;
-        for (var skillIndex in majors) {
-            isMajor[majors[skillIndex]] = true;
-        }
 
         // Track everything we will level up
         var leveled = {};
@@ -207,7 +194,7 @@ ocp.level = {
                 if (skills.length > 0) {
                     for (var skillIndex in skills) {
                         var skill = skills[skillIndex];
-                        if ((current[skill] < ocp.SKILL_MAX) && (!isMajor[skill])) {
+                        if ((current[skill] < ocp.SKILL_MAX) && (!ocp.input.isMajor(skill))) {
                             onlyMajors = false;
                             break;
                         }
@@ -264,7 +251,7 @@ ocp.level = {
             var skill = bonusSkills[skillIndex];
 
             // Only useful if this is a major skill
-            if (isMajor[skill]) {
+            if (ocp.input.isMajor(skill)) {
 
                 // The attr this major skill helps
                 var attr = ocp.skills[skill].attr;
@@ -366,7 +353,7 @@ ocp.level = {
                     var skill = skills[skillIndex];
 
                     // If this is a major skill, check it
-                    if (isMajor[skill]) {
+                    if (ocp.input.isMajor(skill)) {
 
                         // Start by determining the max number of skill points we can raise
                         // without overflowing the needed 10 major skill points
@@ -437,7 +424,7 @@ ocp.level = {
                 var skills = ocp.coreAttrs[attr].skills;
                 for (var skillIndex in skills) {
                     var skill = skills[skillIndex];
-                    if (isMajor[skill]) {
+                    if (ocp.input.isMajor(skill)) {
                         skillsForAttr.push(skill);      // Put major at end
                     } else {
                         skillsForAttr.unshift(skill);   // Put minor in front
@@ -460,7 +447,7 @@ ocp.level = {
                         // If this is a major skill, we cannot raise it without going beyond
                         // the 10 major skill points required to level. Since minor skills
                         // are checked first, if we got here, it's a problem worth noting.
-                        if (isMajor[skill]) {
+                        if (ocp.input.isMajor(skill)) {
                             wasted[skill] = 'Since ' + ocp.coreAttrs[attr].name +
                                 ' is being increased this level, we want to increase this ' +
                                 'skill for the attribute bonus. However, since ' +
@@ -591,7 +578,7 @@ ocp.level = {
         var leveledMajorPoints = 0;
         for (var skill in ocp.skills) {
             if (leveled[skill] > 0) {
-                if (isMajor[skill]) {
+                if (ocp.input.isMajor(skill)) {
                     leveledMajorPoints += leveled[skill];
                 }
 
@@ -665,6 +652,30 @@ ocp.level = {
         if (failsafe <= 0) {
             console.warn('ocp.level._updateLeveling hit failsafe!');
             this._error = true;
+        }
+    },
+
+
+    // Public: Sets the existing character data to the values in the given level.
+    //         The majors are pulled from the current majors.
+    // Throws: An error if the given level is out of range of the currently generated levels.
+    setExisting: function (level) {
+
+        // Only do the work if the level is valid
+        if ((level >= ocp.input.levelMin) && (level <= ocp.level.levelMax)) {
+
+            // It's a valid level, so set the new existing data (without notifications)
+            ocp.existing._selectCustom(level, this._totals[level], ocp.input.majors);
+
+            // Select the existing details (this may or may not notify)
+            ocp.input.isNewChar = false;
+
+            // Since selecting the existing details only generates a notification event if the
+            // panel changed, generate an event here just to be sure.
+            ocp.notifyChanged();
+        } else {
+            // The level is invalid -- throw an error
+            throw 'Invalid level "' + level + '" in ocp.level.setExisting.';
         }
     }
 };

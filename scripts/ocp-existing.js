@@ -26,8 +26,11 @@ ocp.existing = {
     // Private: Level totals for all core attrs, derived attrs, and skills
     _totals: {},
 
-    // Private: The list of major skills
-    _majors: [],
+    // Private: Major skills are properties with true values
+    _majors: {},
+
+    // Private: The Dijit widget for the level slider
+    _levelSlider: null,
 
     // Public: These child helper objects encapsulate everything for each dialog
     attrDialog: null,
@@ -41,7 +44,7 @@ ocp.existing = {
 
     // Public: Returns if a given skill is a major skill
     isMajor: function (skill) {
-        return (dojo.indexOf(this.majors, skill) == -1 ? false : true);
+        return (this._majors[skill] ? true : false);
     },
 
 
@@ -85,7 +88,7 @@ ocp.existing = {
         }, dojo.create('div', null, containerNode, 'last'));
 
         // Create the level slider
-        var slider = new ocp.widget.LabeledHorizontalSlider({
+        this._levelSlider = new ocp.widget.LabeledHorizontalSlider({
             id: 'levelSlider',
             value: 1,
             minimum: 1,
@@ -105,11 +108,12 @@ ocp.existing = {
     _initializeMajors: function() {
         // There's no real method to pick initial major skills, so just go through the skills
         // per spec until we reach the number we need (which should be all for the first spec).
+        var majorsCount = 0;
         for (var specIndex in ocp.specs) {
             var skills = ocp.specs[specIndex].skills;
             for (var skillIndex in skills) {
-                this._majors.push(skills[skillIndex]);
-                if (this._majors.length >= ocp.MAJOR_NUM) {
+                this._majors[skills[skillIndex]] = true;
+                if (++majorsCount >= ocp.MAJOR_NUM) {
                     return;
                 }
             }
@@ -134,6 +138,30 @@ ocp.existing = {
         for (var skill in ocp.skills) {
             this._totals[skill] = (this.isMajor(skill) ? ocp.SKILL_MAJOR_MIN : ocp.SKILL_MIN);
         }
+    },
+
+
+    // Private: Sets all existing details to the given values with no notifications
+    _selectCustom: function (level, totals, majors) {
+
+        // Ensure the level is within the range of the level slider
+        if (level > ocp.LEVEL_MAX) {
+            level = ocp.LEVEL_MAX;
+        }
+
+        // Set the new values
+        this._level = level;
+        delete this._totals;
+        this._totals = totals;
+        delete this._majors;
+        this._majors = majors;
+
+        // Set the level slider to the new value
+        this._levelSlider.attr('value', level);
+
+        // Notify our dialogs that our values changed
+        this.attrDialog.existingChanged();
+        this.skillDialog.existingChanged();
     },
 
 
@@ -344,6 +372,14 @@ ocp.existing.attrDialog = {
     },
 
 
+    // Public: The existing data changed -- update our vaules if we've been initialized
+    existingChanged: function () {
+        if (this._dialog._alreadyInitialized) {
+            this.undo();
+        }
+    },
+
+
     // Public: Submit and use the dialog's values
     submit: function() {
         console.debug('entered attrDialog.submit');
@@ -547,6 +583,14 @@ ocp.existing.skillDialog = {
     },
 
 
+    // Public: The existing data changed -- update our vaules if we've been initialized
+    existingChanged: function () {
+        if (this._dialogInitialized) {
+            this.undo();
+        }
+    },
+
+
     // Private: Update the dialog to reflect our current validity
     _updateValidity: function() {
 
@@ -665,12 +709,12 @@ ocp.existing.skillDialog = {
         if (this._isValid) {
 
             // Grab info from all skills
-            var majors = [];
+            var majors = {};
             for (var skill in ocp.skills) {
 
                 // Store the major if it's checked
                 if (this._checkbox[skill].checked) {
-                    majors.push(skill);
+                    majors[skill] = true;
                 }
 
                 // Store the value of this skill
@@ -678,6 +722,7 @@ ocp.existing.skillDialog = {
             }
 
             // Store the new list of majors
+            delete ocp.existing._majors;
             ocp.existing._majors = majors;
 
             // Notify of changes and return success to let the dialog be closed

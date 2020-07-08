@@ -35,6 +35,7 @@ ocp.input = {
     },
 
     // Public: Set the input data to either a new (true) or existing (false) character
+    //         If the child is new, a notification event is generated
     set isNewChar (newChar) {
         this._stackContainer.selectChild(
             newChar ? 'inputNewCharacter' : 'inputExistingCharacter');

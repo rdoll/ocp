@@ -27,53 +27,88 @@
 <ocp>
     <knownissues>
         <issue type="feature" name="Only officially supported browser is FireFox 3.0/3.5">
-            While OCP is being designed with browser portability in mind, it only officially
-            runs on FireFox 3.0/3.5 because OCP is being developed on it. All other standards
-            compliant browsers may or may not work, but no version of IE works yet. In
-            future OCP versions, the major releases of Internet Explorer, Opera, Safari, and
-            Google Chrome will be explicitly supported.
+            While OCP is being designed with browser portability in mind, it only officially runs
+            on FireFox 3.0/3.5 because OCP is being developed on it. All other standards compliant
+            browsers may or may not work, but no version of IE works yet. In future OCP versions,
+            the major releases of Internet Explorer, Opera, Safari, and Google Chrome will be
+            explicitly supported.
         </issue>
 
-        <issue type="bug" name="The instructions don't properly resize">
-            The instructions do not properly resize resulting in wasted space or unncessary
-            scrollbars. The complete instructions are always visible, so this is merely an
-            annoyance that will be fixed in a future release.
+        <issue type="feature" name="Add some advice for creating new characters?">
+            For people totally new to Oblivion, some basic advice would go a long way towards
+            helping them create fun characters they can sustain through higher levels.
         </issue>
 
-        <issue type="bug" name="Need to report when OCP and/or Dojo scripts don't run">
-            Right now there is just a noscript block, but it doesn&apos;t detect when
-            the OCP scripts are run but the o.aolcdn.com Dojo ones are not.
+        <issue type="bug" name="Minor issues with some resizing scenarios">
+            There are a few unlikely scenarios that can cause unnecessary scrollbars or other
+            minor resizing issues. If this happens, you can fix it by changing the size of the
+            browser window again.
         </issue>
 
         <issue type="function" name="Colors and styles are minimal">
-            To simplify development, the colors and styles are designed to be informative,
-            but kept to a minimum. If OCP gets hosted as part of a larger site, OCP will
-            adopt that site's colors and styling. However, if OCP remains independent,
-            it will adopt Oblivion-like colors and styling.
+            To simplify development, the colors and styles are designed to be informative, but
+            kept to a minimum. If OCP gets hosted as part of a larger site, OCP will adopt that
+            site's colors and styling. However, if OCP remains independent, it will adopt
+            Oblivion-like colors and styling.
         </issue>
 
         <issue type="function" name="Release Notes icons are generic">
-            The current icons are placeholders. If you know of some cool
-            (and free) icons that you think would go well with OCP, please let me know!
+            The current icons are placeholders. If you know of some cool (and free) icons that you
+            think would go well with OCP, please let me know!
         </issue>
 
         <issue type="feature" name="Ability to share character configurations">
-            This will at least include using URL get parameters so a character can be
-            shared via a single (albeit long) link.
+            This will at least include using URL get parameters so a character can be shared via a
+            single (albeit long) link.
         </issue>
     </knownissues>
 
     <changelog>
+        <version name="0.7.4" type="beta" scope="public" date="16 Sep 2009">
+            <change type="feature" name="Changed OCP's home to ocp.uesp.net">
+                The fine folks at UESP (Unofficial Elder Scrolls Pages) have offered to host OCP.
+                As of this release, OCP's official home is ocp.uesp.net.
+            </change>
+
+            <change type="function"
+                name="Added ability to select a level's data from the Leveling Details">
+                Being able to select the values of a level in the Leveling Details has a few uses,
+                but the most important one is to allow multiple Leveling Orders to be used
+                throughout the lifespan of a single character.
+            </change>
+
+            <change type="function" name="Added support for browser resizing">
+                All modules now dynamically resize when the browser is resized.
+            </change>
+
+            <change type="bug"
+                name="Slight recalculation and redisplay performance enhancement" />
+
+            <change type="function"
+                name="Improved reporting when OCP and/or Dojo scripts are not executed">
+                The OCP validation code also detects when any objects/classes are not defined;
+                which implies the browser's JavaScript support is incompatible with the JavaScript
+                constructs OCP uses. This is a roundabout way to detect unsupported browsers
+                without relying on the very undependable User-Agent string.
+            </change>
+        </version>
+
         <version name="0.7.3" type="beta" scope="public" date="23 Aug 2009">
             <change type="function" name="Instructions content completed">
                 The full instructions were completed and will be maintained from now on.
             </change>
+
             <change type="bug"
-                name="Changed JavaScript variable and property names to avoid potential future keywords" />
+                name="Changed JavaScript variable and property names to avoid potential future
+                    keywords" />
+
             <change type="bug"
-                name="Increased size of the Class Dialog to fit two Custom class error messages" />
+                name="Increased size of the Class Dialog to fit two Custom class error
+                    messages" />
+
             <change type="bug"
-                name="Changed the Class Dialog's Detailed Class's skill values to match the Initial Stats results section">
+                name="Changed the Class Dialog's Detailed Class's skill values to match the
+                    Initial Stats results section">
                 Previously, the skill values shown in the Class Dialog's Detailed Stats tab only
                 showed the bonuses above and beyond the minimum skill value. This resulted in the
                 table's values not matching the Initial Stats section, which is confusing. Now the
@@ -84,32 +119,35 @@
 
         <version name="0.7.2" type="beta" scope="public" date="13 Aug 2009">
             <change type="feature" name="FAQ framework completed">
-                The FAQ module framework was completed so FAQ questions and answers can be
-                easily added/modified.
+                The FAQ module framework was completed so FAQ questions and answers can be easily
+                added/modified.
             </change>
+
             <change type="function" name="FAQ content completed">
                 An initial pass of FAQ content was completed and will be maintained from now on.
             </change>
+
             <change type="feature" name="About content completed">
-                The Credits, License, and Warranty information was completed and
-                will be maintained from now on.
+                The Credits, License, and Warranty information was completed and will be
+                maintained from now on.
             </change>
+
             <change type="function"
-                name='Added fun email address "decoder" dialog for contacting me'>
-            </change>
+                name='Added fun email address "decoder" dialog for contacting me' />
+
             <change type="bug"
                 name='Added "still in development" scope to Change Log version types' />
         </version>
 
         <version name="0.7.1" type="beta" scope="public" date="02 Aug 2009">
             <change type="feature" name="Release Notes parsed from XML source completed">
-                The Release Notes module now parses the release notes in XML to
-                generate the Known Issues and Change Log.
+                The Release Notes module now parses the release notes in XML to generate the Known
+                Issues and Change Log.
             </change>
 
             <change type="function" name="Home and Release Notes content completed">
-                The Change Log and Known Issues list in the Release Notes are current and
-                will be maintained from now on.
+                The Change Log and Known Issues list in the Release Notes are current and will be
+                maintained from now on.
             </change>
 
             <change type="function" name="Cleanly catch and report all AJAX module errors" />
@@ -117,9 +155,9 @@
 
         <version name="0.7.0" type="beta" scope="private" date="27 Jul 2009">
             <change type="feature" name="Created AJAX framework for all OCP modules">
-                OCP was partioned into modules so each module could be fully rendered
-                without impacting the space of the others. All modules (including the
-                Planner) are loaded on demand via AJAX requests.
+                OCP was partioned into modules so each module could be fully rendered without
+                impacting the space of the others. All modules (including the Planner) are loaded
+                on demand via AJAX requests.
             </change>
 
             <change type="bug"
@@ -128,14 +166,14 @@
 
         <version name="0.6.0" type="beta" scope="public" date="17 Jul 2009">
             <change type="bug" name="Never &quot;burn&quot; major skills points">
-                Once the 10 major skill points required to level have been spent,
-                do not &quot;burn&quot; any more major skill points while trying to maximize
-                an attribute bonus.
+                Once the 10 major skill points required to level have been spent, do not
+                &quot;burn&quot; any more major skill points while trying to maximize an attribute
+                bonus.
             </change>
 
             <change type="function" name="Added sanity checks to the leveling process">
-                After every level has been calculated, sanitize the results to ensure
-                nothing is amiss (e.g. raising more than 10 major skill points).
+                After every level has been calculated, sanitize the results to ensure nothing is
+                amiss (e.g. raising more than 10 major skill points).
             </change>
         </version>
     </changelog>

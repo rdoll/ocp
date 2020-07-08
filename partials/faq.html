@@ -15,8 +15,10 @@
 <!-- Frequently Asked Questions -->
 <div id="faq">
     <div id="faqButtons">
-        <button dojoType="dijit.form.Button" onclick="ocp.faqExpandAll(true)">Expand All</button>
-        <button dojoType="dijit.form.Button" onclick="ocp.faqExpandAll(false)">Collapse All</button>
+        <button dojoType="dijit.form.Button"
+            onclick="ocp.faqExpandAll(true)">Expand All</button>
+        <button dojoType="dijit.form.Button"
+            onclick="ocp.faqExpandAll(false)">Collapse All</button>
     </div>
 
     <div dojoType="dijit.TitlePane" class="faqItem" open="false"
@@ -32,16 +34,50 @@
             <a href="http://www.uesp.net/wiki/Oblivion:Oghma_Infinium">Oghma Infinium</a>) or
             quest rewards (like from
             <a href="http://www.uesp.net/wiki/Oblivion:Origin_of_the_Gray_Prince">Origin of the
-            Gray Prince</a>).
+                Gray Prince</a>).
         </p>
     </div>
 
     <div dojoType="dijit.TitlePane" class="faqItem" open="false"
-        title="Why doesn't the leveling algorithm assume skills can be lowered by serving a jail sentence or increased by item/quest rewards?">
+        title="Why doesn't the leveling algorithm assume skills can be lowered by serving a jail
+            sentence or increased by item/quest rewards?">
         <p>
             Not only would this significantly complicate the already complex leveling algorithm,
             but not everyone believes this is an acceptable way to continue leveling after all
             major skills have been maxed.
+        </p>
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title="Why doesn't OCP allow me to control which skills are raised each level?">
+        <p>
+            This is done for two reasons. First, OCP is meant to be simple to use and having to
+            set which skills you raise every level would be too complex. Beyond the requisite
+            <span class="plannerSection">Character Details</span>, OCP uses a simple
+            <span class="plannerSection">Leveling Order</span> to control the leveling algoritm.
+        </p>
+        <p>
+            Secondly, the exact skills raised by the leveling algorithm are not particularly
+            important for potency analysis. So long as the skills are for the same attribute and
+            have the same major/minor status, they are interchangeable. For example, if OCP uses
+            minor skill Blade to level up Strength, it won't matter if your character actually
+            uses minor skill Blunt instead; however, substituting major skill Hand-to-Hand or
+            Marksmanship would change your character's potency.
+        </p>
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title="How do I change the Leveling Order midway through leveling?">
+        <p>
+            For simplicity, OCP only supports one
+            <span class="plannerSection">Leveling Order</span> at a time, however you can simulate
+            using different orders. Each time you want to change the order, go to the
+            <span class="plannerSection">Leveling Details</span>, set the
+            <span class="plannerSection">Existing Details</span> to the level before the new
+            order, and then change to the new attribute order. Repeat the process for all orders.
+            While the final <span class="plannerSection">Leveling Details</span> will only show
+            the levels for the final attribute order, its data and the
+            <span class="plannerSection">Analysis</span> will reflect the aggregate of all orders.
         </p>
     </div>
 
@@ -84,34 +120,25 @@
             while being able to safely waste a few skill points each level.
         </p>
         <p>
-             For fun, I added the complete details of Nullis into OCP. When you
-             <a href="javascript:ocp.nullis.safeSetNow();">load Nullis' data</a>, you can see his
-             New Character data, a snapshot of his Existing Character data, and the Leveling Order
-             I (roughly) followed. Additionally, I added the actual past level data to the
-             Leveling Details results. These details are just for fun and they are lost upon any
-             changes to the <span class="plannerSection">Character Details</span> or
-             <span class="plannerSection">Leveling Order</span>.
-         </p>
-    </div>
-
-    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
-        title="Why doesn't OCP have more detailed leveling controls like the historical level up data you added with Nullis?">
-        <p>
-            One of the goals for OCP is that it must be easy to use. The leveling paradigm in
-            Oblivion is complex enough, but if users have to set 100 different inputs just to get
-            a meaningful result, OCP would be useless to all but the most hardcore players.
-            Therefore, beyond the requisite <span class="plannerSection">Character Details</span>,
-            OCP uses a simple <span class="plannerSection">Leveling Order</span> to control the
-            leveling algoritm.
+            For fun, I added the complete details of Nullis into OCP. When you
+            <a href="javascript:ocp.nullis.safeSetNow();">load Nullis' data</a>, you can see his
+            <span class="plannerSection">New Character</span> data, a snapshot of his
+            <span class="plannerSection">Existing Character</span> data, and the
+            <span class="plannerSection">Leveling Order</span> I (roughly) followed. Additionally,
+            I added the actual past level data to the
+            <span class="plannerSection">Leveling Details</span> results. These details are just
+            for fun, cannot be selected, and are lost upon any changes to the
+            <span class="plannerSection">Character Details</span> or
+            <span class="plannerSection">Leveling Order</span>.
         </p>
     </div>
 
     <div dojoType="dijit.TitlePane" class="faqItem" open="false"
         title='Why does your email address have to be "decoded"?'>
         <p>
-            Some spam bots can parse through web page sources looking for email addresses, so I
-            encoded mine. It's not strictly necessary, but it's also an excuse to make a visually
-            fun decoding process when you click on
+            Spam bots can parse through web page sources looking for email addresses, so I encoded
+            mine. It's not strictly necessary, but it was a good excuse to make a visually fun
+            decoding process when you click on
             <a href="javascript:ocp.contact.dialog.show()">Richard Doll</a>.
         </p>
     </div>
