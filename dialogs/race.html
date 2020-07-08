@@ -1,0 +1,139 @@
+<!-- race.html -->
+
+<!-- Styles specific to this dialog
+     Note: Because of the import, for purposes of your browser's cache,
+           the contents of race.css are part of this file. If you
+           change race.css, you must also change this file or the browser
+           will never refresh it's cache.
+           Or sometimes changing race.html won't work either...
+           but forcing a <link> in the main .html file does enable the refresh.
+-->
+<style type="text/css">
+    @import "styles/race.css";
+</style>
+
+<p>Explain that this selects race and gender since some starting
+attributes differ for each gender...</p>
+
+<div dojoType="dijit.layout.TabContainer" id="raceTabContainer">
+
+    <!-- Overview tab has the generic info about races pulled from the official Codex.
+         Unforunately, with no female images, we'll just let you select the male
+         versions of the races here.
+    -->
+    <div dojoType="dijit.layout.ContentPane" id="raceOverviewPane" title="Overview">
+
+<!-- *** Now that ocp.race.select does not close the dialog (it relies
+         on the selection button to be type=submit), selecting race
+         from here doesn't close the dialog.
+         This whole thing needs to be automatically generated from
+         ocp.race._data anyway...
+-->
+
+        <div class="raceDiv" onClick="ocp.race.select('Orc', 'Male')"
+            title="Select Male Orc">
+            <img src="images/orc.gif" class="raceImage" alt="[Orc Image]" />
+            <div>
+                <span class="raceName">Orc</span>
+                <span class="raceDescription">Some info about Orcs.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('Breton', 'Male')"
+            title="Select Male Breton">
+            <img src="images/breton.gif" class="raceImage" alt="[Breton Image]" />
+            <div>
+                <span class="raceName">Breton</span>
+                <span class="raceDescription">Some info about Bretons.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('Imperial', 'Male')"
+            title="Select Male Imperial">
+            <img src="images/imperial.gif" class="raceImage" alt="[Imperial Image]" />
+            <div>
+                <span class="raceName">Imperial</span>
+                <span class="raceDescription">Some info about Imperials.<br />
+                Look at that -- more info here too.<br />
+                <b>Note: Only has 40 (instead of 45) skill bonus points.</b></span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('Redguard', 'Male')"
+            title="Select Male Redguard">
+            <img src="images/redguard.gif" class="raceImage" alt="[Redguard Image]" />
+            <div>
+                <span class="raceName">Redguard</span>
+                <span class="raceDescription">Some info about Redguards.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('Nord', 'Male')"
+            title="Select Male Nord">
+            <img src="images/nord.gif" class="raceImage" alt="[Nord Image]" />
+            <div>
+                <span class="raceName">Nord</span>
+                <span class="raceDescription">Some info about Nords.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('High Elf', 'Male')"
+            title="Select Male High Elf">
+            <img src="images/highelf.gif" class="raceImage" alt="[High Elf Image]" />
+            <div>
+                <span class="raceName">High Elf</span>
+                <span class="raceDescription">Some info about High Elves.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('Dark Elf', 'Male')"
+            title="Select Male Dark Elf">
+            <img src="images/darkelf.gif" class="raceImage" alt="[Dark Elf Image]" />
+            <div>
+                <span class="raceName">Dark Elf</span>
+                <span class="raceDescription">Some info about Dark Elves.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('Wood Elf', 'Male')"
+            title="Select Male Wood Elf">
+            <img src="images/woodelf.gif" class="raceImage" alt="[Wood Elf Image]" />
+            <div>
+                <span class="raceName">Wood Elf</span>
+                <span class="raceDescription">Some info about Wood Elves.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('Argonian', 'Male')"
+            title="Select Male Argonian">
+            <img src="images/argonian.gif" class="raceImage" alt="[Argonian Image]" />
+            <div>
+                <span class="raceName">Argonian</span>
+                <span class="raceDescription">Some info about Argonians.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+
+        <div class="raceDiv" onClick="ocp.race.select('Khajiit', 'Male')"
+            title="Select Male Khajiit">
+            <img src="images/khajiit.gif" class="raceImage" alt="[Khajiit Image]" />
+            <div>
+                <span class="raceName">Khajiit</span>
+                <span class="raceDescription">Some info about Khajiits.<br />
+                Look at that -- more info here too.</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Attribue details for all races and genders -->
+    <div dojoType="dijit.layout.ContentPane" id="raceDetailsDiv" title="Details">
+    </div>
+</div>

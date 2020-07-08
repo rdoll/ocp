@@ -1,0 +1,194 @@
+@charset "utf-8";
+
+/*
+** ocp.css
+*/
+
+
+/* Set the font info for everything */
+html, body {
+/*
+    width: 100%;  height: 100%;
+    padding: 5px;  border: 0;  margin: 0;
+*/
+    font-family: Verdana, Helvetica, Times;
+    font-size: 12px;
+}
+
+
+/*
+** Styles specific to the main page only
+*/
+
+/* Set up the main pane for the planner */
+#plannerPane {
+    width: 900px;  height: 650px;
+    border: 1px solid #ccc
+}
+
+/* Set the starting height of the input area */
+#plannerInputPane {
+    height: 205px;
+}
+
+/* Align starting pane's content side-by-side */
+#resultsStartingPane > div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Starting pane side-by-side divs get a little extra spacing */
+#resultsStartingPane > div + div {
+    margin-left: 50px;
+}
+
+
+/* Allow for multi-line specials in the input table */
+#inputTable td {
+    vertical-align: top;
+}
+
+/* A special description as a list item */
+.specialDescItem {
+    display: list-item;
+    margin-left: 30px;
+    font-size: 75%;
+}
+
+/* The names of selected things */
+.selectedLabel {
+    font-weight: bold;
+    white-space: nowrap;
+    padding-left: 15px;
+    padding-top: 7px;
+}
+
+/* Add some spacing between cells in the starting stats pane */
+#resultsStartingPane th + th {
+    padding-left: 10px;
+}
+
+/* Add a little space to the first column in the starting stats pane's tables */
+/* *** colgroup margin/padding/width doesn't seem to work */
+/* *** does this still work in the skills table now that we added the Attr verticalized? */
+#resultsStartingPane tr > th:first-child, #resultsStartingPane tr > td:first-child {
+    padding-right: 10px;
+}
+
+
+/* Add some spacing between cells in the analysis pane */
+#resultsAnalysisPane th + th {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* Add a little space to the first column in the analysis pane's tables */
+/* *** colgroup margin/padding/width doesn't seem to work */
+/* *** does this still work in the skills table now that we added the Attr verticalized? */
+#resultsAnalysisPane tr > th:first-child, #resultsAnalysisPane tr > td:first-child {
+    padding-right: 5px;
+}
+
+
+/* Inside the level details table, pack everything as tight as possible */
+#levelDetailsTable td.numeric {
+    padding-right: 2px;
+}
+
+/* Make all data columns in the level details table the same width */
+#levelDetailsTable th.vertical {
+    width: 30px;
+}
+
+/* Major skills get a special highlight in the level details table */
+#levelDetailsTable td.major {
+    font-weight: bold;
+}
+
+
+/*
+** Generic styles for all content
+*/
+
+/* Add a little space between buttons in every StackController */
+.dijitStackController .dijitToggleButton + .dijitToggleButton {
+    margin-left: 10px;
+}
+
+/* Make the contents of a StackContainer stand out */
+.dijitStackContainer {
+    border: 1px solid #ccc;
+    margin-top: 10px;
+}
+
+/* Give the inner contents of a StackContainer a little room */
+.dijitStackContainer {
+    padding: 5px;
+}
+
+
+/* Do detailed row/column styling on all tables */
+table {
+    border-collapse: collapse;
+}
+
+/* All table headers aligned to bottom in case of multi-line headers */
+th {
+    vertical-align: bottom;
+}
+
+/* The first column in a table */
+table > colgroup:first-child {
+    border-right: 1px solid blue;
+}
+
+/* The first column in a new section */
+colgroup.first {
+    border-left: 1px dashed blue;
+}
+
+/* A header in the first column */
+tr > th:first-child {
+    text-align: left;
+}
+
+/* The first row in a new section */
+tr.first {
+    border-top: 1px dashed blue;
+}
+
+/* The last row of a section */
+tr.last {
+    border-bottom: 1px solid blue;
+}
+
+/* Right justify and somewhat center numeric cells */
+td.numeric {
+    text-align: right;
+    padding-right: 0.5em;
+}
+
+/* Highlight cells with better, worse, or changed data */
+td.better {
+    background-color: #bfb;
+}
+td.worse {
+    background-color: #fbb;
+}
+td.changed {
+    background-color: #ffb;
+}
+
+/* Highlight even/odd rows */
+tr.even {
+}
+tr.odd {
+    background-color: #eee;
+}
+
+/* Make "a b c" appear as a vertical column header */
+td.vertical, th.vertical {
+    white-space: pre;
+    text-align: center;
+    font-weight: bold;
+}
