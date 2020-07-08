@@ -20,6 +20,13 @@
 
 ocp.results = {
 
+    // Private: Whether we are updating results or not
+    _doUpdate: true,
+
+    get doUpdate()         { return this._doUpdate; },
+    set doUpdate(doUpdate) { return (this._doUpdate = doUpdate); },
+
+
     // Public: Initialize ourselves
     initialize: function() {
         // Nothing to initialize
@@ -32,16 +39,14 @@ ocp.results = {
     },
 
 
-    // Private: Update any generated content
+    // Private: Update any generated content unless hooked not to
     _update: function() {
-        this._updateInitialAttrs();
-        this._updateInitialSkills();
-        this._updateLeveling();
-        this._updateAnalysis();
-
-        // This is an expensive call because of the number of tooltips to replace
-        // and how often this method gets called, but it seems ok atm so keep it.
-        ocp.replaceTooltips('resultsStackContainer');
+        if (this.doUpdate) {
+            this._updateInitialAttrs();
+            this._updateInitialSkills();
+            this._updateLeveling();
+            this._updateAnalysis();
+        }
     },
 
 
@@ -109,9 +114,10 @@ ocp.results = {
         }
         res += '</tbody>';
 
-        // Complete the table and insert it
+        // Complete the table, insert it, and replace tooltips
         res += '</table>';
         dojo.place(res, 'resultsInitialAttrs', 'only');
+        ocp.replaceTooltips('resultsInitialAttrs');
     },
 
 
@@ -188,9 +194,10 @@ ocp.results = {
             }
         }
 
-        // Complete the table and insert it
+        // Complete the table, insert it, and replace tooltips
         res += '</table>';
         dojo.place(res, 'resultsInitialSkills', 'only');
+        ocp.replaceTooltips('resultsInitialSkills');
     },
 
 
@@ -333,6 +340,7 @@ ocp.results = {
 
         // Set the content and we're done
         dojo.place(lev, 'resultsLevelingPane', 'only');
+        ocp.replaceTooltips('resultsLevelingPane');
     },
 
 
@@ -550,5 +558,6 @@ ocp.results = {
 
         // Set the content and we're done
         dojo.place(anal, 'resultsAnalysisPane', 'only');
+        ocp.replaceTooltips('resultsAnalysisPane');
     }
 };

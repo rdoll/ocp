@@ -143,6 +143,7 @@ ocp.existing = {
 
     // Private: Sets all existing details to the given values with no notifications
     _selectCustom: function (level, totals, majors) {
+        console.debug('entered _selectCustom:', level, totals, majors);
 
         // Ensure the level is within the range of the level slider
         if (level > ocp.LEVEL_MAX) {
@@ -156,8 +157,16 @@ ocp.existing = {
         delete this._majors;
         this._majors = majors;
 
-        // Set the level slider to the new value
+        // As of Dojo 1.4, the level slider's onChange is no longer called immediately.
+        // See ocp.existing.skillDialog.undo for a full explanation, but because this
+        // method is probably going to be followed by an ocp.notifyChanged, we need
+        // _levelChanged to fire now or we'll end up with a race condition.
+        // So hack the level slider to disable onChange, make the change, call the onChange
+        // manually, and then restore onChange.
+        this._levelSlider.onChangeActive = false;
         this._levelSlider.attr('value', level);
+        this._levelSlider.onChangeActive = true;
+        this._levelSlider.onChange(level);
 
         // Notify our dialogs that our values changed
         this.attrDialog.existingChanged();
@@ -167,15 +176,19 @@ ocp.existing = {
 
     // Private: Called when the level slider changes value
     // Note:    intermediateChanges=false helps reduce unnecessary notifies
+    // Note:    As of Dojo 1.4, onChange's don't occur immediately. They are queued with a
+    //          short timer to accumulate multiple changes in a short period of time.
     _levelChanged: function (newValue) {
         console.debug('entered _levelChanged:', newValue);
 
-        // Whenever the slider has changed, update our value and notify of a change
+        // If the slider has changed, update our value and notify of a change
         // Note: The newValue is not subject to ocp.widget.LabeledHorizontalSlider's
         //       forceIntegral feature, so be safe and force integral here.
         // TODO: Should update ocp.widget.LabeledHorizontalSlider to fix this?
-        this._level = Math.floor(newValue);
-        ocp.notifyChanged();
+        if (this._level != Math.floor(newValue)) {
+            this._level = Math.floor(newValue);
+            ocp.notifyChanged();
+        }
     },
 
 

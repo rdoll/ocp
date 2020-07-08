@@ -85,6 +85,13 @@
             my gracious host <![CDATA[<a href="http://www.uesp.net">UESP</a>]]>.
         </issue>
 
+        <issue type="bug"
+            name="Previously selected menu items that open dialogs still look selected">
+            This is a bug in Dojo 1.4.3 that is harmless, but a tad sloppy looking. Since it is a
+            very minor bug with Dojo, I am not going to bother to work around it hoping Dojo will
+            eventually fix it.
+        </issue>
+
         <issue type="bug" name="Browser built-in tooltips are used on buttons and images">
             The fancy Dojo tooltips (like on
             <![CDATA[<b ocpTooltip="[help]This is a fancy Dojo tooltip">this</b>]]>)
@@ -114,7 +121,7 @@
                 HTML markup (e.g. <![CDATA[<b>bold text</b>]]>) now shows correctly in the Release
                 Notes.
             </change>
-            <change type="feature" name="Upgraded to use Dojo 1.4">
+            <change type="feature" name="Upgraded to use Dojo 1.4.3">
                 Dojo 1.4 offers a few improvements and bug fixes over Dojo 1.3.
             </change>
             <change type="feature" name="Race Overview's gender selection is now a full dialog">

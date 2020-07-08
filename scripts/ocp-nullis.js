@@ -26,6 +26,9 @@ ocp.nullis = {
     setNullisStart: function () {
         console.log('Setting starting data for Nullis...');
 
+        var saveDoUpdate = ocp.results.doUpdate;
+        ocp.results.doUpdate = false;
+
         ocp.race._select('Khajiit', 'Male');
 
         ocp.birth._select('The Thief');
@@ -45,12 +48,16 @@ ocp.nullis = {
         ocp.order._initializeAttrDnd();
 
         ocp.input.isNewChar = true;
+        ocp.results.doUpdate = saveDoUpdate;
         ocp.notifyChanged();
     },
 
 
     // Public: Set existing details for my toon Nullis
     setNullisNow: function() {
+        var saveDoUpdate = ocp.results.doUpdate;
+        ocp.results.doUpdate = false;
+
         // Set starting values to seed totals
         this.setNullisStart();
 
@@ -157,6 +164,7 @@ ocp.nullis = {
 
         ocp.existing._selectCustom(maxLevel, totals[maxLevel], ocp.clazz.majors);
         ocp.input.isNewChar = false;
+        ocp.results.doUpdate = saveDoUpdate;
         ocp.notifyChanged();
 
         // Hack the leveling results to show the "historic" info for past levels
@@ -188,9 +196,6 @@ ocp.nullis = {
                 delete aNode;
             }
         });
-
-        // Create tooltips for the hacked results
-        ocp.replaceTooltips('resultsLevelingPane');
     },
 
 

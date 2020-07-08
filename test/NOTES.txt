@@ -1,17 +1,8 @@
-Dojo 1.4 changes todo:
-http://docs.dojocampus.org/releasenotes/1.4
-    - recheck if ocp.loader.ManagedModule.onContentError's dojo 1.3.2 bug workaround still exists
-    - tooltips can be dynamically attached to nodes. might allow me to dynamically
-      search for title= attributes and replace with a custom tooltip.
-        when done, add this to release notes
-        when tooltips are done, check memory usage after lots of recalcs
-        When done, note here that you cannot apply an ocpTooltip= to a dijit.form.Button element
-            or to an image
-        Note that the dialog's close button uses a browser built-in tooltip
-
-*** Nullis doesn't work on the first attempt ***
-
-Is regenerating the entire results pane still worth it with all the tooltips being created now?
+Tooltips:
+- They don't work on buttons or images per-release notes known issue
+- The Dojo dialog's cancel button uses a browser default title= tooltip
+- Creating tooltips for the entire results (including non-changing table headers) is probably
+    pretty expensive
 
 In race gender selection sub-dialog, show stat differences? Or keep all stats in details?
 
