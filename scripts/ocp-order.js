@@ -34,7 +34,7 @@ ocp.order = {
             // We don't really need a custom avatar, but it's ok if they are
             // identical to our nodes
             creator: function (item, hint) {
-                //console.log('creator: item=', item, ', hint=', hint);
+                //console.debug('creator: item=', item, ', hint=', hint);
 
                 // Use a basic div to create a vertical list of contents
                 var node = dojo.doc.createElement('div');
@@ -82,7 +82,7 @@ ocp.order = {
             // From closure: source, newOrder
             var item = source.getItem(node.id);
             newOrder.push(item.data.attr);
-            //console.log(node.id, item.data);
+            //console.debug(node.id, item.data);
         });
 
         /* This works, but the order in the map never changes
@@ -93,7 +93,7 @@ ocp.order = {
         */
 
         // Set the new order and notify that something has changed
-        console.log('entered ocp.order._attrOrderChanged:', newOrder);
+        console.debug('entered _attrOrderChanged:', newOrder);
         this._attrs = newOrder;
         ocp.notifyChanged();
     },

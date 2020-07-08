@@ -6,9 +6,6 @@
 
 ocp.level = {
 
-    // Private: Starting level for this character
-    _startingLevel: 1,
-
     // Private: Level totals for all core attrs, derived attrs, and skills
     //          The index in this array is the level for the totals
     _totals: [],
@@ -28,8 +25,7 @@ ocp.level = {
 
 
     // Public: getters for our data
-    get minLevel () { return this._startingLevel; },
-    get maxLevel () { return this._totals.length - 1; },
+    get levelMax () { return this._totals.length - 1; },
     get hadError () { return this._error; },
 
     // Public: accessors for per-level total and wasted data
@@ -59,34 +55,47 @@ ocp.level = {
     // Private: Recalculate all starting value totals
     _updateStarting: function () {
 
-        // Create a new set of totals
+        // The data for new characters comes from several places,
+        // but existing character data can just be copied.
         var totals = {};
+        var isNewChar = ocp.input.isNewChar;
+        var existingTotals = ocp.existing.totals;
 
-        // Core attributes are just the sum of the given selections
+        // For new chars, core attributes are the sum of the given selections
         for (var attr in ocp.coreAttrs) {
-            totals[attr] = ocp.race[attr] + ocp.birth[attr] + ocp.cclass[attr];
+            totals[attr] = (isNewChar
+                ? ocp.race[attr] + ocp.birth[attr] + ocp.cclass[attr]
+                : existingTotals[attr]);
         }
 
-        // Derived attributes start with any race and birthsign bonuses
+        // For new chars, derived attributes start with any race and birthsign bonuses
         for (var attr in ocp.derivedAttrs) {
-            totals[attr] = ocp.race[attr] + ocp.birth[attr];
+            totals[attr] = (isNewChar
+                ? ocp.race[attr] + ocp.birth[attr]
+                : existingTotals[attr]);
         }
 
-        // Now update the derived attributes based on the core ones
-        ocp.deriveAttrs(totals);
+        // For new chars, update the derived attributes based on the core ones
+        if (isNewChar) {
+            ocp.deriveAttrs(totals);
+        }
 
-        // Skills come mainly from your class, but can have a race bonus
+        // For new chars, skills come mainly from your class, but can have a race bonus
         for (var skill in ocp.skills) {
-            totals[skill] = ocp.race[skill] + ocp.cclass[skill];
+            totals[skill] = (isNewChar
+                ? ocp.race[skill] + ocp.cclass[skill]
+                : existingTotals[skill]);
         }
 
         // Since we've started the leveling process, clear all existing totals and wasted info
+        delete this._totals;
         this._totals = [];
+        delete this._wasted;
         this._wasted = [];
 
         // Store the new totals (and an empty wasted) for the starting level
-        this._totals[this._startingLevel] = totals;
-        this._wasted[this._startingLevel] = {};
+        this._totals[ocp.input.levelMin] = totals;
+        this._wasted[ocp.input.levelMin] = {};
     },
 
 
@@ -105,17 +114,17 @@ ocp.level = {
             return false;
         }
 
-        // If we have less than 10 points available in major skills, we can't level
+        // If we don't have enough points in all major skills combined, we can't level
         var points = 0;
-        for each (var skill in ocp.cclass.majors) {
+        for each (var skill in ocp.input.majors) {
             if (totals[skill] < ocp.SKILL_MAX) {
                 points += ocp.SKILL_MAX - totals[skill];
-                if (points >= 10) {
+                if (points >= ocp.LEVELUP_MAJOR_POINTS) {
                     break;
                 }
             }
         }
-        if (points < 10) {
+        if (points < ocp.LEVELUP_MAJOR_POINTS) {
             return false;
         }
 
@@ -153,11 +162,17 @@ ocp.level = {
         for each (var attr in attrOrder) {
             if (current[attr] < ocp.coreAttrs[attr].max) {
                 attrsToLevel.push(attr);
-                if (attrsToLevel.length >= 3) {
+                if (attrsToLevel.length >= ocp.LEVELUP_ATTRS_MAX) {
                     break;
                 }
             }
         }
+
+        // *** Could change order of attrsToLevel to account for attrs
+        // *** that have all 3 major skills; e.g. if agi, str, and luc
+        // *** are attrsToLevel and Bla, Blu, and Han are all major
+        // *** skills but Mar is not a major skill, swap the order
+        // *** of str and agi so the str skill ups aren't wasted.
 
         // For the attributes we are leveling,
         // determine which skills could yield an attribute bonus
@@ -181,7 +196,7 @@ ocp.level = {
         for each (var skill in bonusSkills) {
 
             // Only useful if this is a major skill
-            if (ocp.cclass.isMajor(skill)) {
+            if (ocp.input.isMajor(skill)) {
 
                 // The attr this major skill helps
                 var attr = ocp.skills[skill].attr;
@@ -190,7 +205,7 @@ ocp.level = {
                 // so determine how much room this attr has left.
                 // We can't do better than the max 5 point bonus
                 var attrMax = Math.min(ocp.coreAttrs[attr].max - (current[attr] + leveled[attr]),
-                    5 - leveled[attr]);
+                    ocp.LEVELUP_BONUS_ATTR_MAX - leveled[attr]);
 
                 // Only continue if this attr can still be raised
                 if (attrMax > 0) {
@@ -206,7 +221,8 @@ ocp.level = {
 
                     // Start by determining the max number of skill points we can raise
                     // without overflowing the needed 10 major skill points
-                    var skillMax = Math.min(ocp.SKILL_MAX - current[skill], 10 - majorPoints);
+                    var skillMax = Math.min(ocp.SKILL_MAX - current[skill],
+                        ocp.LEVELUP_MAJOR_POINTS - majorPoints);
 
                     // Total number of points we're leveling the attr
                     // Since bonuses are pooled, consider everything we've done so far
@@ -239,7 +255,7 @@ ocp.level = {
                     // Finally, note that we've raised a major skill and
                     // stop if we've done enough for a level
                     majorPoints += skillPoints;
-                    if (majorPoints >= 10) {
+                    if (majorPoints >= ocp.LEVELUP_MAJOR_POINTS) {
                         break;
                     }
                 }
@@ -249,7 +265,7 @@ ocp.level = {
 
         // If we didn't find 10 points in major skills for attributes we need,
         // we'll have to burn some major points just so we can level
-        if (majorPoints < 10) {
+        if (majorPoints < ocp.LEVELUP_MAJOR_POINTS) {
 
             // Since these points will be wasted just for the level up,
             // we want to burn points on skills we don't care about.
@@ -279,12 +295,12 @@ ocp.level = {
                 for each (var skill in ocp.coreAttrs[attr].skills) {
 
                     // If this is a major skill, check it
-                    if (ocp.cclass.isMajor(skill)) {
+                    if (ocp.input.isMajor(skill)) {
 
                         // Start by determining the max number of skill points we can raise
                         // without overflowing the needed 10 major skill points
                         var skillMax = Math.min(ocp.SKILL_MAX - (current[skill] + leveled[skill]),
-                            10 - majorPoints);
+                            ocp.LEVELUP_MAJOR_POINTS - majorPoints);
 
                         // Only continue if this skill can be raised
                         if (skillMax > 0) {
@@ -306,7 +322,7 @@ ocp.level = {
                             // Note that we've raised a major skill and
                             // stop if we've done enough for a level
                             majorPoints += skillMax;
-                            if (majorPoints >= 10) {
+                            if (majorPoints >= ocp.LEVELUP_MAJOR_POINTS) {
                                 break;
                             }
                         }
@@ -318,8 +334,9 @@ ocp.level = {
 
         // If we *still* don't have enough major points, we can't level
         // This means _canLevel lied to us or we have a bug, so fail
-        if (majorPoints < 10) {
-            console.warn('ocp.level._nextLevel: Did not find 10 major points to level!');
+        if (majorPoints < ocp.LEVELUP_MAJOR_POINTS) {
+            console.warn('ocp.level._nextLevel: Did not find ' + ocp.LEVELUP_MAJOR_POINTS +
+                ' major points to level!');
             return false;
         }
 
@@ -331,7 +348,7 @@ ocp.level = {
             // Determine the max number of skill points we can use to
             // raise this attr (up to the max of 5 bonus points)
             var attrMax = Math.min(ocp.coreAttrs[attr].max - (current[attr] + leveled[attr]),
-                5 - leveled[attr]);
+                ocp.LEVELUP_BONUS_ATTR_MAX - leveled[attr]);
 
             // If we cannot level this attr, it must already be done
             if (attrMax > 0) {
@@ -339,7 +356,7 @@ ocp.level = {
                 // Order this attr's skills to check minors first and majors last
                 var skillsForAttr = [];
                 for each (var skill in ocp.coreAttrs[attr].skills) {
-                    if (ocp.cclass.isMajor(skill)) {
+                    if (ocp.input.isMajor(skill)) {
                         skillsForAttr.push(skill);      // Put major at end
                     } else {
                         skillsForAttr.unshift(skill);   // Put minor in front
@@ -353,7 +370,7 @@ ocp.level = {
                     // There's no need to go beyond the 10 total bonus points
                     // necessary to reach the max +5 attr bonus.
                     var skillMax = Math.min(ocp.SKILL_MAX - (current[skill] + leveled[skill]),
-                        10 - bonus[attr]);
+                        ocp.LEVELUP_BONUS_SKILL_MAX - bonus[attr]);
 
                     // Proceed if we can level this skill
                     if (skillMax > 0) {
@@ -395,7 +412,7 @@ ocp.level = {
 
                         // If this was a major skill, we did more than the 10 needed to
                         // level which may have cheated us of future levels
-                        if (ocp.cclass.isMajor(skill)) {
+                        if (ocp.input.isMajor(skill)) {
                             wasted[skill] = 'This major skill was raised for the attribute bonus on ' +
                                 ocp.coreAttrs[attr].name + ', but the skill up did not count towards ' +
                                 'the 10 major points necessary to level.';
@@ -404,7 +421,7 @@ ocp.level = {
                         // The leveling is done.
                         // Now update the attrMax so we can continue with the next skill
                         attrMax = Math.min(ocp.coreAttrs[attr].max - (current[attr] + leveled[attr]),
-                            5 - leveled[attr]);
+                            ocp.LEVELUP_BONUS_ATTR_MAX - leveled[attr]);
 
                         // If this attr is done, stop checking skills
                         if (attrMax <= 0) {
@@ -424,11 +441,12 @@ ocp.level = {
         // Check all attributes to make sure we didn't increase any less than their maximum
         for (var attr in ocp.coreAttrs) {
             if ((leveled[attr] > 0) &&
-                (leveled[attr] < 5) &&
+                (leveled[attr] < ocp.LEVELUP_BONUS_ATTR_MAX) &&
                 (current[attr] + leveled[attr] < ocp.coreAttrs[attr].max) &&
                 (ocp.coreAttrs[attr].skills.length > 0))
             {
-                wasted[attr] = 'This attribute was not raised the maximum of 5 points.';
+                wasted[attr] = 'This attribute was not raised the maximum of ' +
+                    ocp.LEVELUP_BONUS_ATTR_MAX + ' points.';
             }
         }
 
@@ -459,12 +477,17 @@ ocp.level = {
         this._error = false;
 
         // Always the totals for the current level
-        var current = this._totals[this._startingLevel];
+        var current = this._totals[ocp.input.levelMin];
 
-        // Keep leveling until we hit the max level or until we hit a failsafe limit
-        // Set the failsafe to the max level since we can't level more than that many times
-        var failsafe = ocp.LEVEL_MAX;
-        while ((failsafe-- > 0) && this._canLevel(current)) {
+        // Keep leveling until we hit the max level or until we hit a failsafe limit.
+        // If this is a new character, the failsafe is simply the max level.
+        // However, since the inputs for existing characters have to accomodate all
+        // min values for every skill and attribute (and because those inputs are not
+        // validated for "being possible"), the failsafe has to accomodate this.
+        // With all min values, we can reach level 63.
+        // *** With a custom class, make sure level 53 can be reached without tripping failsafe
+        var failsafe = (ocp.input.isNewChar ? ocp.LEVEL_MAX : 63) + 1;
+        while ((--failsafe > 0) && this._canLevel(current)) {
 
             // Level up -- start with an empty next and wasted for this level
             var next = {};

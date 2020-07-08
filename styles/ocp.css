@@ -28,6 +28,7 @@ html, body {
 \*---------------------------------------------------------------------------*/
 
 /* Set up the main pane for the planner */
+/* *** With all attrs and skills at max, leveling details gets a horizontal scrollbar */
 #plannerPane {
     width: 920px;
     height: 680px;
@@ -119,27 +120,27 @@ html, body {
 }
 
 /* Align starting pane's content side-by-side */
-#resultsStartingPane > div {
+#resultsInitialPane > div {
     display: inline-block;
     vertical-align: top;
 }
 
 /* Starting pane side-by-side divs get a little extra spacing */
-#resultsStartingPane > div + div {
+#resultsInitialPane > div + div {
     margin-left: 50px;
 }
 
 
 /* Add some spacing between cells in the starting stats pane */
-#resultsStartingPane th + th {
+#resultsInitialPane th + th {
     padding-left: 10px;
 }
 
 /* Add a little space to the first column in the starting stats pane's tables */
 /* *** colgroup margin/padding/width doesn't seem to work */
 /* *** does this still work in the skills table now that we added the Attr verticalized? */
-#resultsStartingPane tr > th:first-child, #resultsStartingPane tr > td:first-child {
-    padding-right: 10px;
+#resultsInitialPane tr > th:first-child, #resultsInitialPane tr > td:first-child {
+    padding-right: 1em;
 }
 
 
@@ -153,7 +154,12 @@ html, body {
 /* *** colgroup margin/padding/width doesn't seem to work */
 /* *** does this still work in the skills table now that we added the Attr verticalized? */
 #resultsAnalysisPane tr > th:first-child, #resultsAnalysisPane tr > td:first-child {
-    padding-right: 5px;
+    padding-right: 0.5em;
+}
+
+/* Details of maxed skills get a little greyed out */
+#resultsAnalysisPane td.maxed {
+    background-color: #eee;
 }
 
 
@@ -170,6 +176,50 @@ html, body {
 /* Major skills get a special highlight in the level details table */
 #levelDetailsTable td.major {
     font-weight: bold;
+}
+
+/* Major skills get a special highlight in the initial skills table */
+/* *** Maybe make all major skills bold and italics globally? */
+#resultsInitialSkills tr.major {
+    font-weight: bold;
+}
+
+
+/*
+** About footer section
+*/
+
+/* The main page footer with about information */
+#aboutFooter {
+    margin-top: 1em;
+    border-top: 1px solid #ccc;
+    padding-top: 0.5em;
+    margin-left: 10px;
+    width: 900px;
+    font-size: smaller;
+    text-align: center;
+    vertical-align: top;
+    position: relative;
+}
+
+/* No border around clickable images */
+#aboutFooter a img {
+    border: 0;
+}
+
+#aboutPrograms {
+    position: absolute;
+    top: 1em;
+    left: 0;
+}
+
+#aboutAuthors {
+}
+
+#aboutValidators {
+    position: absolute;
+    top: 1em;
+    right: 0;
 }
 
 
@@ -208,6 +258,7 @@ html, body {
 #raceOverviewPane .raceImage {
     display: inline-block;
     width: 110px;
+    border: 2px solid #8D7758;
     vertical-align: top;
 }
 
@@ -355,6 +406,102 @@ html, body {
 
 
 /*---------------------------------------------------------------------------*\
+|* Styles specific to the class dialog
+\*---------------------------------------------------------------------------*/
+
+/*
+** Common class dialog styles
+*/
+
+/* When the class dialog is shown, color the main page to focus attention */
+#classDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#classTabContainer {
+    width: 730px;
+    height: 440px;
+    overflow: auto;
+}
+
+
+/*
+** Class overview specific styles
+*/
+
+/* Add some space between the overview of each class */
+#classOverviewPane .classOverview + .classOverview {
+    margin-top: 1em;
+}
+
+/* Align the image and details side-by-side */
+/* Note, the images are natively 261px wide and 400px long */
+#classOverviewPane .classImage {
+    display: inline-block;
+    width: 110px;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+/* The details -- set an explicit width to fit side-by-side with the image */
+/* *** Is there any way to let this auto-size without dropping below the image? */
+#classOverviewPane .classDetails {
+    display: inline-block;
+    width: 585px;
+    margin-left: 0.5em;
+}
+
+/* The name of the race gets fancy treatment to stand out */
+#classOverviewPane .className {
+    font-size: larger;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* The description isn't that important */
+#classOverviewPane .classDescription {
+/*    font-size: smaller; *** Delete style or at least update comment? */
+    margin-bottom: 1em;
+}
+
+#classOverviewPane .classStatName {
+    font-weight: bold;
+    white-space: nowrap;
+    margin-right: 0.5em;
+}
+
+#classOverviewPane .classStatValue {
+}
+
+
+/*
+** Class details specific styles
+*/
+
+/* Pad the first column a little bit */
+#classDetailsTable tr > th:first-child, #classDetailsTable tr > td:first-child {
+    padding-right: 0.5em;
+}
+
+/* Inside the class details table, pack everything as tight as possible */
+#classDetailsTable td.numeric {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+/* Major skills get a special highlight in the class details table */
+#classDetailsTable td.major {
+    font-weight: bold;
+}
+
+/* Bonuses get a special highlight in the class details table */
+#classDetailsTable td.bonus {
+    color: green;
+}
+
+
+/*---------------------------------------------------------------------------*\
 |* Styles specific to the existing character's attributes dialog
 \*---------------------------------------------------------------------------*/
 
@@ -486,10 +633,6 @@ html, body {
 .dijitStackContainer {
     border: 1px solid #ccc;
     margin-top: 10px;
-}
-
-/* Give the inner contents of a StackContainer a little room */
-.dijitStackContainer {
     padding: 5px;
 }
 
@@ -505,7 +648,13 @@ html, body {
 
 /* The title bar is basically dijitDialogTitleBar without the moveable/button stuff */
 .soria .ocpTitledPaneTitleBar {
-    background: #FAFAFA url(../dojotoolkit/dijit/themes/soria/images/titleBar.png) repeat-x scroll left top;
+/*
+    background: #FAFAFA url(../dojotoolkit/dijit/themes/soria/images/titleBar.png)
+        repeat-x scroll left top;
+*/
+    background: #FAFAFA
+        url(http://o.aolcdn.com/dojo/1.3.1/dijit/themes/soria/images/titleBar.png)
+        repeat-x scroll left top;
     border: 1px solid #cccccc;
     padding: 5px 6px 3px;
 }
@@ -552,14 +701,30 @@ html, body {
 
 /* The footer section of a dialog */
 .dialogFooter {
-    margin-top: 0.5em;
-    border-top: 2px solid #ccc;
-    padding-top: 0.5em;
+    margin: 1em 0 0 0;
+    border: 2px solid #ccc;
+    padding: 0.5em 0 0.5em 0;
 }
 
 /* The buttons to control the dialog */
 .dialogFooterButtons {
     text-align: center;
+}
+
+/* The status display area of the dialog */
+.dialogFooterStatus {
+    padding-top: 0.5em;
+    border-top: 1px dotted #ccc;
+    margin-top: 0.5em;
+    text-align: center;
+}
+
+/* The valid/invalid status text in a dialog footer */
+.dialogStatusValid {
+    color: green;
+}
+.dialogStatusInvalid {
+    color: red;
 }
 
 

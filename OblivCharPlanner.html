@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 
 <!--
     Author: Richard Doll
     Copyright (C) 2009 by Richard Doll
-    Written with Dojo 1.3.0
-    Developed on FireFox 3.0, but should be DOM and JavaScript 1.5 compatible.
+    Written with Dojo 1.3.1
+    Developed on FireFox 3.0.*, but should be DOM and JavaScript 1.5 compatible.
 *** "for each" and array "indexOf" are JavaScript 1.6 constructs...
 *** Need to test on IE or warn if user isn't using FireFox ***
+*** Need license details and copyright info atop every file
 -->
 
 <head>
@@ -24,49 +26,99 @@
     <!-- Describe this document -->
     <meta name="author" content="Richard Doll" />
     <meta name="copyright" content="Copyright &copy; 2009 by Richard Doll" />
-    <!-- *** Keep my email addy in here? -->
-    <link rev="made" href="mailto:richard_3655@yahoo.com" />
+    <!-- *** Put my email addy in here?
+    <link rev="made" href="mailto:someone@somewhere.com" />
+     -->
     <meta name="description"
-        content="Plans a new or existing TES IV: Oblivion character's leveling progress." />
+        content="Plans a new or existing The Elder Scrolls IV: Oblivion character's leveling progress." />
     <meta name="keywords"
-        content="TES, TES4, TES 4, TESIV, TES IV, The Elder Scrolls, Elder Scrolls, Oblivion,
+        content="TES4, TES 4, TESIV, TES IV, The Elder Scrolls, Elder Scrolls, Oblivion,
             character, planner, plan, forecast, progress, level, leveling, power level, power leveling" />
 
     <!-- Load styles (Dijit theme followed by OCP specific) -->
+    <!-- *** Add charset="utf-8" to all <link> tags? -->
+    <!--
     <link rel="stylesheet" type="text/css" href="dojotoolkit/dijit/themes/soria/soria.css" />
+    -->
+    <!-- *** What these styles too? http://o.aolcdn.com/dojo/1.3.0/dojo/resources/dojo.css -->
+    <link rel="stylesheet" type="text/css"
+        href="http://o.aolcdn.com/dojo/1.3/dijit/themes/soria/soria.css" />
     <link rel="stylesheet" type="text/css" href="styles/ocp.css" />
 
-    <!-- Load the Dojo toolkit base -->
-    <script type="text/javascript" src="dojotoolkit/dojo/dojo.js"
-        djConfig="parseOnLoad:true, isDebug:true"></script>
-
-    <!-- Load Dojo/Dijit required elements -->
+    <!-- Configure and load the Dojo toolkit -->
     <script type="text/javascript">//<![CDATA[
-/* *** Be sure to scrub this list to ensure nothing we don't need **** */
-        dojo.require('dojo.dnd.Source');
-        dojo.require('dojo.html');
-        dojo.require('dijit.Declaration');
-        dojo.require('dijit.Dialog');
-        dojo.require('dijit.form.Button');
-        dojo.require('dijit.form.CheckBox');
-        dojo.require('dijit.form.DropDownButton');
-        dojo.require('dijit.form.Form');
-        dojo.require('dijit.form.HorizontalRule');
-        dojo.require('dijit.form.HorizontalRuleLabels');
-        dojo.require('dijit.form.HorizontalSlider');
-        dojo.require('dijit.form.NumberSpinner');
-        dojo.require('dijit.layout.BorderContainer');
-        dojo.require('dijit.layout.ContentPane');
-        dojo.require('dijit.layout.StackContainer');
-        dojo.require('dijit.layout.TabContainer');
-        dojo.require('dijit.Menu');
-        dojo.require('dijit.Tooltip');
-        // *** Globally replace title="" attributes with Tooltips?
-        // *** Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
-    //]]></script>
+        djConfig = {
+            // Debugging status
+            // *** FireBug Lite doesn't show up in IE
+            isDebug: true,
+            debugAtAllCosts: false,
 
-    <!-- Load the OCP scripts in order -->
+            // Do not automatically parse Dojo markups
+            parseOnLoad: false,
+
+            // Pull in these Dojo modules automatically
+            require: [
+// *** Be sure to scrub this list to ensure nothing we don't need
+               'dojo.dnd.Source',
+               'dojo.html',
+               'dojo.parser',
+               'dijit.Dialog',
+               'dijit.form.Button',
+               'dijit.form.CheckBox',
+               'dijit.form.DropDownButton',
+               'dijit.form.HorizontalRule',
+               'dijit.form.HorizontalRuleLabels',
+               'dijit.form.HorizontalSlider',
+               'dijit.form.NumberSpinner',
+               'dijit.layout.BorderContainer',
+               'dijit.layout.ContentPane',
+               'dijit.layout.StackContainer',
+               'dijit.layout.TabContainer',
+               'dijit.Menu',
+               'dijit.Tooltip'
+// *** Globally replace title="" attributes with Tooltips?
+// *** Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
+            ],
+
+            // After everything has been loaded, initialize everything
+            addOnLoad: function() {
+                //console.log('Doing addOnLoad initialization...');
+                // Now that the widgets in ocp.widget have been defined
+                // (via direct loading in a <script> tag), parse the Dojo markups
+                /*
+                var dojoTypeNodes = dojo.query('[dojoType]');
+                dojo.forEach(dojoTypeNodes, function (node) {
+                    var results = dojo.parser.instantiate([node]);
+                    console.log('parsed node=', node, ', results=', results);
+                });
+                */
+                var instances = dojo.parser.parse();
+                var cont = dijit.byId('inputStackContainer');
+                if ('selectedChildWidget' in cont) {
+                    console.log('Parsing passed. cont.selectedChildWidget.title=',
+                        cont.selectedChildWidget.title);
+                } else {
+                    console.log('Parsing failed!');
+                }
+                // With all markups processed, initialize the OCP scripts
+                //ocp.initialize();
+            }
+        };
+    //]]></script>
+    <!--
+    <script type="text/javascript" src="dojotoolkit/dojo/dojo.js"></script>
+    *** Intermittent parsing failures only seem to appear when pulling from the CDN...
+    -->
+    <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"></script>
+
+    <!-- Load the OCP scripts in order (no initialization allowed yet) -->
     <script type="text/javascript" src="scripts/ocp.js"></script>
+
+    <!-- Load the OCP custom Dojo widgets.
+         Note that by loading these explicitly, they don't need to be dojo.require'd. -->
+    <script type="text/javascript" src="scripts/ocp-widget.js"></script>
+
+    <script type="text/javascript" src="scripts/ocp-input.js"></script>
     <script type="text/javascript" src="scripts/ocp-race.js"></script>
     <script type="text/javascript" src="scripts/ocp-birth.js"></script>
     <script type="text/javascript" src="scripts/ocp-cclass.js"></script>
@@ -74,7 +126,6 @@
     <script type="text/javascript" src="scripts/ocp-order.js"></script>
     <script type="text/javascript" src="scripts/ocp-level.js"></script>
     <script type="text/javascript" src="scripts/ocp-results.js"></script>
-    <script type="text/javascript" src="scripts/ocp-widget.js"></script>
 </head>
 
 <body class="soria">
@@ -90,14 +141,33 @@
 
     <p>Something about how to use this thing...</p>
 
-    <!-- Better warn the user about the memory leaks. :( -->
-    <!-- Use inline styles so this warning can be easily (and hopefully soon) removed. -->
-    <div style="background-color: #ccc; border: 1px solid black; padding: 4px; margin: 10px; width: 690px">
+    <!-- Better warn the user about beta issues -->
+    <!-- Use inline styles so this warning can be easily (and hopefully soon) removed -->
+    <div style="background-color: #ccc; border: 1px solid black; padding: 4px; margin: 10px; width: 850px">
         <span style="font-weight: bold; font-style: italic; color: red;">Warning:</span>
         <div>
-            This uses Dojo version 1.3.0, which seems to have a memory leak.
-            If you reload this page many times, you should close your browser and
-            open a new one to prevent the leak from growing too large.
+            This is a beta that is still in development. At the moment, OCP has
+            the following notable issues and limitations:
+            <ol>
+                <li>
+                    FireFox 3.0.* is the only officially supported browser. All
+                    other browsers may or may not work (IE is known NOT to work).
+                </li>
+                <li>
+                    This uses the Dojo Toolkit from the AOL CDN. This has several
+                    benefits, but it means that you must allow JavaScript from both
+                    this server and from o.aol.cdn for OCP to work.
+                </li>
+                <li>
+                    There is an intermittent timing issue that causes the page to
+                    render incorrectly (the page looks garbled with a blue background).
+                    If this happens, just reload the page.
+                </li>
+                <li>
+                    There is a small memory leak across page reloads. If you do many,
+                    many page reloads, you should close and reopen your browser.
+                </li>
+            </ol>
         </div>
     </div>
 
@@ -116,17 +186,18 @@
                  ***     fix-tabs-dolayout-false-look-right -->
             <div>
                 <!-- Buttons for the stack container -->
-                <!-- *** When a button is pressed, need to call ocp.notifyChanged() to update results -->
-                <div dojoType="dijit.layout.StackController" containerId="inputStackContainer">
+                <span dojoType="dijit.layout.StackController" id="inputStackController"
+                    containerId="inputStackContainer">
                     <!-- Contents generated by Dojo -->
-                </div>
+                </span>
 
                 <!-- See anonymous div above for why doLayout=false -->
                 <div dojoType="dijit.layout.StackContainer" id="inputStackContainer"
                     doLayout="false">
 
                     <!-- Info for a new character -->
-                    <div dojoType="dijit.layout.ContentPane" title="New Character">
+                    <div dojoType="dijit.layout.ContentPane" id="inputNewCharacter"
+                        title="New Character">
                         <!-- Value and Details contents maintained by OCP -->
                         <table id="inputTable">
                         <tbody>
@@ -155,7 +226,12 @@
                             </tr>
 
                             <tr>
-                                <td id="classDropdownContainer"></td>
+                                <td>
+                                    <button dojoType="dijit.form.Button" id="classDialogButton"
+                                        onclick="dijit.byId('classDialog').show()">
+                                        Class
+                                    </button>
+                                </td>
                                 <td id="classValue" class="selectedValue">-none-</td>
                                 <td id="classDetails">-none-</td>
                             </tr>
@@ -164,7 +240,8 @@
                     </div>
 
                     <!-- Info for an existing character -->
-                    <div dojoType="dijit.layout.ContentPane" title="Existing Character">
+                    <div dojoType="dijit.layout.ContentPane" id="inputExistingCharacter"
+                        title="Existing Character">
                         <!-- Value and Details contents maintained by OCP -->
                         <table>
                         <tbody>
@@ -220,20 +297,20 @@
                  ***     fix-tabs-dolayout-false-look-right -->
             <div>
                 <!-- Buttons for the stack container -->
-                <div dojoType="dijit.layout.StackController" containerId="resultsStackContainer">
+                <span dojoType="dijit.layout.StackController" containerId="resultsStackContainer">
                     <!-- Contents generated by Dojo -->
-                </div>
+                </span>
 
                 <!-- See anonymous div above for why doLayout=false -->
                 <div dojoType="dijit.layout.StackContainer" id="resultsStackContainer" doLayout="false">
 
                     <!-- Initial stats (contents managed by OCP) -->
-                    <div dojoType="dijit.layout.ContentPane" id="resultsStartingPane"
+                    <div dojoType="dijit.layout.ContentPane" id="resultsInitialPane"
                         title="Initial Stats">
-                        <div id="resultsStartingAttributes">
+                        <div id="resultsInitialAttrs">
                             -none-
                         </div>
-                        <div id="resultsStartingSkills">
+                        <div id="resultsInitialSkills">
                             -none-
                         </div>
                     </div>
@@ -254,24 +331,43 @@
         </div>
     </div>
 
-    <!-- Footer info with author info -->
-    <!-- *** add version info and enable this when done...
-    <div>
-        <hr />
-        <a href="http://validator.w3.org/check?uri=referer">
-            <img src="http://www.w3.org/Icons/valid-xhtml10-blue"
-                alt="Valid XHTML 1.0 Strict" height="31" width="88" />
-        </a>
-        <a href="http://jigsaw.w3.org/css-validator/check/referer">
-            <img style="border:0;width:88px;height:31px"
-                src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
-                alt="Valid CSS!" />
-        </a>
-    </div>
-    -->
+    <!-- Footer with about info -->
+    <div id="aboutFooter">
+        <div id="aboutPrograms">
+            Using <a href="http://www.dojotoolkit.org/">Dojo Toolkit v<span id="dojoVersion" /></a>
+        </div>
 
-    <!-- Race selection dialog -->
-    <div dojoType="dijit.Dialog" id="raceDialog" title="Choose Your Character's Race and Gender">
+        <div id="aboutAuthors">
+            <!-- *** Put email addy link here? -->
+            <div>&copy;Copyright 2009 Richard Doll</div>
+            <div>Oblivion Character Planner (OCP) version <span id="ocpVersion" /></div>
+            <div>
+                All images are from
+                <a href="http://www.elderscrolls.com/">Elder Scrolls IV: Oblivion</a>
+                which is owned by
+                <a href="http://www.bethsoft.com/">Bethesda Softworks</a>
+            </div>
+        </div>
+
+        <div id="aboutValidators">
+            <!-- *** Enable these when I'm actually compliant
+            <a href="http://validator.w3.org/check?uri=referer">
+                <img src="http://www.w3.org/Icons/valid-xhtml10-blue"
+                    alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+            </a>
+            <a href="http://jigsaw.w3.org/css-validator/check/referer">
+                <img style="border:0;width:88px;height:31px"
+                    src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+                    alt="Valid CSS!" />
+            </a>
+            -->
+        </div>
+    </div>
+
+
+    <!-- Race selection dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="raceDialog" title="Choose Your Character's Race and Gender"
+        style="display:none">
         <div dojoType="dijit.layout.TabContainer" id="raceTabContainer">
 
             <!-- Overview with descriptions and pictures -->
@@ -286,8 +382,9 @@
         </div>
     </div>
 
-    <!-- Birthsign selection dialog -->
-    <div dojoType="dijit.Dialog" id="birthDialog" title="Choose Your Character's Birthsign">
+    <!-- Birthsign selection dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="birthDialog" title="Choose Your Character's Birthsign"
+        style="display:none">
         <div dojoType="dijit.layout.ContentPane" id="birthContainer">
             <div id="birthIntro">
                 In Tamriel, persons born under certain constellations are said to be &quot;fortunate
@@ -298,9 +395,68 @@
         </div>
     </div>
 
+    <!-- Class selection dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="classDialog" title="Choose Your Character's Class"
+        style="display:none">
+        <div dojoType="dijit.layout.TabContainer" id="classTabContainer">
 
-    <!-- Existing character's attributes dialog -->
-    <div dojoType="dijit.Dialog" id="attrDialog" title="Existing Character's Attributes">
+            <!-- Overview of predefined classes with descriptions and pictures -->
+            <div dojoType="dijit.layout.ContentPane" id="classOverviewPane" title="Overview">
+                <!-- Contents generated by OCP -->
+            </div>
+
+            <!-- Hard core details of predefined classes -->
+            <div dojoType="dijit.layout.ContentPane" id="classDetailsPane" title="Detailed Stats">
+                <!-- Contents generated by OCP -->
+            </div>
+
+            <!-- Creation of a custom class -->
+            <div dojoType="dijit.layout.ContentPane" id="classCustomPane" title="Custom">
+
+                <!-- Favored Attribute inputs -->
+                <div id="classFavAttrsContainer">
+                    <!-- Contents generated by OCP -->
+                </div>
+
+                <!-- Specialization inputs -->
+                <div id="classSpecContainer">
+                    <!-- Contents generated by OCP -->
+                </div>
+
+                <!-- Skill inputs -->
+                <div id="classSkillContainer">
+                    <!-- Contents generated by OCP -->
+                </div>
+
+                <!-- Footer -->
+                <div class="dialogFooter">
+                    <!-- Buttons -->
+                    <div class="dialogFooterButtons">
+                        <button dojoType="dijit.form.Button" id="classDialogSubmit" type="submit"
+                            title="Accept changes and close dialog">Done</button>
+                        <button dojoType="dijit.form.Button"
+                            onclick="ocp.cclass.classDialog.undo()"
+                            title="Undo changes but keep dialog open">Undo</button>
+                        <button dojoType="dijit.form.Button" type="reset"
+                            onclick="ocp.cclass.classDialog.reset()"
+                            title="Reset everything to initial values">Reset</button>
+                        <button dojoType="dijit.form.Button"
+                            onclick="ocp.cclass.classDialog.cancel()"
+                            title="Abort changes and close dialog">Cancel</button>
+                    </div>
+
+                    <!-- Validity status of inputs -->
+                    <div id="classDialogValidity" class="dialogFooterStatus">
+                        <!-- Contents generated by OCP -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Existing character's attributes dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="attrDialog" title="Existing Character's Attributes"
+        style="display:none">
         <div dojoType="dijit.layout.ContentPane" id="attrContainer">
 
             <!-- Core attributes -->
@@ -332,41 +488,36 @@
         </div>
     </div>
 
-    <!-- Existing character's skills dialog -->
-    <div dojoType="dijit.Dialog" id="skillDialog" title="Existing Character's Skills">
+    <!-- Existing character's skills dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="skillDialog" title="Existing Character's Skills"
+        style="display:none">
         <div dojoType="dijit.layout.ContentPane" id="skillContainer">
 
-            <!-- Form for all skill settings (div instead of form to work around IE bug) -->
-            <div dojoType="dijit.form.Form" id="skillForm"
-                encType="multipart/form-data" action="" method="">
+            <!-- Skills -->
+            <div id="skillInputsContainer">
+                <!-- Contents generated by OCP -->
+            </div>
 
-                <!-- Skills -->
-                <div id="skillInputsContainer">
-                    <!-- Contents generated by OCP -->
+            <!-- Footer -->
+            <div class="dialogFooter">
+                <!-- Buttons -->
+                <div class="dialogFooterButtons">
+                    <button dojoType="dijit.form.Button" id="skillDialogSubmit" type="submit"
+                        title="Accept changes and close dialog">Done</button>
+                    <button dojoType="dijit.form.Button"
+                        onclick="ocp.existing.skillDialog.undo()"
+                        title="Undo changes but keep dialog open">Undo</button>
+                    <button dojoType="dijit.form.Button" type="reset"
+                        onclick="ocp.existing.skillDialog.reset()"
+                        title="Reset everything to initial values">Reset</button>
+                    <button dojoType="dijit.form.Button"
+                        onclick="ocp.existing.skillDialog.cancel()"
+                        title="Abort changes and close dialog">Cancel</button>
                 </div>
 
-                <!-- Footer -->
-                <div class="dialogFooter">
-
-                    <!-- Validity status of inputs -->
-                    <div id="skillDialogValidity">
-                        <!-- Contents generated by OCP -->
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="dialogFooterButtons">
-                        <button dojoType="dijit.form.Button" id="skillDialogSubmit" type="submit"
-                            title="Accept changes and close dialog">Done</button>
-                        <button dojoType="dijit.form.Button"
-                            onclick="ocp.existing.skillDialog.undo()"
-                            title="Undo changes but keep dialog open">Undo</button>
-                        <button dojoType="dijit.form.Button" type="reset"
-                            onclick="ocp.existing.skillDialog.reset()"
-                            title="Reset everything to initial values">Reset</button>
-                        <button dojoType="dijit.form.Button"
-                            onclick="ocp.existing.skillDialog.cancel()"
-                            title="Abort changes and close dialog">Cancel</button>
-                    </div>
+                <!-- Validity status of inputs -->
+                <div id="skillDialogValidity" class="dialogFooterStatus">
+                    <!-- Contents generated by OCP -->
                 </div>
             </div>
         </div>

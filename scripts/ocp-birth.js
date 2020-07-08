@@ -2,16 +2,26 @@
 ** ocp-birth.js
 **
 ** Everything related to birth signs.
+**
+** All of these images were converted to JPG from the PNGs at
+** http://www.elderscrolls.com/codex/codex_birthsigns.htm
+**
+** Descriptions also taken from http://www.elderscrolls.com/codex/codex_birthsigns.htm
+**
+** *** Should show attributes in input summary?
 */
 
 ocp.birth = {
+
+    // Private: Location of our images
+    IMAGE_DIR: ocp.IMAGE_ROOT_DIR + 'birth/',
 
     // Private: Data for all birthsigns
     _data: {
         'The Apprentice': {
             attributes: { mag:100 },
             specials: [ 'Weakness to Magic 100%' ],
-            image: 'apprentice.gif',
+            image: 'apprentice.jpg',
             description: 'The Apprentice ability confers a 100-point bonus to your Magicka ' +
                 'attribute, but gives you a 100% Weakness to Magic.'
         },
@@ -22,7 +32,7 @@ ocp.birth = {
                 'Spell Absorption 50%',
                 'No Magicka regeneration'
             ],
-            image: 'atronach.gif',
+            image: 'atronach.jpg',
             description: 'With the Atronach ability you don\'t regain Magicka over time. ' +
                 'Instead you have a permanent 50% Spell Absorption to recharge your Magicka. ' +
                 'Your base Magicka is also increased by 150 points.'
@@ -31,7 +41,7 @@ ocp.birth = {
         'The Lady': {
             attributes: { wil:10, end:10 },
             specials: [],
-            image: 'lady.gif',
+            image: 'lady.jpg',
             description: 'The Lady\'s Blessing confers bonuses of 10 points to your ' +
                 'Willpower and Endurance attributes.'
         },
@@ -42,7 +52,7 @@ ocp.birth = {
                 'Restore Health (magnitude 6, duration 15, once a day)',
                 'Weakness to Fire 25%'
             ],
-            image: 'lord.gif',
+            image: 'lord.jpg',
             description: 'Being born under the Lord gives you the Blood of the North ' +
                 'lesser power to regenerate up to 90 points of Health. However, you also ' +
                 'gain the Trollkin curse, a permanent 25% Weakness to Fire.'
@@ -51,7 +61,7 @@ ocp.birth = {
         'The Lover': {
             attributes: {},
             specials: [ 'Paralyze (touch, duration 10) and lose 120 points of Fatigue once a day' ],
-            image: 'lover.gif',
+            image: 'lover.jpg',
             description: 'Use the Lover\'s Kiss power once a day to paralyze an opponent for ' +
                 '10 seconds at the cost of 120 points of Fatigue.'
         },
@@ -59,7 +69,7 @@ ocp.birth = {
         'The Mage': {
             attributes: { mag:50 },
             specials: [],
-            image: 'mage.gif',
+            image: 'mage.jpg',
             description: 'The Mage ability confers a permanent bonus of 50 points to your Magicka.'
         },
 
@@ -69,7 +79,7 @@ ocp.birth = {
                 'Restore Health (magnitude 200, once a day)',
                 'Turn Undead (target, magnitude 100, duration 30, once a day)'
             ],
-            image: 'ritual.gif',
+            image: 'ritual.jpg',
             description: 'Those born under the Ritual use the Mara\'s Gift power once a ' +
                 'day as a powerful Restore Health spell. The Blessed Word can turn the undead.'
         },
@@ -83,7 +93,7 @@ ocp.birth = {
                     'Cure Poison, ' +
                     'Damage Fatigue (self, magnitude 100)'
             ],
-            image: 'serpent.gif',
+            image: 'serpent.jpg',
             description: 'Gain the Serpent spell to cause a slow but potent poison on touch, ' +
                 'while simultaneously curing yourself and dispelling magic on yourself. ' +
                 'Casting this spell costs 100 points of Fatigue.'
@@ -92,21 +102,21 @@ ocp.birth = {
         'The Shadow': {
             attributes: {},
             specials: [ 'Inivisibility (duration 60, once a day)' ],
-            image: 'shadow.gif',
+            image: 'shadow.jpg',
             description: 'Use the Moonshadow power once a day to become Invisible for 60 seconds.'
         },
 
         'The Steed': {
             attributes: { spe:20 },
             specials: [],
-            image: 'steed.gif',
+            image: 'steed.jpg',
             description: 'The Steed ability grants a bonus of 20 to your Speed attribute.'
         },
 
         'The Thief': {
             attributes: { agi:10, spe:10, luc:10 },
             specials: [],
-            image: 'thief.gif',
+            image: 'thief.jpg',
             description: 'The Thief ability grants a 10-point bonus to your Agility, Speed, ' +
                 'and Luck attributes.'
         },
@@ -117,7 +127,7 @@ ocp.birth = {
                 'Open Average lock (once a day)',
                 'Reflect Damage (magnitude 5, duration 120, once a day)'
             ],
-            image: 'tower.gif',
+            image: 'tower.jpg',
             description: 'With the Tower Key power, once a day open a door or container of ' +
                 'Average lock level or less. The Tower Warden reflects five points of damage ' +
                 'for 120 seconds once a day.'
@@ -126,7 +136,7 @@ ocp.birth = {
         'The Warrior': {
             attributes: { str:10, end:10 },
             specials: [],
-            image: 'warrior.gif',
+            image: 'warrior.jpg',
             description: 'The Warrior ability grants a bonus of 10 points to your ' +
                 'Strength and Endurance attributes.'
         }
@@ -177,12 +187,14 @@ ocp.birth = {
     // Public: Initialize
     initialize: function() {
         // Hook the race dialog to initialize it the first time it's shown
+        var _this = this;
         var handle = dojo.connect(dijit.byId('birthDialog'), 'onShow',
             function (/* event */) {
-                // Using handle from closure, disconnect so we only do this once
+                // From closure: _this, handle
+                // Disconnect so we only do this once
                 dojo.disconnect(handle);
                 handle = null;
-                ocp.birth._initializeDialog();
+                _this._initializeDialog();
         });
 
         // Select an initial birthsign
@@ -192,7 +204,7 @@ ocp.birth = {
 
     // Private: Initialize the birthsign dialog
     _initializeDialog: function() {
-        console.log('entered ocp.birth._initializeDialog');
+        console.debug('entered _initializeDialog');
 
         // Build a div for each birthsign
         // Track the count so we can put two per row (one left, other right)
@@ -201,10 +213,10 @@ ocp.birth = {
         for (var birth in this._data) {
             det +=
                 '<div class="birthDetails birthDetails' + (++count % 2 > 0 ? 'Left' : 'Right') + '">' +
-                    '<img src="images/birth/' + this._data[birth].image + '" class="birthImage" ' +
-                        'alt="[' + birth + ' Image]" ' +
+                    '<img src="' + this.IMAGE_DIR + this._data[birth].image + '" ' +
+                        'class="birthImage" alt="[' + birth + ' Image]" ' +
                         'title="Select ' + birth + '" ' +
-                        'onClick="ocp.birth.select(\'' + birth + '\')"/>' +
+                        'onClick="ocp.birth.select(\'' + birth + '\')" />' +
                     '<div class="birthName">' + birth + '</div>' +
                     '<div class="birthDescription">' + this._data[birth].description + '</div>' +
                 '</div>';
@@ -217,7 +229,7 @@ ocp.birth = {
 
     // Private: Select birthsign without error checking or notification
     _select: function(birth) {
-        console.log('entered ocp.birth._select:', birth);
+        console.debug('entered _select:', birth);
 
         // Set the current birthsign
         this._birth = birth;
@@ -227,7 +239,7 @@ ocp.birth = {
     // Public: Validate args, select birthsign, and notify of a change
     //         Should only be called from the selection dialog
     select: function(birth) {
-        console.log('entered ocp.birth.select:', birth);
+        console.debug('entered select:', birth);
 
         // Validate the selection
         if (birth in this._data) {
@@ -240,7 +252,9 @@ ocp.birth = {
             // Close the dialog
             dijit.byId('birthDialog').hide();
         } else {
-            alert('Unknown Birthsign "' + birth + '" selected.');
+            var msg = 'Unknown Birthsign "' + birth + '" selected.';
+            console.error(msg);
+            alert(msg);
         }
     },
 

@@ -9,7 +9,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: 0.20,
+    VERSION: '0.40',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -17,12 +17,37 @@ var ocp = {
     LEVEL_MAX: 53,
 
     // Public: The number of major skills every character must have
-    MAJORS_NUM: 7,
+    MAJOR_NUM: 7,
+
+    // Public: Skill bonuses for a skill being major or specialized
+    //         Note: The game says spec bonus is +10, but it's actually +5
+    SKILL_BONUS_MAJOR: 20,
+    SKILL_BONUS_SPEC: 5,
 
     // Public: Skill minimum/maximum values
     SKILL_MIN: 5,
-    SKILL_MAJOR_MIN: 25,
+    SKILL_MAJOR_MIN: 5 + 20,  // SKILL_MIN + SKILL_BONUS_MAJOR
     SKILL_MAX: 100,
+
+    // Public: Number of favored attributes a class can have
+    CLASS_FAV_ATTR_NUM: 2,
+
+    // Public: Attribute bonus for being a favored attribute
+    ATTR_BONUS_FAV: 5,
+
+    // Public: The number of skill points required to trigger a level up
+    LEVELUP_MAJOR_POINTS: 10,
+
+    // Public: The max number of skill points (that count toward an attr bonus)
+    //         and the max attribute bonus points per level up
+    LEVELUP_BONUS_SKILL_MAX: 10,
+    LEVELUP_BONUS_ATTR_MAX: 5,
+
+    // Public: The max number of attributes that can be leveled each levelup
+    LEVELUP_ATTRS_MAX: 3,
+
+    // Public: The root dir of all images
+    IMAGE_ROOT_DIR: 'images/',
 
     // Public: Define the abbr and full names of all core attributes
     //         Leveling the skills listed increases the level bonus for this stat
@@ -39,7 +64,7 @@ var ocp = {
     },
 
     // Public: Define the abbr and full names of all derived attributes
-    //         Min/max is derived during our initialization
+    //         Min/max is derived during initialization
     derivedAttrs: {
         hea: { name:'Health',      min:0, max:0 },
         mag: { name:'Magicka',     min:0, max:0 },
@@ -81,14 +106,6 @@ var ocp = {
     },
 
 
-    // Public: Return whether using a new (true) or existing character (false)
-    isNewChar: function () {
-        // We're using a new character unless the Existing Char input pane is selected
-        return (dijit.byId('inputStackContainer').selectedChildWidget.title == 'Existing Character'
-            ? false : true);
-    },
-
-
     // Public: Make the given string suitable as a vertical table header
     //         You still must apply the '.vertical' style to a th or td for this to work
     //         Yes, I made up the word 'verticalize'. :)
@@ -108,12 +125,57 @@ var ocp = {
     },
 
 
-    // Public: Given the min and max values of a slider, return the integral value
-    //         that will correspond to the given percentage
-    //         This needs to match the implementation in Dijit sliders so the value
-    //         used in a rule label matches the value of the slider at that position.
-    sliderPercentValue: function (min, max, pct) {
-        return Math.round((max - min) * pct) + min;
+    // Public: Returns a grammatically correct list of the array elements.
+    //         The given preposition (e.g. 'and' or 'or') is correctly used.
+    prettyList: function (arr, prep) {
+
+        // Assume nothing to return (used for empty arrays)
+        var pretty = '';
+
+        // Different item counts are handled differently
+        var totalItems = arr.length;
+        if (totalItems == 1) {
+
+            // For one item, just return it
+            pretty = arr[0];
+        } else if (totalItems == 2) {
+
+            // For two items, return them joined by the preposition
+            pretty = arr[0] + ' ' + prep + ' ' + arr[1];
+        } else {
+
+            // For more than two items, create a comma separated list
+            // Pull off the last item and insert it at then end with the preposition
+            var lastItem = arr.pop();
+            pretty = arr.join( ', ' ) + ', ' + prep + ' ' + lastItem;
+        }
+
+        // Return the results
+        return pretty;
+    },
+
+
+    // Public: Returns a pretty list of full core attribute names from an
+    //         input array with abbreviations
+    prettyAttrList: function (arr, prep) {
+
+        // Create a new array with each abbreviation converted to it's name
+        var newArr = dojo.map(arr, function (attr) { return ocp.coreAttrs[attr].name; });
+
+        // Return the results of pretty-ing the new array
+        return this.prettyList(newArr, prep);
+    },
+
+
+    // Public: Returns a pretty list of full skill names from an
+    //         input array with abbreviations
+    prettySkillList: function (arr, prep) {
+
+        // Create a new array with each abbreviation converted to it's name
+        var newArr = dojo.map(arr, function (skill) { return ocp.skills[skill].name; });
+
+        // Return the results of pretty-ing the new array
+        return this.prettyList(newArr, prep);
     },
 
 
@@ -145,12 +207,15 @@ var ocp = {
 
     // Public: Initialize ourselves
     initialize: function() {
+        // Initialize the version numbers in the about info
+        this._initializeVersions();
 
         // Initialize the min/max stats for attributes
         this._initializeAttrs();
 
         // Initialize our children
         // During this initialization, no notifications are allowed
+        this.input.initialize();
         this.race.initialize();
         this.birth.initialize();
         this.cclass.initialize();
@@ -162,6 +227,13 @@ var ocp = {
         // Now that all initialization is complete,
         // notify of the changes made during initialization
         this.notifyChanged();
+    },
+
+
+    // Private: Initialize the version numbers in the main page's about section
+    _initializeVersions: function () {
+        dojo.place('<span>' + this.VERSION + '</span>', 'ocpVersion', 'only');
+        dojo.place('<span>' + dojo.version.toString() + '</span>', 'dojoVersion', 'only');
     },
 
 
@@ -208,9 +280,10 @@ var ocp = {
 
     // Public: Some character data has changed, so update all results
     notifyChanged: function() {
-        console.log('entered ocp.notifyChanged');
+        console.debug('entered notifyChanged');
 
         // Update our children in the correct order
+        this.input.notifyChanged();
         this.race.notifyChanged();
         this.birth.notifyChanged();
         this.cclass.notifyChanged();
@@ -230,33 +303,33 @@ var ocp = {
 
         ocp.birth._select('The Thief');
 
-        with (ocp.cclass) {
-            _customData.name = 'Nullis';
-            _customData.specialization = 'Stealth';
-            _customData.favoredAttrs = ['end', 'luc'];
-            _customData.majorSkills = ['blu', 'con', 'des', 'mar', 'ath', 'hvy', 'ill'];
-            _custom = true;
+        ocp.cclass._selectCustom('Stealth', ['end', 'luc'],
+            ['blu', 'con', 'des', 'mar', 'ath', 'hvy', 'ill']);
+        if (ocp.cclass.classDialog._dialogInitialized) {
+            ocp.cclass.classDialog.undo();
         }
 
-        with (ocp.order) {
-            _attrDndSource.destroy();
-            dojo.empty('attrOrderDndSource');
-            _attrs = ['agi', 'spe', 'end', 'luc', 'str', 'int', 'wil', 'per'];
-            //_attrs = ['agi', 'spe', 'end', 'str', 'int', 'wil', 'per', 'luc'];
-            _initializeAttrDnd();
-        }
+        ocp.order._attrDndSource.destroy();
+        delete ocp.order._attrDndSource;
+        dojo.empty('attrOrderDndSource');
+        delete ocp.order._attrs;
+        ocp.order._attrs = ['agi', 'spe', 'end', 'luc', 'str', 'int', 'wil', 'per'];
+        //ocp.order._attrs = ['agi', 'spe', 'end', 'str', 'int', 'wil', 'per', 'luc'];
+        ocp.order._initializeAttrDnd();
 
-        ocp.level._startingLevel = 1;
+        ocp.input._stackContainer.selectChild('inputNewCharacter');
 
         ocp.notifyChanged();
     },
 
+
     // *** Temp for my toon
-    // Public: Set leveling details for my toon Nullis
+    // Public: Set existing details for my toon Nullis
     setNullisNow: function() {
+        // Set starting values to seed totals
         this.setNullisStart();
 
-        console.log('Setting already leveled data for Nullis...');
+        console.log('Setting existing data for Nullis...');
 
         function nextLevel(current, leveled) {
             var next = {};
@@ -273,7 +346,7 @@ var ocp = {
 
         totals[2] = nextLevel(totals[totals.length - 1], {
             agi:5, spe:5, end:5, hea:14, mag:0, fat:10, enc:0,
-            bla:1, han:1, res:1, mar:6, sec:1, sne:5, ath:3, lig:9, arm:7, blo:3, mer:4
+            bla:1, han:1, res:1, mar:6, sec:1, sne:5, ath:4, lig:9, arm:7, blo:3, mer:4
         });
         wasted[2] = { bla:'', han:'', res:'', mer:'' };
 
@@ -309,25 +382,48 @@ var ocp = {
         });
         wasted[7] = { mer:'', spc:'' };
 
-        var maxLevel = totals.length - 1;
+        totals[8] = nextLevel(totals[totals.length - 1], {
+            agi:5, spe:5, end:5, hea:17, mag:0, fat:10, enc:0,
+            mar:6, sne:6, acr:2, ath:4, lig:6, arm:10, mer:2, spc:3
+        });
+        wasted[8] = { mer:'', spc:'' };
 
+        totals[9] = nextLevel(totals[totals.length - 1], {
+            agi:5, spe:5, end:5, hea:17, mag:0, fat:10, enc:0,
+            bla:1, mar:6, sec:8, sne:7, acr:3, ath:4, lig:3, arm:10, mer:4, spc:4
+        });
+        wasted[9] = { bla:'', mer:'', spc:'' };
+
+        var maxLevel = totals.length - 1;
+        dijit.byId('levelSlider').attr('value', maxLevel);
+        delete ocp.existing._totals;
+        ocp.existing._totals = totals[maxLevel];
+        delete ocp.existing._majors;
+        ocp.existing._majors = [];
+        for each (var skill in ocp.cclass.majors) {
+            ocp.existing.majors.push(skill);
+        }
+        if (ocp.existing.attrDialog._dialog._alreadyInitialized) {
+            ocp.existing.attrDialog.undo();
+        }
+        if (ocp.existing.skillDialog._dialogInitialized) {
+            ocp.existing.skillDialog.undo();
+        }
+
+        ocp.input._stackContainer.selectChild('inputExistingCharacter');
+        ocp.notifyChanged();
+
+        // Hack the leveling results to show the "historic" info for past levels
+        // This info will be completely lost upon any recalc
+        var saveTotals = ocp.level._totals;
+        var saveWasted = ocp.level._wasted;
         ocp.level._totals = totals;
         ocp.level._wasted = wasted;
-
-        // Update future leveling
-        ocp.level._startingLevel = maxLevel;
         ocp.level._updateLeveling();
-
-        // Show all results starting from level 1, even tho these will be lost after any recalc
-        ocp.level._startingLevel = 1;
-        ocp.results.notifyChanged();
-
-        // But do analysis starting from the current level
-        ocp.level._startingLevel = maxLevel;
-        ocp.results._updateAnalysis();
+        ocp.existing._level = 1;
+        ocp.results._updateLeveling();
+        ocp.existing._level = maxLevel;
+        ocp.level._totals = saveTotals;
+        ocp.level._wasted = saveWasted;
     }
 };
-
-// After everything (including our children) is loaded
-// and Dojo has processed markups, initialize ourselves
-dojo.addOnLoad(ocp, 'initialize');

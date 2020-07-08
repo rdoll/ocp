@@ -6,6 +6,7 @@ export SRC_FILES="\
     styles/ocp.css \
     scripts/ocp.js \
     scripts/ocp-widget.js \
+    scripts/ocp-input.js \
     scripts/ocp-race.js \
     scripts/ocp-birth.js \
     scripts/ocp-cclass.js \
@@ -19,7 +20,23 @@ export SRC_FILES="\
 alias nedit-all="nedit-nc -g 111x40 $SRC_FILES"
 
 # Quick backup
-alias backupcwd="tar cvzf backup-\`date '+%Y%m%d'\`.tar.gz --exclude=\*.tar.gz *"
+function backupcwd {
+    dat="`date '+%Y%m%d'`";
+    ver="`perl -ne 'print $1 if /\sVERSION:[^\d]+([\d.]+)/' scripts/ocp.js`"
+    tar -cvzf backup-$dat-v$ver.tar.gz \
+        --exclude=\*.tar.gz \
+        --exclude=images/birth/original \
+        --exclude=images/class/original \
+        --exclude=images/race/original \
+        *
+}
+function backuporigcwd {
+    dat="`date '+%Y%m%d'`";
+    ver="`perl -ne 'print $1 if /\sVERSION:[^\d]+([\d.]+)/' scripts/ocp.js`"
+    tar -cvzf backup-$dat-v$ver-plus-orig.tar.gz \
+        --exclude=\*.tar.gz \
+        *
+}
 
 # Print list of text files excluding .svn dirs
 # -- Does not follow links so dojotoolkit is not found
@@ -83,12 +100,57 @@ alias cleancwd='cleandir .'
 function countdir {
     find_text_files "${@:-.}" | \
         grep -v setup.bash | \
+        grep -v htaccess | \
         xargs grep -c '[:alnum:]' | \
-        awk -F: '{total += $2; print} END { print "Total Lines =", total}'
+        awk -F: '{ tot += $2; printf "%5d\t%s\n", $2, $1 } \
+            END { printf "%5d\t%s\n", tot, "Total AlphaNum Lines" }'
 }
 alias countcwd='countdir .'
 
 # Count with plain wc
 alias wccwd="find_text_files . | \
     grep -v setup.bash | \
+    grep -v htaccess | \
     xargs wc --chars --max-line-length --lines"
+
+# Use GIMP to convert a PNG image to JPEG
+# Derived from http://www.lemur.com/dmm/culch/scriptsfu/index.html#convertjpg
+# I'm guessing this doesn't work for the class PNGs pulled from
+# http://www.elderstats.com/about/?p=credits because they use transparency
+# and that transparency must be explicitly flattened before this works well.
+# Since I have no idea how to do that in GIMP LISP, I did the conversions
+# manually instead :(.
+function gimp-png-to-jpg {
+    for x in "$@" ; do
+        f="${x%.png}"
+        if [ ".$f" == ".$x" ] ; then
+            echo "Input file $x must end in .png!"
+            return 1
+        fi
+        f="$f.jpg"
+        echo "Converting $x to $f..."
+        gimp -c -i -d -b - <<EOS
+(define (dmmConvertPNGtoJPG infile outfile)
+   (let* ((image (car (file-png-load 1 infile infile)))
+          (drawable (car (gimp-image-active-drawable image)))
+         )
+
+         (file-jpeg-save 1 image drawable outfile outfile
+              0.75 0 1 1 "GIMP" 0 1 0 0 )
+            ; 0.75 quality (float 0 <= x <= 1)
+            ;      0 smoothing factor (0 <= x <= 1)
+            ;        1 optimization of entropy encoding parameter (0/1)
+            ;          1 enable progressive jpeg image loading (0/1)
+            ;            "xxxx"  image comment
+            ;                   0 subsampling option number
+            ;                     1 force creation of a baseline JPEG
+            ;                       0 frequency of restart markers
+            ;                         in rows, 0 = no restart markers
+            ;                         0 DCT algoritm to use
+   )
+)
+(dmmConvertPNGtoJPG "$x" "$f")
+(gimp-quit 0)
+EOS
+    done
+}

@@ -2,6 +2,10 @@
 ** ocp-widget.js
 **
 ** Everything related to OCP custom Dijit widgets.
+**
+** Note that this cannot be placed under the ocp global namespace.
+** In some cases that works (e.g. 100% local Dojo), but in other cases it
+** fails (e.g. XD CDN with these local custom widgets).
 */
 
 /*
@@ -25,7 +29,6 @@ dojo.declare('ocp.widget.TitledContentPane',
 
     // Our class properties
     {
-
         // Inline the template here
         templateString:
             '<div class="ocpTitledContentPane">' +
@@ -60,28 +63,32 @@ dojo.declare('ocp.widget.LabeledHorizontalSlider',
 
     // Our class properties
     {
-
         // The DOM ID of the label who's value we will set
         labelId: '',
 
-        // Do we force the value in the label to be integral
-        forceIntLabel: true,
+        // Do we force the values to be integral?
+        // For OCP, always yes since all player visible values are whole numbers
+        forceIntegral: true,
 
-        // Set the label to our current value
+        // If a label ID is defined, set the label to our current value
         _setLabel: function () {
             if (this.labelId.length > 0) {
-                var v = (this.forceIntLabel ? Math.floor(this.value) : this.value);
-                dojo.place('<span>' + v + '</span>', this.labelId, 'only');
+                // Use _getValueAttr so value can be made integral if required
+                dojo.place('<span>' + this._getValueAttr() + '</span>', this.labelId, 'only');
             }
+        },
+
+        // Allow the returned value to be forced integral
+        _getValueAttr: function (/*String*/ value) {
+            var val = this.inherited(arguments);
+            return (this.forceIntegral ? Math.floor(val) : val);
         },
 
         // Whenever the value of this slider changes, update the corresponding label
         _setValueAttr: function (/*Number*/ value, /*Boolean, optional*/ priorityChange) {
-
-            // Let the parent do it's work first (which includes setting the new value)
+            // Let the parent set the new value first, then update the label
+            // *** Should force value integral here?
             this.inherited(arguments);
-
-            // Now update the label with the new value
             this._setLabel();
         }
     }

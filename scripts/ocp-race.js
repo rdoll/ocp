@@ -3,10 +3,25 @@
 **
 ** Everything related to race.
 ** Note: Race usually means Gender and Race since the gender affects starting attributes.
+**
 ** *** Gah: int is a potential future reserved word! Change to ite? Or put all fields in quotes? ***
+**
+** All of these images were converted to JPG from the individual race details pages under
+** http://www.elderscrolls.com/codex/races_map.htm
+** Note: The JPG conversion eliminated the transparency present in the source GIFs.
+** *** The background used to replace transparency is not the same for all race images.
+**
+** Descriptions also taken from the individual race details pages under
+** http://www.elderscrolls.com/codex/races_map.htm
+**
+** *** Add height/weight info (esp height since it affects movement speed)
+** *** Show resists, water breathing, and night-eye in details table?
 */
 
 ocp.race = {
+
+    // Private: Location of our images
+    IMAGE_DIR: ocp.IMAGE_ROOT_DIR + 'race/',
 
     // Private: Data for all races and genders
     _data: {
@@ -21,7 +36,7 @@ ocp.race = {
                 'Resist Poison (magnitude 100, constant)',
                 'Water Breathing (constant)'
             ],
-            image: 'argonian.gif',
+            image: 'argonian.jpg',
             description: 'Little is known and less is understood about the reptilian denizens ' +
                 'of Black Marsh. Years of defending their borders have made the Argonians ' +
                 'experts in guerilla warfare, and their natural abilities make them equally at ' +
@@ -46,7 +61,7 @@ ocp.race = {
                 'Resist Magicka (magnitude 50, constant)',
                 'Shield (magnitude 50, duration 60, once a day)'
             ],
-            image: 'breton.gif',
+            image: 'breton.jpg',
             description: 'Passionate and eccentric, poetic and flamboyant, intelligent and ' +
                 'willful, the Bretons feel an inborn, instinctive bond with the mercurial ' +
                 'forces of magic and the supernatural. Many great sorcerers have come out ' +
@@ -65,7 +80,7 @@ ocp.race = {
                 'Summon Ghost (duration 60, once a day)',
                 'Resist Fire (magnitude 75, constant)'
             ],
-            image: 'darkelf.gif',
+            image: 'darkelf.jpg',
             description: 'Dark Elves are the dark-skinned Elven peoples of the Eastern Empire. ' +
                 '"Dark" is variously understood to mean "dark-skinned", "gloomy", and ' +
                 '"ill-favored by fate". The Dunmer and their national character embrace these ' +
@@ -89,7 +104,7 @@ ocp.race = {
                 'Weakness to Fire, Frost, and Shock (magnitude 25, constant)',
                 'Resist Desease (magnitude 75, constant)'
             ],
-            image: 'highelf.gif',
+            image: 'highelf.jpg',
             description: 'In Imperial speech, the haughty, tall, golden-skinned peoples of ' +
                 'Summerset Isle are called "High Elves", but they call themselves the "Altmer", ' +
                 'or the "Cultured People". In the Empire, "High" is often understood to mean ' +
@@ -114,7 +129,7 @@ ocp.race = {
                 'Absorb Fatigure (touch, magnitude 100, once a day)',
                 'Charm (target, magnitude 30, once a day)'
             ],
-            image: 'imperial.gif',
+            image: 'imperial.jpg',
             description: 'Natives of the civilized, cosmopolitan province of Cyrodiil, the ' +
                 'Imperials are well-educated and well-spoken. Imperials are also known for ' +
                 'the discipline and training of their citizen armies. Though physically less ' +
@@ -135,7 +150,7 @@ ocp.race = {
                 'Demoralize (target, magnitude 100, duration 30, once a day)',
                 'Night-Eye (duration 30, unlimited uses)'
             ],
-            image: 'khajiit.gif',
+            image: 'khajiit.jpg',
             description: 'Khajiit hail from the province of Elsweyr and can vary in appearance ' +
                 'from nearly Elven to the cathay-raht "jaguar men" to the great Senche-Tiger. ' +
                 'The most common breed found in Morrowind, the suthay-raht, is intelligent, ' +
@@ -157,7 +172,7 @@ ocp.race = {
                 'Shield (magnitude 30, duration 60, once a day)',
                 'Resist Frost (magnitude 50, constant)'
             ],
-            image: 'nord.gif',
+            image: 'nord.jpg',
             description: 'The citizens of Skyrim are a tall and fair-haired people, aggressive ' +
                 'and fearless in war, industrious and enterprising in trade and exploration. ' +
                 'Skilled sailors, Nords can be found in seaports and settlements along all the ' +
@@ -179,7 +194,7 @@ ocp.race = {
                     'duration 60, once a day)',
                 'Resist Magicka (magnitude 25, constant)'
             ],
-            image: 'orc.gif',
+            image: 'orc.jpg',
             description: 'These sophisticated barbarian beast peoples of the Wrothgarian ' +
                 'and Dragontail Mountains are noted for their unshakeable courage in war and ' +
                 'their unflinching endurance of hardships. In the past, Orcs have been widely ' +
@@ -204,7 +219,7 @@ ocp.race = {
                 'Resist Poison (magnitude 75, constant)',
                 'Resist Disease (magnitude 75, constant)'
             ],
-            image: 'redguard.gif',
+            image: 'redguard.jpg',
             description: 'The most naturally talented warriors in Tamriel, the dark-skinned, ' +
                 'wiry-haired Redguards of Hammerfell seem born to battle, though their pride ' +
                 'and fierce independence of spirit makes them more suitable as scouts or ' +
@@ -224,7 +239,7 @@ ocp.race = {
                 'Command Creature (target, magnitude 20, duration 60, once a day)',
                 'Resist Disease (magnitude 75, constant)'
             ],
-            image: 'woodelf.gif',
+            image: 'woodelf.jpg',
             description: 'The Wood Elves are the various barbarian Elven clanfolk of the ' +
                 'Western Valenwood forests. In the Empire, they are collectively referred to as ' +
                 '"Wood Elves", but "Bosmer", or "the Tree-Sap People", is what they call ' +
@@ -321,12 +336,14 @@ ocp.race = {
         this._initializeLimits();
 
         // Hook the race dialog to initialize it the first time it's shown
+        var _this = this;
         var handle = dojo.connect(dijit.byId('raceDialog'), 'onShow',
             function (/* event */) {
-                // Using handle from closure, disconnect so we only do this once
+                // From closure: _this, handle
+                // Disconnect so we only do this once
                 dojo.disconnect(handle);
                 handle = null;
-                ocp.race._initializeDialog();
+                _this._initializeDialog();
         });
 
         // Select an initial race
@@ -339,7 +356,7 @@ ocp.race = {
     _initializeLimits: function() {
 
         // Only init if we haven't yet
-        if (this._limits == null) {
+        if (!this._limits) {
 
             // Search through all attributes for all races and genders
             this._limits = {};
@@ -368,7 +385,7 @@ ocp.race = {
 
     // Private: Initialize the race dialog
     _initializeDialog: function() {
-        console.log('entered ocp.race._initializeDialog');
+        console.debug('entered _initializeDialog');
         this._initializeOverview();
         this._initializeDetails();
     },
@@ -382,8 +399,8 @@ ocp.race = {
         for (var race in this._data) {
             over +=
                 '<div class="raceOverview">' +
-                    '<img src="images/race/' + this._data[race].image + '" class="raceImage"' +
-                        ' alt="[' + race + ' Image]" />' +
+                    '<img src="' + this.IMAGE_DIR + this._data[race].image + '" ' +
+                        'class="raceImage" alt="[' + race + ' Image]" />' +
                     '<div class="raceDetails">' +
                         '<div class="raceName">' + race + '</div>' +
                         '<div class="raceDescription">' + this._data[race].description + '</div>' +
@@ -529,7 +546,7 @@ ocp.race = {
 
     // Private: Select race/gender without error checking or notification
     _select: function(race, gender) {
-        console.log('entered ocp.race._select:', gender, race);
+        console.debug('entered _select:', gender, race);
 
         // Set the current race/gender
         this._race = race;
@@ -540,7 +557,7 @@ ocp.race = {
     // Public: Validate args, select race/gender, and notify of a change
     //         Should only be called from the selection dialog
     select: function(race, gender) {
-        console.log('entered ocp.race.select:', gender, race);
+        console.debug('entered select:', gender, race);
 
         // Validate the selection
         if (race in this._data) {
@@ -551,10 +568,14 @@ ocp.race = {
                 // Notify that something has changed
                 ocp.notifyChanged();
             } else {
-                alert('Unknown gender "' + gender + '" selected for race "' + race + '".');
+                var msg = 'Unknown gender "' + gender + '" selected for race "' + race + '".';
+                console.error(msg);
+                alert(msg);
             }
         } else {
-            alert('Unknown race "' + race + '" selected.');
+            var msg = 'Unknown race "' + race + '" selected.';
+            console.error(msg);
+            alert(msg);
         }
     },
 
