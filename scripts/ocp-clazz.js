@@ -596,7 +596,8 @@ ocp.clazz.classDialog = {
         // Add a vertical header for each core attribute
         for (var attr in ocp.coreAttrs) {
             det +=
-                '<th class="vertical" title="' + ocp.coreAttrs[attr].name + ' core attribute">' +
+                '<th class="vertical" ocpTooltip="[help]' + ocp.coreAttrs[attr].name +
+                    ' core attribute">' +
                     ocp.verticalize(attr) +
                 '</th>';
         }
@@ -604,7 +605,7 @@ ocp.clazz.classDialog = {
         // Add a vertical header for each skill
         for (var skill in ocp.skills) {
             det +=
-                '<th class="vertical" title="' + ocp.skills[skill].name + ' skill">' +
+                '<th class="vertical" ocpTooltip="[help]' + ocp.skills[skill].name + ' skill">' +
                     ocp.verticalize(skill) +
                 '</th>';
         }
@@ -623,7 +624,7 @@ ocp.clazz.classDialog = {
                     '<td>' +
                         // TODO: Clean up the look of this -- it doesn't match the rest of the UI
                         '<a href="javascript:ocp.clazz.selectPredefined(\'' + clazz + '\')" ' +
-                            'title="Select ' + clazz + '">' +
+                            'ocpTooltip="[after]Select ' + clazz + '">' +
                             clazz +
                         '</a>' +
                     '</td>';
@@ -650,16 +651,17 @@ ocp.clazz.classDialog = {
                         (isMajor ? ' majorSkill' : '') + '"' +
                     '>' +
                         // Add skill min so values shown are what you get with this class
-                        (bonus > 0 ? bonus + ocp.SKILL_MIN : '' ) +
+                        (bonus > 0 ? bonus + ocp.SKILL_MIN : '') +
                     '</td>';
             }
 
             det += '</tr>';
         }
 
-        // Complete the table and insert the results
+        // Complete the table, insert the results, and replace tooltips
         det += '</tbody></table>';
         dojo.place(det, 'classDetailsPane', 'only');
+        ocp.replaceTooltips('classDetailsPane');
     },
 
 

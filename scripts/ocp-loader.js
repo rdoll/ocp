@@ -401,17 +401,8 @@ dojo.declare('ocp.loader.ManagedModule', null, {
         this._container.loadingMessage = 'Loading the ' + this.moduleName + '...';
 
         // Hook the content download events
-        this._container.attr('onDownloadEnd',   dojo.hitch(this, 'onDownloadEnd'));
         this._container.attr('onDownloadError', dojo.hitch(this, 'onDownloadError'));
         this._container.attr('onContentError',  dojo.hitch(this, 'onContentError'));
-    },
-
-
-    // Public: Called after the ContentPane's content has been downloaded and set
-    onDownloadEnd: function () {
-        console.debug('entered onDownloadEnd');
-        // Replace all OCP tooltips with real tooltips
-        ocp.replaceTooltips(this._containerId);
     },
 
 

@@ -84,10 +84,32 @@
             kept to a minimum. I intend to update OCP to match the general colors and styles of
             my gracious host <![CDATA[<a href="http://www.uesp.net">UESP</a>]]>.
         </issue>
+
+        <issue type="bug" name="Browser built-in tooltips are used on buttons and images">
+            The fancy Dojo tooltips (like on
+            <![CDATA[<b ocpTooltip="[help]This is a fancy Dojo tooltip">this</b>]]>)
+            don't work well on buttons or images. If you click on a button with a Dojo tooltip, the
+            tooltip doesn't disappear until you show a tooltip from a different element. On an
+            image, the browser built-in tooltip is positioned near the mouse cursor, but Dojo's
+            tooltip placement is always around the edge of the image (which can end up outside of a
+            dialog). These issues are annoying enough to warrant using the browser's built-in
+            tooltips (like on
+            <![CDATA[<b title="This is a browser built-in tooltip">this</b>]]>)
+            for buttons and images.
+        </issue>
     </knownissues>
 
     <changelog>
         <version name="0.8.3" type="beta" scope="wip" date="*** TBD ***">
+            <change type="feature"
+                name="Use fancy Dojo tooltips instead of browser built-in tooltips">
+                Fancy Dojo tooltips (like on
+                <![CDATA[<b ocpTooltip="[help]This is a fancy Dojo tooltip">this</b>]]>)
+                are used instead of browser built-in tooltips (like on
+                <![CDATA[<b title="This is a browser built-in tooltip">this</b>]]>)
+                everywhere except on buttons and images (because the Dojo 1.4 tooltips don&apos;t
+                work well with them).
+            </change>
             <change type="feature" name="Added support for HTML in Release Notes">
                 HTML markup (e.g. <![CDATA[<b>bold text</b>]]>) now shows correctly in the Release
                 Notes.
@@ -109,6 +131,7 @@
                 With Dojo 1.4, previously used menu selections should never get stuck looking
                 selected.
             </change>
+            <change type="feature" name="Updated all copyrights to 2009-2010" />
         </version>
 
         <version name="0.8.2" type="beta" scope="public" date="18 Dec 2009">

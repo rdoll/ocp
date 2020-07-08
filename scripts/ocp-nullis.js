@@ -188,6 +188,9 @@ ocp.nullis = {
                 delete aNode;
             }
         });
+
+        // Create tooltips for the hacked results
+        ocp.replaceTooltips('resultsLevelingPane');
     },
 
 

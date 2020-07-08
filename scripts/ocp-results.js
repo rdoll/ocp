@@ -38,6 +38,9 @@ ocp.results = {
         this._updateInitialSkills();
         this._updateLeveling();
         this._updateAnalysis();
+
+        // This is an expensive call because of the number of tooltips to replace
+        // and how often this method gets called, but it seems ok atm so keep it.
         ocp.replaceTooltips('resultsStackContainer');
     },
 
@@ -447,17 +450,19 @@ ocp.results = {
                 '</tr>' +
                 '<tr class="last">' +
                     '<th>Attribute</th>' +
-                    '<th title="Starting total value">Start</th>' +
-                    '<th title="Maximum achievable by leveling">Max</th>' +
-                    '<th title="Level the maximum value was achieved">Level</th>' +
-                    '<th title="Total skill points you can level up for this attribute">' +
-                        'Avail</th>' +
-                    '<th title="Skill points required to reach the maximum value">Used</th>' +
-                    '<th title="Spare skill points not required to level this attribute">' +
-                        'Spare</th>' +
-                    '<th title="Spare skill points that are for major skills">Sp Maj</th>' +
-                    '<th title="Skill points you can waste each level (assuming this ' +
-                        'exact leveling pattern)">Sp/Lv</th>' +
+                    '<th ocpTooltip="[help]Starting total value">Start</th>' +
+                    '<th ocpTooltip="[help]Maximum achievable by leveling">Max</th>' +
+                    '<th ocpTooltip="[help]Level the maximum value was achieved">Level</th>' +
+                    '<th ocpTooltip="[help]Total skill points you can level up for this ' +
+                        'attribute">Avail</th>' +
+                    '<th ocpTooltip="[help]Skill points required to reach the maximum value">' +
+                        'Used</th>' +
+                    '<th ocpTooltip="[help]Spare skill points not required to level this ' +
+                        'attribute">Spare</th>' +
+                    '<th ocpTooltip="[help]Spare skill points that are for major skills">' +
+                        'Sp Maj</th>' +
+                    '<th ocpTooltip="[help]Skill points you can waste each level (assuming ' +
+                        'this exact leveling pattern)">Sp/Lv</th>' +
                 '</tr>' +
             '</thead>';
 
@@ -470,14 +475,16 @@ ocp.results = {
             // The class for attributes that failed to reach max level
             var worseClass = (data[attr].max < attrMax
                 ? 'class="numeric worse" ' +
-                    'title="Failed to reach the maximum possible value of ' + attrMax + '"'
+                    'ocpTooltip="[help]Failed to reach the maximum possible value of ' +
+                        attrMax + '"'
                 : 'class="numeric"');
 
             // The class for maxed attributes
             var maxedClass = (firstTotals[attr] < attrMax
                 ? 'class="numeric"'
                 : 'class="numeric maxed" ' +
-                    'title="Not included in totals since ' + attrName + ' cannot be leveled"');
+                    'ocpTooltip="[help]Not included in totals since ' + attrName +
+                        ' cannot be leveled"');
 
             anal +=
                 '<tr>' +

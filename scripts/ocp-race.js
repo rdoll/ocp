@@ -560,7 +560,8 @@ ocp.race = {
                 if (firstSkill) {
                     det +=
                         '<td rowspan="' + skills.length + '" class="vertical" ' +
-                            'title="Skills that affect ' + ocp.coreAttrs[attr].name + '"' +
+                            'ocpTooltip="[help,after]Skills that affect ' +
+                                ocp.coreAttrs[attr].name + '"' +
                         '>' +
                             ocp.verticalize(attr) +
                         '</td>';
@@ -582,8 +583,9 @@ ocp.race = {
         // Terminate the table
         det += '</table>';
 
-        // Insert the details and parse the inserted code for Dojo markups
+        // Insert the details and parse the inserted code for Dojo and OCP markups
         dojo.html.set(dojo.byId('raceDetailsPane'), det, { parseContent: true });
+        ocp.replaceTooltips('raceDetailsPane');
     },
 
 

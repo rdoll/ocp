@@ -361,12 +361,14 @@
         <!--
              The main stack container to show one module at a time.
              All modules are loaderManagedContainers so the loader can cleanly handle errors.
+             After the content is downloaded, create/replace all OCP tooltips.
         -->
         <div dojoType="dijit.layout.StackContainer" id="ocpStackContainer" doLayout="false">
 
             <div dojoType="ocp.widget.TitledContentPane" title="Home" selected="true"
                 id="homeContentPane" class="loaderManagedContainer"
-                href="partials/home.html" doLayout="false">
+                href="partials/home.html" doLayout="false"
+                onDownloadEnd="ocp.replaceTooltips('homeContentPane');">
                 <!-- Contents filled via AJAX request -->
             </div>
 
@@ -374,38 +376,43 @@
             <div dojoType="dijit.layout.ContentPane" title="Planner"
                 id="plannerContentPane" class="loaderManagedContainer"
                 href="partials/planner.html" doLayout="false"
-                onDownloadEnd="ocp.initializePlanner()">
+                onDownloadEnd="ocp.replaceTooltips('plannerContentPane'); ocp.initializePlanner();">
                 <!-- Contents filled via AJAX request -->
             </div>
 
             <div dojoType="ocp.widget.TitledContentPane" title="Instructions"
                 id="instructionsContentPane" class="loaderManagedContainer"
-                href="partials/instructions.html" doLayout="false">
+                href="partials/instructions.html" doLayout="false"
+                onDownloadEnd="ocp.replaceTooltips('instructionsContentPane');">
                 <!-- Contents filled via AJAX request -->
             </div>
 
             <div dojoType="ocp.widget.TitledContentPane" title="Advice"
                 id="adviceContentPane" class="loaderManagedContainer"
-                href="partials/advice.html" doLayout="false">
+                href="partials/advice.html" doLayout="false"
+                onDownloadEnd="ocp.replaceTooltips('adviceContentPane');">
                 <!-- Contents filled via AJAX request -->
             </div>
 
             <div dojoType="ocp.widget.TitledContentPane" title="FAQ"
                 id="faqContentPane" class="loaderManagedContainer"
-                href="partials/faq.html" doLayout="false">
+                href="partials/faq.html" doLayout="false"
+                onDownloadEnd="ocp.replaceTooltips('faqContentPane');">
                 <!-- Contents filled via AJAX request -->
             </div>
 
             <!-- The release notes XML is pre-processed into HTML before being displayed -->
             <div dojoType="ocp.widget.TitledContentPane" title="Release Notes"
                 id="relnotesContentPane" class="loaderManagedContainer"
-                href="partials/relnotes.xml" doLayout="false" ioArgs="{ handleAs: 'xml' }">
+                href="partials/relnotes.xml" doLayout="false" ioArgs="{ handleAs: 'xml' }"
+                onDownloadEnd="ocp.replaceTooltips('relnotesContentPane');">
                 <!-- Contents filled via AJAX request -->
             </div>
 
             <div dojoType="ocp.widget.TitledContentPane" title="About"
                 id="aboutContentPane" class="loaderManagedContainer"
-                href="partials/about.html" doLayout="false">
+                href="partials/about.html" doLayout="false"
+                onDownloadEnd="ocp.replaceTooltips('aboutContentPane');">
                 <!-- Contents filled via AJAX request -->
             </div>
         </div>

@@ -4,20 +4,12 @@ http://docs.dojocampus.org/releasenotes/1.4
     - tooltips can be dynamically attached to nodes. might allow me to dynamically
       search for title= attributes and replace with a custom tooltip.
         when done, add this to release notes
-        extend search to everywhere, not just results.
-        test all.
-        continue replacing title='s with ocpTooltip='s
-        continue testing tooltips in all of the results
-        don't forget about tooltips in dialogs (like on images)
-        careful, there is a tooltip on the gender sub-dialog
         when tooltips are done, check memory usage after lots of recalcs
-        check tooltip placement of warnings in all locations of leveling details
-        need html formatting of all leveling warnings?
-        should I add a call to ocp.replaceTooltips into ocp.loader.ManageModule so it
-            happens automatically after a module is loaded? yeah, i think so.
-            *** yeah, but now the onDownloadEnd collides with the ocp.initializePlanner call
-        the default dijit.Dialog's cancel button has a title= tooltip
-            create a new one with an ocpTooltip= attribute? or hack the real one live somehow?
+        When done, note here that you cannot apply an ocpTooltip= to a dijit.form.Button element
+            or to an image
+        Note that the dialog's close button uses a browser built-in tooltip
+
+*** Nullis doesn't work on the first attempt ***
 
 Is regenerating the entire results pane still worth it with all the tooltips being created now?
 
@@ -52,10 +44,6 @@ see if I can combine these into one set of generic styles.
 Replace M/F in Race Details with Male and Female icons. &#x2642; and &#x2640; chars look
 crappy -- need icons.
 
-Replace all title="" tooltips (found with a CSS [title] query) with dijit.Tooltips?
-Use a post-processor to do the conversion?
-Need a style (dashed underline?) to show a tooltip is available?
-
 From http://www.dojotoolkit.org/book/dojo-book-0-9/part-2-dijit/user-assistance-and-feedback/tooltip
 
   Tooltips are displayed when the associated item receives focus or a mouseover event. Be careful
@@ -88,7 +76,6 @@ Up front message if browser is known not to be supported?
 -----
 Icons:
 
-Need to add icon credits.
 Need to convent icons from links to real images.
 
 Possible Fugue Icons:

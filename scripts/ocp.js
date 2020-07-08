@@ -342,7 +342,7 @@ var ocp = {
                 } else {
 
                     // Create and attach the tooltip
-                    console.log('Attaching tooltip to', ttNode, 'with ttArgs=', ttArgs);
+                    //console.log('Attaching tooltip to', ttNode, 'with ttArgs=', ttArgs);
                     var tt = new dijit.Tooltip({
                         label: ttArgs.message,
                         position: ttArgs.position
