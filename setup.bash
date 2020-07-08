@@ -1,8 +1,54 @@
 #!/bin/echo Must be sourced via .
 
+# This is a bash/ksh/sh compatible script that must be source'd
+# into the current shell so environment variables, functions, and
+# aliases can be set.
+
+# Project root directory
+export OCP_PROJ="/var/www/ocp"
+
+# Ensure we are in a version under the root
+if [ ".${PWD#$OCP_PROJ/}" = ".$PWD" ] ; then
+    echo "Can only setup while under a version subdir of $OCP_PROJ."
+    return 1
+fi
+
+# Get the version from the subdirectory name
+export OCP_VER="${PWD#$OCP_PROJ/}"
+export OCP_VER="${OCP_VER%%/*}"
+
+# Root directory for this version
+export OCP_ROOT="$OCP_PROJ/$OCP_VER"
+
+# Quick CD shortcuts
+function cdproj { cd "$OCP_PROJ${@:+/$@}" ;}
+function cdtop { cd "$OCP_ROOT${@:+/$@}" ;}
+
+# Function to get the version from the source
+function ocpSourceVersion {
+    perl -ne 'print $1 if /\sVERSION:[^\d]+([\d.]+)/' $OCP_ROOT/scripts/ocp.js
+}
+
+# Validate that the source version matches the directory version
+function ocpValidateVersions {
+    _srcver="`ocpSourceVersion`"
+    if [ ".$OCP_VER" != ".$_srcver" ] ; then
+        echo "Error: Source version $_srcver does not match directory" \
+            "version $OCP_VER."
+        unset _srcver
+        return 1
+    fi
+    unset _srcver
+    return 0
+}
+
+# If the source and dir versions don't match, return failure
+ocpValidateVersions || return 1
+
+
 # Define the files for the project
-export SRC_FILES="\
-    OblivCharPlanner.html \
+export OCP_SRC="\
+    ocp.html \
     styles/ocp.css \
     scripts/ocp.js \
     scripts/ocp-input.js \
@@ -18,48 +64,60 @@ export SRC_FILES="\
     "
 
 # Start up the editor on all files
-alias nedit-all="nedit-nc -g 111x40 $SRC_FILES"
+alias nedit-all="nedit-nc -g 111x40 $OCP_SRC"
 
-# Quick backup
-function backupcwd {
-    dat="`date '+%Y%m%d'`";
-    ver="`perl -ne 'print $1 if /\sVERSION:[^\d]+([\d.]+)/' scripts/ocp.js`"
-    tar -cvzf backup-$dat-v$ver.tar.gz \
-        --exclude=\*.tar.gz \
-        --exclude=images/birth/original \
-        --exclude=images/class/original \
-        --exclude=images/race/original \
-        *
+
+# Backup root directory
+export OCP_BACKUP="$OCP_PROJ/backup"
+function cdback { cd "$OCP_BACKUP${@:+/$@}" ;}
+
+# Backup the current version
+function backupsrc {
+    ocpValidateVersions &&
+    ( cd "$OCP_ROOT" &&
+      tar -cvzf "$OCP_BACKUP/ocp-`date '+%Y%m%d'`-v$OCP_VER.tar.gz" .
+    )
 }
-function backuporigcwd {
-    dat="`date '+%Y%m%d'`";
-    ver="`perl -ne 'print $1 if /\sVERSION:[^\d]+([\d.]+)/' scripts/ocp.js`"
-    tar -cvzf backup-$dat-v$ver-plus-orig.tar.gz \
-        --exclude=\*.tar.gz \
-        *
+
+# Backup the original images
+function backuporig {
+    ( cd "$OCP_PROJ/original-images" &&
+      tar -cvzf "$OCP_BACKUP/ocp-`date '+%Y%m%d'`-original-images.tar.gz" .
+    )
 }
+
 
 # Print list of text files excluding .svn dirs
 # -- Does not follow links so dojotoolkit is not found
 function find_text_files {
   perl -e '
     use File::Find;
-    sub prep() { return sort grep { not /^\.svn$/ and not /\.(png|gif|jpg|jpeg)$/ } @_; }
+    sub prep() {
+        return sort grep { not /^\.svn$/ and not /\.(png|gif|jpg|jpeg)$/ } @_;
+    }
     sub want() { s!^\./!!; print if -T; }
     if ( $ARGV[0] eq "-0" ) { shift @ARGV; $\ = "\0"; } else { $\ = "\n"; }
-    find( { wanted => \&want, preprocess => \&prep, no_chdir => 1, follow => 0 }, @ARGV );' -- "${@:-.}"
+    find( { wanted => \&want, preprocess => \&prep,
+            no_chdir => 1, follow => 0 },
+        @ARGV );' -- "${@:-.}"
 }
 
 # Grep text files
 alias grepcwd='find_text_files -0 . | xargs -0 grep'
-#alias grepsrc='find_text_files -0 "$FLEXDKP_SOURCE_DIR" | xargs -0 grep'
-#alias greppub='find_text_files -0 "$FLEXDKP_PUBLIC_DIR" | xargs -0 grep'
-#alias grepzend='find_text_files -0 "$FLEXDKP_ZEND_DIR" | xargs -0 grep'
+alias grepsrc='find_text_files -0 "$OCP_ROOT" | xargs -0 grep'
+function grepver {
+    if [ $# -lt 1 ] ; then
+        echo "Error: grepver requires at least one argument."
+        return 1
+    else
+        _ver="$1" ; shift
+        find_text_files -0 "$OCP_PROJ/$_ver" | xargs -0 grep ${@:+"$@"}
+    fi
+}
 
 # Check text files for control characters and trailing whitespace
 alias checkcwd='find_text_files -0 . | xargs -0 grep -E "([[:cntrl:]]|[[:space:]]\$)"'
-#alias checksrc='find_text_files -0 $FLEXDKP_SOURCE_DIR | xargs -0 grep -E "([[:cntrl:]]|[[:space:]]\$)"'
-#alias checkpub='find_text_files -0 $FLEXDKP_PUBLIC_DIR | xargs -0 grep -E "([[:cntrl:]]|[[:space:]]\$)"'
+alias checksrc='find_text_files -0 "$OCP_ROOT" | xargs -0 grep -E "([[:cntrl:]]|[[:space:]]\$)"'
 
 # Strip trailing whitespace from all lines in the given files
 alias stripws="perl -i -pe 's/\s+\n$/\n/'"
@@ -92,27 +150,56 @@ function cleandir {
     fi
   done
 }
-
 alias cleancwd='cleandir .'
-#alias cleansrc='cleandir "$FLEXDKP_SOURCE_DIR"'
-#alias cleanpub='cleandir "$FLEXDKP_PUBLIC_DIR"'
+alias cleansrc='cleandir "$OCP_ROOT"'
 
 # Count lines in source text files that contain something alpha-numeric
 function countdir {
     find_text_files "${@:-.}" | \
         grep -v setup.bash | \
-        grep -v htaccess | \
+        grep -v '\.txt$' | \
         xargs grep -c '[:alnum:]' | \
         awk -F: '{ tot += $2; printf "%5d\t%s\n", $2, $1 } \
             END { printf "%5d\t%s\n", tot, "Total AlphaNum Lines" }'
 }
 alias countcwd='countdir .'
+alias countsrc='countdir "$OCP_ROOT"'
 
 # Count with plain wc
-alias wccwd="find_text_files . | \
-    grep -v setup.bash | \
-    grep -v htaccess | \
-    xargs wc --chars --max-line-length --lines"
+function wcdir {
+    find_text_files "${@:-.}" | \
+        grep -v setup.bash | \
+        grep -v '\.txt$' | \
+        xargs wc --chars --max-line-length --lines
+}
+alias wccwd='wcdir .'
+alias wcsrc='wcdir "$OCP_ROOT"'
+
+# Diff versus current source
+# *** Be awesome if these could compare sub-dirs
+# *** (e.g. while in .../ver2/scripts, diffcwd would only compare
+# *** .../ver1/scripts to ../ver2/scripts)
+function diffdir {
+    if [ $# -lt 2 ] ; then
+        echo "Error: diffdir requires at least two arguments."
+        return 1
+    else
+        _dir1="$1" ; shift
+        _dir2="$1" ; shift
+        diff -r "$@" "$_dir1" "$_dir2"
+    fi
+}
+alias diffcwd='diffdir "$OCP_ROOT" .'
+function diffver {
+    if [ $# -lt 1 ] ; then
+        echo "Error: diffver requires at least one argument."
+        return 1
+    else
+        _ver="$1" ; shift
+        diff -r "$@" "$OCP_ROOT" "$OCP_PROJ/$_ver"
+    fi
+}
+
 
 # Use GIMP to convert a PNG image to JPEG
 # Derived from http://www.lemur.com/dmm/culch/scriptsfu/index.html#convertjpg
@@ -155,3 +242,7 @@ function gimp-png-to-jpg {
 EOS
     done
 }
+
+
+# Return success
+return 0

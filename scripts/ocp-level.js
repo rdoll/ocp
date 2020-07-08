@@ -20,12 +20,13 @@ ocp.level = {
     // Skill Points: 0  1  2  3  4  5  6  7  8  9  10
     _attrBonus:    [ 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 5 ],
 
-    // Public: An error was hit during the leveling process
-    error: false,
+    // Private: An error was hit during the leveling process
+    _error: false,
 
 
-    // Public: accessor for max level
-    levelMax: function () { return this._totals.length - 1; },
+    // Public: getters for our data
+    get levelMax () { return this._totals.length - 1; },
+    get hadError () { return this._error; },
 
     // Public: accessors for per-level total and wasted data
     levelTotals: function (level) { return this._totals[level]; },
@@ -93,8 +94,8 @@ ocp.level = {
         this._wasted = [];
 
         // Store the new totals (and an empty wasted) for the starting level
-        this._totals[ocp.input.levelMin()] = totals;
-        this._wasted[ocp.input.levelMin()] = {};
+        this._totals[ocp.input.levelMin] = totals;
+        this._wasted[ocp.input.levelMin] = {};
     },
 
 
@@ -115,7 +116,7 @@ ocp.level = {
 
         // If we don't have enough points in all major skills combined, we can't level
         var points = 0;
-        var majors = ocp.input.majors();
+        var majors = ocp.input.majors;
         for (var skillIndex in majors) {
             var skill = majors[skillIndex];
             if (totals[skill] < ocp.SKILL_MAX) {
@@ -491,10 +492,10 @@ ocp.level = {
     _updateLeveling: function () {
 
         // Assume no error was hit during the leveling process
-        this.error = false;
+        this._error = false;
 
         // Always the totals for the current level
-        var current = this._totals[ocp.input.levelMin()];
+        var current = this._totals[ocp.input.levelMin];
 
         // Keep leveling until we hit the max level or until we hit a failsafe limit.
         // If this is a new character, the failsafe is simply the max level.
@@ -516,7 +517,7 @@ ocp.level = {
                 current = next;
             } else {
                 // Failure -- abort the process (nextLevel generated a log about why already)
-                this.error = true;
+                this._error = true;
                 return;
             }
         }
@@ -524,7 +525,7 @@ ocp.level = {
         // It's an error if we hit the failsafe
         if (failsafe <= 0) {
             console.warn('ocp.level._updateLeveling hit failsafe!');
-            this.error = true;
+            this._error = true;
         }
     }
 };

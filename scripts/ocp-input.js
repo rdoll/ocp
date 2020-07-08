@@ -11,28 +11,25 @@ ocp.input = {
     _stackController: null,
     _existingPane: null,
 
-    // Public: Whether we are doing a new character or an existing one
-    isNewChar: true,
 
-
-    // Private: Sets our new character data attribute
-    _setNewChar: function() {
+    // Public: Return whether using a new (true) or existing (false) character
+    get isNewChar () {
         // We're using a new character unless the Existing Char input pane is selected
         // This way if something goes wrong, we'll return "using a new char"
         // which is the more important use case for OCP.
-        this.isNewChar = !this._existingPane.selected;
+        return !this._existingPane.selected;
     },
 
 
     // Public: The starting level for this character
-    levelMin: function () {
+    get levelMin () {
         // New characters are always level one, but existing ones can set any starting level
         return (this.isNewChar ? 1 : ocp.existing.level);
     },
 
 
     // Public: Return an array of major skills based on char type
-    majors: function () {
+    get majors () {
         return (this.isNewChar ? ocp.cclass.majors : ocp.existing.majors);
     },
 
@@ -59,18 +56,13 @@ ocp.input = {
         this._stackController = dijit.byId('inputStackController');
         this._existingPane = dijit.byId('inputExistingCharacter');
 
-        // Initialize new/existing character
-        this._setNewChar();
-
         // Capture whenever the stack changes the currently displayed child
         dojo.connect(this._stackController, 'onSelectChild', this, 'onSelectChild');
     },
 
 
-    // Public: When the user toggles between new and existing characters,
-    //         update our new/existing char status and notify of changes
+    // Public: When the user toggles between new and existing characters, notify of changes
     onSelectChild: function(/* Widget */ page) {
-        this._setNewChar();
         ocp.notifyChanged();
     },
 

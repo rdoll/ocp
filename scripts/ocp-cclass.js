@@ -269,6 +269,44 @@ ocp.cclass = {
     },
 
 
+    // Public: getters for all data of the currently selected class
+    get name ()   { return (this._custom ? this._customData.name : this._predefined); },
+    get spec ()   { return this._getCurrent().specialization; },
+    get favs ()   { return this._getCurrent().favoredAttrs; },
+    get majors () { return this._getCurrent().majorSkills; },
+
+    get str () { return this._getAttr('str'); },
+    get int () { return this._getAttr('int'); },
+    get wil () { return this._getAttr('wil'); },
+    get agi () { return this._getAttr('agi'); },
+    get spe () { return this._getAttr('spe'); },
+    get end () { return this._getAttr('end'); },
+    get per () { return this._getAttr('per'); },
+    get luc () { return this._getAttr('luc'); },
+
+    get bla () { return this._getSkill('bla'); },
+    get blu () { return this._getSkill('blu'); },
+    get han () { return this._getSkill('han'); },
+    get alc () { return this._getSkill('alc'); },
+    get con () { return this._getSkill('con'); },
+    get mys () { return this._getSkill('mys'); },
+    get alt () { return this._getSkill('alt'); },
+    get des () { return this._getSkill('des'); },
+    get res () { return this._getSkill('res'); },
+    get mar () { return this._getSkill('mar'); },
+    get sec () { return this._getSkill('sec'); },
+    get sne () { return this._getSkill('sne'); },
+    get acr () { return this._getSkill('acr'); },
+    get ath () { return this._getSkill('ath'); },
+    get lig () { return this._getSkill('lig'); },
+    get arm () { return this._getSkill('arm'); },
+    get blo () { return this._getSkill('blo'); },
+    get hvy () { return this._getSkill('hvy'); },
+    get ill () { return this._getSkill('ill'); },
+    get mer () { return this._getSkill('mer'); },
+    get spc () { return this._getSkill('spc'); },
+
+
     // Public: Returns if a given skill is a major skill for the current class
     isMajor: function (skill) {
         return (dojo.indexOf(this._getCurrent().majorSkills, skill) == -1 ? false : true);
@@ -326,21 +364,6 @@ ocp.cclass = {
     },
 
 
-    // Private: Create public data members with the values for the current class
-    _createGetters: function() {
-        for (var attr in ocp.coreAttrs) {
-            this[attr] = this._getAttr(attr);
-        }
-        for (var skill in ocp.skills) {
-            this[skill] = this._getSkill(skill);
-        }
-        var current = this._getCurrent();
-        this.spec = current.specialization;
-        this.favs = current.favoredAttrs;
-        this.majors = current.majorSkills;
-    },
-
-
     // Private: Select predefined class without error checking or notification
     _selectPredefined: function(predefined) {
         console.debug('entered _selectPredefined:', predefined);
@@ -348,10 +371,6 @@ ocp.cclass = {
         // Set the current class
         this._custom = false;
         this._predefined = predefined;
-
-        // Since lame browsers don't support getters, create public data members
-        // with read-only values for the newly selected class
-        this._createGetters();
     },
 
 
@@ -390,10 +409,6 @@ ocp.cclass = {
         this._customData.favoredAttrs = favs;
         delete this._customData.majorSkills;
         this._customData.majorSkills = majors;
-
-        // Since lame browsers don't support getters, create public data members
-        // with read-only values for the newly selected class
-        this._createGetters();
     },
 
 
@@ -551,15 +566,15 @@ ocp.cclass.classDialog = {
         // Start the details table with its header columns
         var det =
             '<table id="classDetailsTable">' +
-                '<colgroup></colgroup>' +
-                '<colgroup span="8"></colgroup>' +
-                '<colgroup span="3" class="firstMajor"></colgroup>' +
-                '<colgroup span="3" class="first"></colgroup>' +
-                '<colgroup span="3" class="first"></colgroup>' +
-                '<colgroup span="3" class="first"></colgroup>' +
-                '<colgroup span="3" class="first"></colgroup>' +
-                '<colgroup span="3" class="first"></colgroup>' +
-                '<colgroup span="3" class="first"></colgroup>' +
+                '<colgroup />' +
+                '<colgroup span="8" />' +
+                '<colgroup span="3" class="firstMajor" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
+                '<colgroup span="3" class="first" />' +
             '<thead>' +
                 '<tr>' +
                     '<th></th>' +

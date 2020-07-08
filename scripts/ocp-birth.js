@@ -151,10 +151,23 @@ ocp.birth = {
         return (attr in attrs ? attrs[attr] : 0);
     },
 
-    // Private: Gets the specials for a given race
-    _getSpecials: function (birth) {
-        return this._data[birth].specials;
-    },
+
+    // Public: getters for all data of the currently selected race and gender
+    get str () { return this._getAttr(this._birth, 'str'); },
+    get int () { return this._getAttr(this._birth, 'int'); },
+    get wil () { return this._getAttr(this._birth, 'wil'); },
+    get agi () { return this._getAttr(this._birth, 'agi'); },
+    get spe () { return this._getAttr(this._birth, 'spe'); },
+    get end () { return this._getAttr(this._birth, 'end'); },
+    get per () { return this._getAttr(this._birth, 'per'); },
+    get luc () { return this._getAttr(this._birth, 'luc'); },
+
+    get hea () { return this._getAttr(this._birth, 'hea'); },
+    get mag () { return this._getAttr(this._birth, 'mag'); },
+    get fat () { return this._getAttr(this._birth, 'fat'); },
+    get enc () { return this._getAttr(this._birth, 'enc'); },
+
+    get specials () { return this._data[this._birth].specials; },
 
 
     // Public: Returns the max possible value for an attribute
@@ -220,16 +233,6 @@ ocp.birth = {
 
         // Set the current birthsign
         this._birth = birth;
-
-        // Since lame browsers don't support getters, create public data members
-        // with read-only values for the newly selected birthsign
-        for (var attr in ocp.coreAttrs) {
-            this[attr] = this._getAttr(birth, attr);
-        }
-        for (var attr in ocp.derivedAttrs) {
-            this[attr] = this._getAttr(birth, attr);
-        }
-        this.specials = this._getSpecials(birth);
     },
 
 

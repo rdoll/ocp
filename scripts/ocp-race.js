@@ -274,10 +274,45 @@ ocp.race = {
         return (skill in skills ? skills[skill] : 0);
     },
 
-    // Private: Gets the specials for a given race
-    _getSpecials: function (race) {
-        return this._data[race].specials;
-    },
+
+    // Public: getters for all data of the currently selected race and gender
+    get str () { return this._getAttr(this._race, this._gender, 'str'); },
+    get int () { return this._getAttr(this._race, this._gender, 'int'); },
+    get wil () { return this._getAttr(this._race, this._gender, 'wil'); },
+    get agi () { return this._getAttr(this._race, this._gender, 'agi'); },
+    get spe () { return this._getAttr(this._race, this._gender, 'spe'); },
+    get end () { return this._getAttr(this._race, this._gender, 'end'); },
+    get per () { return this._getAttr(this._race, this._gender, 'per'); },
+    get luc () { return this._getAttr(this._race, this._gender, 'luc'); },
+
+    get hea () { return this._getAttr(this._race, this._gender, 'hea'); },
+    get mag () { return this._getAttr(this._race, this._gender, 'mag'); },
+    get fat () { return this._getAttr(this._race, this._gender, 'fat'); },
+    get enc () { return this._getAttr(this._race, this._gender, 'enc'); },
+
+    get bla () { return this._getSkill(this._race, 'bla'); },
+    get blu () { return this._getSkill(this._race, 'blu'); },
+    get han () { return this._getSkill(this._race, 'han'); },
+    get alc () { return this._getSkill(this._race, 'alc'); },
+    get con () { return this._getSkill(this._race, 'con'); },
+    get mys () { return this._getSkill(this._race, 'mys'); },
+    get alt () { return this._getSkill(this._race, 'alt'); },
+    get des () { return this._getSkill(this._race, 'des'); },
+    get res () { return this._getSkill(this._race, 'res'); },
+    get mar () { return this._getSkill(this._race, 'mar'); },
+    get sec () { return this._getSkill(this._race, 'sec'); },
+    get sne () { return this._getSkill(this._race, 'sne'); },
+    get acr () { return this._getSkill(this._race, 'acr'); },
+    get ath () { return this._getSkill(this._race, 'ath'); },
+    get lig () { return this._getSkill(this._race, 'lig'); },
+    get arm () { return this._getSkill(this._race, 'arm'); },
+    get blo () { return this._getSkill(this._race, 'blo'); },
+    get hvy () { return this._getSkill(this._race, 'hvy'); },
+    get ill () { return this._getSkill(this._race, 'ill'); },
+    get mer () { return this._getSkill(this._race, 'mer'); },
+    get spc () { return this._getSkill(this._race, 'spc'); },
+
+    get specials () { return this._data[this._race].specials; },
 
 
     // Public: Returns the min/max possible value for an attribute
@@ -394,14 +429,14 @@ ocp.race = {
         var det = '<table id="raceDetailsTable">';
 
         // Use column groups to apply styles dividing each column
-        det += '<colgroup span="2"></colgroup>';
+        det += '<colgroup span="2" />';
         var firstRace = true;
         for (var race in this._data) {
 //          *** raceData's width doesn't work here -- using th.raceName instead
 //          det += '<colgroup span="2" class="raceData' +
-//              (firstRace ? '' : ' first') + '"></colgroup>';
+//              (firstRace ? '' : ' first') + '" />';
             det += '<colgroup span="2"' +
-                (firstRace ? '' : ' class="first"') + '></colgroup>';
+                (firstRace ? '' : ' class="first"') + ' />';
             firstRace = false;
         }
 
@@ -461,7 +496,7 @@ ocp.race = {
                 if ('mag' in gender) {
                     det += '<td class="numeric better">' + gender.mag + '</td>';
                 } else {
-                    det += '<td class="numeric"></td>';
+                    det += '<td class="numeric" />';
                 }
             }
         }
@@ -525,19 +560,6 @@ ocp.race = {
         // Set the current race/gender
         this._race = race;
         this._gender = gender;
-
-        // Since lame browsers don't support getters, create public data members
-        // with read-only values for the newly selected race and gender
-        for (var attr in ocp.coreAttrs) {
-            this[attr] = this._getAttr(race, gender, attr);
-        }
-        for (var attr in ocp.derivedAttrs) {
-            this[attr] = this._getAttr(race, gender, attr);
-        }
-        for (var skill in ocp.skills) {
-            this[skill] = this._getSkill(race, skill);
-        }
-        this.specials = this._getSpecials(race);
     },
 
 

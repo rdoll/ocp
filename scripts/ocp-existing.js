@@ -6,19 +6,24 @@
 
 ocp.existing = {
 
-    // Public: Level for this character
-    level: 1,
+    // Private: Level for this character
+    _level: 1,
 
-    // Public: Level totals for all core attrs, derived attrs, and skills
-    totals: {},
+    // Private: Level totals for all core attrs, derived attrs, and skills
+    _totals: {},
 
-    // Public: The list of major skills
-    majors: [],
+    // Private: The list of major skills
+    _majors: [],
 
     // Public: These child helper objects encapsulate everything for each dialog
     attrDialog: null,
     skillDialog: null,
 
+
+    // Public: Accessors for our data
+    get level ()  { return this._level; },
+    get totals () { return this._totals; },
+    get majors () { return this._majors; },
 
     // Public: Returns if a given skill is a major skill
     isMajor: function (skill) {
@@ -89,8 +94,8 @@ ocp.existing = {
         for (var specIndex in ocp.specs) {
             var skills = ocp.specs[specIndex].skills;
             for (var skillIndex in skills) {
-                this.majors.push(skills[skillIndex]);
-                if (this.majors.length >= ocp.MAJOR_NUM) {
+                this._majors.push(skills[skillIndex]);
+                if (this._majors.length >= ocp.MAJOR_NUM) {
                     return;
                 }
             }
@@ -103,17 +108,17 @@ ocp.existing = {
 
         // Core attributes first
         for (var attr in ocp.coreAttrs) {
-            this.totals[attr] = ocp.coreAttrs[attr].min;
+            this._totals[attr] = ocp.coreAttrs[attr].min;
         }
 
         // Derived attributes next
         for (var attr in ocp.derivedAttrs) {
-            this.totals[attr] = ocp.derivedAttrs[attr].min;
+            this._totals[attr] = ocp.derivedAttrs[attr].min;
         }
 
         // Skills last
         for (var skill in ocp.skills) {
-            this.totals[skill] = (this.isMajor(skill) ? ocp.SKILL_MAJOR_MIN : ocp.SKILL_MIN);
+            this._totals[skill] = (this.isMajor(skill) ? ocp.SKILL_MAJOR_MIN : ocp.SKILL_MIN);
         }
     },
 
@@ -127,7 +132,7 @@ ocp.existing = {
         // Note: The newValue is not subject to ocp.widget.LabeledHorizontalSlider's
         //       forceIntegral feature, so be safe and force integral here.
         // *** Should update ocp.widget.LabeledHorizontalSlider to fix this?
-        this.level = Math.floor(newValue);
+        this._level = Math.floor(newValue);
         ocp.notifyChanged();
     },
 
@@ -144,14 +149,14 @@ ocp.existing = {
         // List of derived attributes
         var att = '<ul class="attrList">';
         for (var attr in ocp.derivedAttrs) {
-            att += '<li>' + ocp.derivedAttrs[attr].name + ': ' + this.totals[attr] + '</li>';
+            att += '<li>' + ocp.derivedAttrs[attr].name + ': ' + this._totals[attr] + '</li>';
         }
         att += '</ul>';
 
         // List of core attributes
         att += '<ul class="attrList">';
         for (var attr in ocp.coreAttrs) {
-            att += '<li>' + ocp.coreAttrs[attr].name + ': ' + this.totals[attr] + '</li>';
+            att += '<li>' + ocp.coreAttrs[attr].name + ': ' + this._totals[attr] + '</li>';
         }
         att += '</ul>';
 
@@ -167,7 +172,7 @@ ocp.existing = {
                 var skill = skills[skillIndex];
                 ski +=
                     '<li' + (this.isMajor(skill) ? ' class="majorSkill"' : '') + '>' +
-                        ocp.skills[skill].name + ': ' + this.totals[skill] +
+                        ocp.skills[skill].name + ': ' + this._totals[skill] +
                     '</li>';
             }
             ski += '</ul>';
@@ -322,10 +327,10 @@ ocp.existing.attrDialog = {
         // Update our totals based on the values of each attribute
         // Slider values already forced to be integral
         for (var attr in ocp.coreAttrs) {
-            ocp.existing.totals[attr] = this._slider[attr].attr('value');
+            ocp.existing._totals[attr] = this._slider[attr].attr('value');
         }
         for (var attr in ocp.derivedAttrs) {
-            ocp.existing.totals[attr] = this._slider[attr].attr('value');
+            ocp.existing._totals[attr] = this._slider[attr].attr('value');
         }
 
         // Notify that changes were made
@@ -340,10 +345,10 @@ ocp.existing.attrDialog = {
         // Assign our values to each slider
         // The slider will update it's value and it's linked label
         for (var attr in ocp.coreAttrs) {
-            this._slider[attr].attr('value', ocp.existing.totals[attr]);
+            this._slider[attr].attr('value', ocp.existing._totals[attr]);
         }
         for (var attr in ocp.derivedAttrs) {
-            this._slider[attr].attr('value', ocp.existing.totals[attr]);
+            this._slider[attr].attr('value', ocp.existing._totals[attr]);
         }
     },
 
@@ -643,11 +648,11 @@ ocp.existing.skillDialog = {
                 }
 
                 // Store the value of this skill
-                ocp.existing.totals[skill] = this._spinner[skill].attr('value');
+                ocp.existing._totals[skill] = this._spinner[skill].attr('value');
             }
 
             // Store the new list of majors
-            ocp.existing.majors = majors;
+            ocp.existing._majors = majors;
 
             // Notify of changes and return success to let the dialog be closed
             ocp.notifyChanged();
@@ -677,7 +682,7 @@ ocp.existing.skillDialog = {
         // constraints as appropriate.
         for (var skill in ocp.skills) {
             this._checkbox[skill].attr('value', ocp.existing.isMajor(skill));
-            this._spinner[skill].attr('value', ocp.existing.totals[skill]);
+            this._spinner[skill].attr('value', ocp.existing._totals[skill]);
         }
 
         // Done with the many changes, so update validity

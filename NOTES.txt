@@ -1,0 +1,23 @@
+Fix level bug (grep BUG in ocp-level.js)
+Move cclass _customData into _data ???
+Change cclass to clazz ?
+Change all plural dirs to singular ?
+Change int to itl?
+
+0.5.1.ie is 0.42 but
+- changed /> tags to <></> tags to be IE compatible
+- cleaned up the placement of a few multi-line />'s
+- eliminated all getters
+- eliminated all for each usage
+- eliminated all native Array.indexOf usage
+
+0.5.0 is 0.42 plus some prop'ed parts of 0.5.1.ie
+- cleaned up the placement of a few multi-line />'s
+- eliminated all for each usage
+- eliminated all native Array.indexOf usage
++ added Nullis level 10 data
++ Nullis wasted skills can set individual reason messages
++ reorganized project directory tree for multiple versions
++ very updated setup.bash
++ renamed OblivCharPlanner.html to ocp.html
++ comment note added for leveling majors as minors
