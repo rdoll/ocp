@@ -22,7 +22,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.8.1',
+    VERSION: '0.8.2',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -293,6 +293,7 @@ var ocp = {
 
         // Initialize our main page children
         ocp.loader.initialize();
+        ocp.util.initialize();
         ocp.contact.initialize();
     },
 
@@ -369,7 +370,7 @@ var ocp = {
     },
 
 
-    // Public: Initializes the planner module after it has been successfully downloaded
+    // Public: Initializes the planner module after it has been successfully loaded
     initializePlanner: function () {
         console.debug('entered initializePlanner');
 

@@ -337,3 +337,33 @@
         </div>
     </div>
 </div>
+
+
+<!-- Load/Save utility dialog -->
+<div dojoType="dijit.Dialog" id="loadsaveDialog" title="Load/Save Character Configurations"
+    style="display:none">
+    <div dojoType="dijit.layout.ContentPane" id="loadSaveContainer">
+
+        <p>Sorry, but neither loading nor saving is supported yet.</p>
+
+        <div class="dialogFooterButtons">
+            <button dojoType="dijit.form.Button" onclick="ocp.util.loadsave.hideDialog()"
+                title="Close dialog">Close</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Print utility dialog -->
+<div dojoType="dijit.Dialog" id="printDialog" title="Print Character Details and Results"
+    style="display:none">
+    <div dojoType="dijit.layout.ContentPane" id="printContainer">
+
+        <p>Sorry, but printing is not supported yet.</p>
+
+        <div class="dialogFooterButtons">
+            <button dojoType="dijit.form.Button" onclick="ocp.util.print.hideDialog()"
+                title="Close dialog">Close</button>
+        </div>
+    </div>
+</div>

@@ -193,9 +193,9 @@ ocp.nullis = {
 
     // Public: Safely set info for my toon Nullis after planner is loaded
     safeSetStart: function () {
-        ocp.loader.runAfterLoaded('plannerContentPane', dojo.hitch(this, 'setNullisStart'));
+        ocp.loader.runAfterPlannerLoaded(dojo.hitch(this, 'setNullisStart'));
     },
     safeSetNow: function () {
-        ocp.loader.runAfterLoaded('plannerContentPane', dojo.hitch(this, 'setNullisNow'));
+        ocp.loader.runAfterPlannerLoaded(dojo.hitch(this, 'setNullisNow'));
     }
 };

@@ -74,13 +74,21 @@
     </knownissues>
 
     <changelog>
-        <version name="0.8.1" type="beta" scope="wip" date="*** TBD ***">
+        <version name="0.8.2" type="beta" scope="public" date="18 Dec 2009">
             <change type="feature"
                 name="Support selecting a race (and gender) by clicking the images in the race
                     dialog's Overview pane">
                 To maintain consistency with the Birthsign and Class panes, clicking on a race's
                 image pops up a gender selection dialog.
             </change>
+            <change type="feature"
+                name="Added framework to support load/save and print functions">
+                Neither load/save nor print functionality is implemented yet, but these changes
+                laid the groundwork for both.
+            </change>
+        </version>
+
+        <version name="0.8.1" type="beta" scope="private" date="29 Nov 2009">
             <change type="feature" name="Added new Advice section">
                 While it is beyond OCP's scope to list all possible advice for maximizing the
                 potency of a new or existing character, the new Advice section should give players
@@ -88,11 +96,11 @@
             </change>
         </version>
 
-        <version name="0.8.0" type="beta" scope="private" date="12 Nov 2009">
+        <version name="0.8.0" type="beta" scope="private" date="02 Nov 2009">
             <change type="feature"
                 name="Replaced simple section toggle buttons with a proper menu bar">
-                The new menu bar sets the stage for future functions like load/save and printing
-                (sorry, they aren't implmented yet).
+                The new menu bar system allows future functionality to be added in a clear and
+                organized manner.
             </change>
             <change type="feature" name="Added expand/collapse ability to Change Log versions">
                 By default, all versions start collapsed so they take up less space.

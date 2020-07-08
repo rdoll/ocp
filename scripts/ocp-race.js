@@ -619,7 +619,10 @@ ocp.race = {
                 race: race,
                 content:
                     '<div class="raceGenderDialog">' +
-                        '<div>Gender of your ' + race + ' character?</div>' +
+                        '<div>' +
+                            'Gender of your <span class="raceName">' + race + '</span> ' +
+                            'character?' +
+                        '</div>' +
                         '<button dojoType="dijit.form.Button" ' +
                             'type="submit" ' +
                             'title="Select Male ' + race + '" ' +

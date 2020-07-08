@@ -129,6 +129,7 @@
                     // With all OCP content loaded, validate that every object/class exists
                     if (!((typeof ocp == 'object') &&
                         ocp.loader && ocp.loader.relnotes && ocp.loader.ManagedModule &&
+                        ocp.util && ocp.util.print && ocp.util.loadsave &&
                         ocp.contact && ocp.contact.letterDecoder &&
                         ocp.input &&
                         ocp.race &&
@@ -170,6 +171,7 @@
     <!-- TODO: Compress/merge these for faster loading? -->
     <script type="text/javascript" src="scripts/ocp.js"></script>
     <script type="text/javascript" src="scripts/ocp-loader.js"></script>
+    <script type="text/javascript" src="scripts/ocp-util.js"></script>
     <script type="text/javascript" src="scripts/ocp-contact.js"></script>
     <script type="text/javascript" src="scripts/ocp-input.js"></script>
     <script type="text/javascript" src="scripts/ocp-race.js"></script>
@@ -220,8 +222,9 @@
     <div id="ocpNotLoaded" class="scriptFailWarning" style="display: none">
         <p>There was an error loading/parsing the OCP JavaScript scripts.</p>
         <p>
-            Assuming your browser is configured to execute JavaScript scripts from this server,
-            this usually means your browser's JavaScript support is incompatible with OCP.
+            Assuming your browser is configured to execute JavaScript scripts from this server and
+            there are no bugs in OCP, this usually means your browser's JavaScript support is
+            incompatible with OCP.
         </p>
         <p>
             While OCP is being designed with browser portability in mind, it only officially runs
@@ -250,12 +253,10 @@
                     <div dojoType="dijit.MenuItem" onClick="ocp.setMainModule('planner')">
                         Planner
                     </div>
-                    <div dojoType="dijit.MenuItem"
-                        onClick="alert('Sorry, loading and saving is not supported yet.')">
+                    <div dojoType="dijit.MenuItem" onClick="ocp.util.openUtil(ocp.util.loadsave)">
                         Load/Save...
                     </div>
-                    <div dojoType="dijit.MenuItem"
-                        onClick="alert('Sorry, printing is not supported yet.')">
+                    <div dojoType="dijit.MenuItem" onClick="ocp.util.openUtil(ocp.util.print)">
                         Print...
                     </div>
                 </div>

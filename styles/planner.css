@@ -264,6 +264,11 @@
     border: 2px solid #aaa;
 }
 
+/* Make the race name stand out a bit */
+.raceGenderDialog .raceName {
+    font-weight: bold;
+}
+
 /* Add space above buttons */
 .raceGenderDialog .dijitButton {
     margin-top: 0.5em;

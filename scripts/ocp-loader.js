@@ -97,6 +97,12 @@ ocp.loader = {
     },
 
 
+    // Public: Runs the given function after the planner has been loaded
+    runAfterPlannerLoaded: function (runFunc) {
+        this.runAfterLoaded('plannerContentPane', runFunc);
+    },
+
+
     // Public: Set the module as the main module and shows the given submodule
     showSubmodule: function (moduleId, subModId) {
 

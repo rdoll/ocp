@@ -147,6 +147,7 @@ styles/ocp.css
 styles/planner.css
 scripts/ocp.js
 scripts/ocp-loader.js
+scripts/ocp-util.js
 scripts/ocp-contact.js
 scripts/ocp-input.js
 scripts/ocp-race.js
