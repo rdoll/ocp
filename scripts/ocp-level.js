@@ -391,10 +391,10 @@ ocp.level = {
                             // If the attr for this skill is not at max,
                             // then we wasted the attr bonus for this skillup
                             if (current[attr] < ocp.coreAttrs[attr].max) {
-                                wasted[skill] = 'This skill was raised solely for the major points ' +
-                                    'necessary to level. Because ' + ocp.coreAttrs[attr].name +
-                                    ' was not increased this level, the attribute bonus of this ' +
-                                    'skill up was wasted.';
+                                wasted[skill] = 'This skill was raised solely for the major ' +
+                                    'points necessary to level. Because ' +
+                                    ocp.coreAttrs[attr].name + ' was not increased this ' +
+                                    'level, the attribute bonus of this skill up was wasted.';
                             }
 
                             // Note that we've raised a major skill and
@@ -462,10 +462,10 @@ ocp.level = {
                         // are checked first, if we got here, it's a problem worth noting.
                         if (isMajor[skill]) {
                             wasted[skill] = 'Since ' + ocp.coreAttrs[attr].name +
-                                ' is being increased this level, we want to increase this skill ' +
-                                'for the attribute bonus. However, since ' +
-                                ocp.skills[skill].name + ' is a major skill, it cannot be raised ' +
-                                'without exceeding the ' + ocp.LEVELUP_MAJOR_POINTS +
+                                ' is being increased this level, we want to increase this ' +
+                                'skill for the attribute bonus. However, since ' +
+                                ocp.skills[skill].name + ' is a major skill, it cannot be ' +
+                                'raised without exceeding the ' + ocp.LEVELUP_MAJOR_POINTS +
                                 ' major skill points used to level.';
                         } else {
 
@@ -506,7 +506,8 @@ ocp.level = {
 
                             // The leveling is done.
                             // Now update the attrMax so we can continue with the next skill
-                            attrMax = Math.min(ocp.coreAttrs[attr].max - (current[attr] + leveled[attr]),
+                            attrMax = Math.min(
+                                ocp.coreAttrs[attr].max - (current[attr] + leveled[attr]),
                                 ocp.LEVELUP_BONUS_ATTR_MAX - leveled[attr]);
 
                             // If this attr is done, stop checking skills

@@ -45,7 +45,7 @@ ocp.birth = {
                 'No Magicka regeneration'
             ],
             image: 'atronach.jpg',
-            description: 'With the Atronach ability you don\'t regain Magicka over time. ' +
+            description: 'With the Atronach ability you don&apos;t regain Magicka over time. ' +
                 'Instead you have a permanent 50% Spell Absorption to recharge your Magicka. ' +
                 'Your base Magicka is also increased by 150 points.'
         },
@@ -54,7 +54,7 @@ ocp.birth = {
             attributes: { wil:10, end:10 },
             specials: [],
             image: 'lady.jpg',
-            description: 'The Lady\'s Blessing confers bonuses of 10 points to your ' +
+            description: 'The Lady&apos;s Blessing confers bonuses of 10 points to your ' +
                 'Willpower and Endurance attributes.'
         },
 
@@ -74,8 +74,8 @@ ocp.birth = {
             attributes: {},
             specials: [ 'Paralyze (touch, duration 10) and lose 120 points of Fatigue once a day' ],
             image: 'lover.jpg',
-            description: 'Use the Lover\'s Kiss power once a day to paralyze an opponent for ' +
-                '10 seconds at the cost of 120 points of Fatigue.'
+            description: 'Use the Lover&apos;s Kiss power once a day to paralyze an opponent ' +
+                'for 10 seconds at the cost of 120 points of Fatigue.'
         },
 
         'The Mage': {
@@ -92,7 +92,7 @@ ocp.birth = {
                 'Turn Undead (target, magnitude 100, duration 30, once a day)'
             ],
             image: 'ritual.jpg',
-            description: 'Those born under the Ritual use the Mara\'s Gift power once a ' +
+            description: 'Those born under the Ritual use the Mara&apos;s Gift power once a ' +
                 'day as a powerful Restore Health spell. The Blessed Word can turn the undead.'
         },
 
@@ -166,7 +166,7 @@ ocp.birth = {
     },
 
 
-    // Public: getters for all data of the currently selected race and gender
+    // Public: getters for all data of the currently selected birthsign
     get str () { return this._getAttr(this._birth, 'str'); },
     get int () { return this._getAttr(this._birth, 'int'); },
     get wil () { return this._getAttr(this._birth, 'wil'); },
@@ -199,7 +199,7 @@ ocp.birth = {
 
     // Public: Initialize
     initialize: function() {
-        // Hook the race dialog to initialize it the first time it's shown
+        // Hook the birthsign dialog to initialize it the first time it's shown
         var _this = this;
         var handle = dojo.connect(dijit.byId('birthDialog'), 'onShow',
             function (/* event */) {
@@ -225,7 +225,8 @@ ocp.birth = {
         var count = 0;
         for (var birth in this._data) {
             det +=
-                '<div class="birthDetails birthDetails' + (++count % 2 > 0 ? 'Left' : 'Right') + '">' +
+                '<div class="birthDetails birthDetails' + (++count % 2 > 0 ? 'Left' : 'Right') +
+                '">' +
                     '<img src="' + this.IMAGE_DIR + this._data[birth].image + '" ' +
                         'class="birthImage" alt="[' + birth + ' Image]" ' +
                         'title="Select ' + birth + '" ' +

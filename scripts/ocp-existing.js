@@ -254,11 +254,16 @@ ocp.existing.attrDialog = {
                     '<td id="attrValue_' + attr + '" class="selectedValue">-none-</td>' +
                     '<td>' +
                         '<div dojoType="ocp.widget.LabeledHorizontalSlider" ' +
-                            'id="attrSlider_' + attr + '" class="attrSlider" ' +
-                            'value="' + min + '" ' + 'minimum="' + min + '" ' +
-                            'maximum="' + max + '" ' + 'discreteValues="' + (max - min + 1) + '" ' +
+                            'id="attrSlider_' + attr + '" ' +
+                            'class="attrSlider" ' +
+                            'value="' + min + '" ' +
+                            'minimum="' + min + '" ' +
+                            'maximum="' + max + '" ' +
+                            'discreteValues="' + (max - min + 1) + '" ' +
                             'pageIncrement="10" ' +
-                            'intermediateChanges="false" labelId="attrValue_' + attr + '">' +
+                            'intermediateChanges="false" ' +
+                            'labelId="attrValue_' + attr + '"' +
+                        '>' +
                             '<div dojoType="dijit.form.HorizontalRule" class="sliderHorRules"' +
                                 'container="bottomDecoration" count="5">' +
                             '</div>' +
@@ -294,11 +299,16 @@ ocp.existing.attrDialog = {
                     '<td id="attrValue_' + attr + '" class="selectedValue">-none-</td>' +
                     '<td>' +
                         '<div dojoType="ocp.widget.LabeledHorizontalSlider" ' +
-                            'id="attrSlider_' + attr + '" class="attrSlider" ' +
-                            'value="' + min + '" ' + 'minimum="' + min + '" ' +
-                            'maximum="' + max + '" ' + 'discreteValues="' + (max - min + 1) + '" ' +
+                            'id="attrSlider_' + attr + '" ' +
+                            'class="attrSlider" ' +
+                            'value="' + min + '" ' +
+                            'minimum="' + min + '" ' +
+                            'maximum="' + max + '" ' +
+                            'discreteValues="' + (max - min + 1) + '" ' +
                             'pageIncrement="20" ' +
-                            'intermediateChanges="false" labelId="attrValue_' + attr + '">' +
+                            'intermediateChanges="false" ' +
+                            'labelId="attrValue_' + attr + '"' +
+                        '>' +
                             '<div dojoType="dijit.form.HorizontalRule" class="sliderHorRules"' +
                                 'container="bottomDecoration" count="5">' +
                             '</div>' +
@@ -500,7 +510,8 @@ ocp.existing.skillDialog = {
                                 'value="' + min + '" intermediateChanges="false" ' +
                                 'timeoutChangeRate="0.6" smallDelta="1" largeDelta="10" ' +
                                 'constraints="{min:' + min + ', max:' + max + ', places:0}" ' +
-                                'onChange="ocp.existing.skillDialog.spinnerChanged(\'' + skill + '\')" ' +
+                                'onChange="ocp.existing.skillDialog.spinnerChanged(\'' +
+                                    skill + '\')" ' +
                             '/>' +
                         '</td>' +
                         '<td class="majorCheckContainer">' +
@@ -508,7 +519,8 @@ ocp.existing.skillDialog = {
                                 'id="existingMajorCheck_' + skill + '" ' +
                                 'name="majors" value="' + skill + '" ' +
                                 (isMajor ? 'checked="checked" ' : '') +
-                                'onChange="ocp.existing.skillDialog.checkboxChanged(\'' + skill + '\')" ' +
+                                'onChange="ocp.existing.skillDialog.checkboxChanged(\'' +
+                                    skill + '\')" ' +
                             '/>' +
                         '</td>' +
                     '</tr>';

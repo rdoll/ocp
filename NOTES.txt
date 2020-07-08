@@ -1,7 +1,5 @@
-Fix level bug (grep BUG in ocp-level.js)
 Move cclass _customData into _data ???
 Change cclass to clazz ?
-Change all plural dirs to singular ?
 Change int to itl?
 
 Migrate the hacks in the SetNullis* functions into their
@@ -15,7 +13,16 @@ I'd never need to worry about calling ocp.input.isMajor.
 Is some memory leaking after each page reload?
 
 Allow http://.../index.html?debug to enable debugging?
+Or unnecessary since FireBug works regardless of djConfig.debug value?
+Needed for other browsers perhaps?
 
+Should include Jump Height (derived from Acrobatics) and
+Water Breathing (derived from Endurance? -- check USEP Water Breathing
+discussion page) in derived attributes?
+
+Should have an Advice top-level page?
+
+Can make planner resize-able with min-width/height?
 -----
 For JavaScript browser compatibility per
 http://en.wikipedia.org/wiki/Comparison_of_layout_engines_(ECMAScript)
@@ -28,7 +35,6 @@ This currently fails in IE for several reasons, but major ones are:
 + IE doesn't support getters which are used all over the place
 Even with these fixed, the styles are still not properly rendered in IE.
 
-*** Need license details and copyright info atop every file
 *** Globally replace title="" attributes with Tooltips?
 *** Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
 

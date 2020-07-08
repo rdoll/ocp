@@ -18,10 +18,11 @@
 ** Main controller, overall namespace for everything, and cool Robocop reference :P.
 */
 
+// Note what we provide and then define the module
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.6.0',
+    VERSION: '0.7.0',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -226,20 +227,8 @@ var ocp = {
         // Initialize the min/max stats for attributes
         this._initializeAttrs();
 
-        // Initialize our children
-        // During this initialization, no notifications are allowed
-        this.input.initialize();
-        this.race.initialize();
-        this.birth.initialize();
-        this.cclass.initialize();
-        this.existing.initialize();
-        this.order.initialize();
-        this.level.initialize();
-        this.results.initialize();
-
-        // Now that all initialization is complete,
-        // notify of the changes made during initialization
-        this.notifyChanged();
+        // Initialize the loader
+        ocp.loader.initialize();
     },
 
 
@@ -291,6 +280,26 @@ var ocp = {
     },
 
 
+    // Public: Initializes the planner module after it has been successfully downloaded
+    initializePlanner: function () {
+
+        // Intialize the planner's children
+        // During this initialization, no notifications are allowed
+        ocp.input.initialize();
+        ocp.race.initialize();
+        ocp.birth.initialize();
+        ocp.cclass.initialize();
+        ocp.existing.initialize();
+        ocp.order.initialize();
+        ocp.level.initialize();
+        ocp.results.initialize();
+
+        // Now that all planner initialization is complete,
+        // notify of the changes made during initialization
+        ocp.notifyChanged();
+    },
+
+
     // Public: Some character data has changed, so update all results
     notifyChanged: function() {
         console.debug('entered notifyChanged');
@@ -309,7 +318,7 @@ var ocp = {
 
     // Public: Set starting details for my toon Nullis
     // Note:   This isn't properly commented or implemented since it's a just for fun hack
-    setNullisStart: function() {
+    setNullisStart: function () {
         console.log('Setting starting data for Nullis...');
 
         ocp.race._select('Khajiit', 'Male');
@@ -410,7 +419,7 @@ var ocp = {
             agi:5, spe:5, end:5, hea:18, mag:0, fat:10, enc:0,
             bla:1, blu:-1, mar:7, sec:3, sne:12, acr:4, ath:3, lig:3, arm:10, mer:3, spc:3
         });
-        wasted[10] = { bla:1, blu:'Skill reduced from being imprisoned.', mer:'', spc:'' };
+        wasted[10] = { bla:'', blu:'Skill reduced from being imprisoned.', mer:'', spc:'' };
 
         totals[11] = nextLevel(totals[totals.length - 1], {
             spe:5, end:5, luc:1, hea:18, mag:0, fat:5, enc:0,
@@ -461,5 +470,12 @@ var ocp = {
         ocp.existing._level = maxLevel;
         ocp.level._totals = saveTotals;
         ocp.level._wasted = saveWasted;
+    },
+
+
+    // Public: Safely set existing details for my toon Nullis after planner is loaded
+    // Note:   This isn't properly commented or implemented since it's a just for fun hack
+    setNullis: function () {
+        ocp.loader.runAfterLoaded('plannerContentPane', dojo.hitch(this, 'setNullisNow'));
     }
 };

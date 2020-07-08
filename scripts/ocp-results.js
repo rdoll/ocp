@@ -127,8 +127,9 @@ ocp.results = {
             '<thead>' +
                 '<tr class="last">' +
                     '<th colspan="2">Skill</th>' +
-                    '<th title="Base skill values for the selected class: ' + ocp.SKILL_MAJOR_MIN +
-                        ' for Majors and ' + ocp.SKILL_MIN + ' for Minors">Base</th>' +
+                    '<th title="Base skill values for the selected class: ' +
+                        ocp.SKILL_MAJOR_MIN + ' for Majors and ' + ocp.SKILL_MIN +
+                        ' for Minors">Base</th>' +
                     '<th title="Bonuses for the selected class Specialization">Spec</th>' +
                     '<th title="Bonuses for the selected Race">Race</th>' +
                     '<th>Total</th>' +
@@ -214,20 +215,27 @@ ocp.results = {
 
         // Add a vertical header for each core attribute
         for (var attr in ocp.coreAttrs) {
-            lev += '<th class="vertical" title="' + ocp.coreAttrs[attr].name + ' core attribute">' +
-                ocp.verticalize(attr) + '</th>';
+            lev +=
+                '<th class="vertical" title="' + ocp.coreAttrs[attr].name + ' core attribute">' +
+                    ocp.verticalize(attr) +
+                '</th>';
         }
 
         // Add a vertical header for each derived attribute
         for (var attr in ocp.derivedAttrs) {
-            lev += '<th class="vertical" title="' + ocp.derivedAttrs[attr].name + ' derived attribute">' +
-                ocp.verticalize(attr) + '</th>';
+            lev +=
+                '<th class="vertical" title="' + ocp.derivedAttrs[attr].name +
+                    ' derived attribute">' +
+                    ocp.verticalize(attr) +
+                '</th>';
         }
 
         // Add a vertical header for each skill
         for (var skill in ocp.skills) {
-            lev += '<th class="vertical" title="' + ocp.skills[skill].name + ' skill">' +
-                ocp.verticalize(skill) + '</th>';
+            lev +=
+                '<th class="vertical" title="' + ocp.skills[skill].name + ' skill">' +
+                    ocp.verticalize(skill) +
+                '</th>';
         }
 
         // Complete the header and start the body
@@ -290,15 +298,14 @@ ocp.results = {
 
         // If there was an error during leveling, note it
         if (ocp.level.hadError) {
-            // *** Move to styles if this is permanent
-            lev += '<p><i><b><span style="color: red">Warning</span></b>: ' +
-                'Leveling hit an error before completion.</p>';
+            lev +=
+                '<p class="resultsFootnote">' +
+                    '<span class="warningKeyword">Warning</span>: ' +
+                    'Leveling hit an error before completion.' +
+                '</p>';
         }
 
-        // Add a final footnote and set it
-        // *** Use styles if this is permanent
-        lev += '<p><i><b>Note</b>: All leveling tries to achieve the maximum of +5 per attribute ' +
-            'per level (except for Luck\'s fixed +1).</i></p>';
+        // Set the content and we're done
         dojo.place(lev, 'resultsLevelingPane', 'only');
     },
 
@@ -378,7 +385,7 @@ ocp.results = {
 
         /*
         ** Now generate the HTML for the new analysis
-        ** *** Add "key level snapshots"? e.g. level 10 stats, level 15 stats, level 20 stats, etc...
+        ** *** Add "key level snapshots"? e.g. level 10 stats, level 15 stats, level 20 stats, ...
         ** *** How to handle this for existing characters that may be past some key levels?
         */
 
@@ -420,12 +427,14 @@ ocp.results = {
                     '<th title="Starting total value">Start</th>' +
                     '<th title="Maximum achievable by leveling">Max</th>' +
                     '<th title="Level the maximum value was achieved">Level</th>' +
-                    '<th title="Total skill points you can level up for this attribute">Avail</th>' +
+                    '<th title="Total skill points you can level up for this attribute">' +
+                        'Avail</th>' +
                     '<th title="Skill points required to reach the maximum value">Used</th>' +
-                    '<th title="Spare skill points not required to level this attribute">Spare</th>' +
+                    '<th title="Spare skill points not required to level this attribute">' +
+                        'Spare</th>' +
                     '<th title="Spare skill points that are for major skills">Sp Maj</th>' +
-                    '<th title="Skill points you can waste each level (assuming this exact leveling ' +
-                        'pattern)">Sp/Lv</th>' +
+                    '<th title="Skill points you can waste each level (assuming this ' +
+                        'exact leveling pattern)">Sp/Lv</th>' +
                 '</tr>' +
             '</thead>';
 
@@ -501,9 +510,12 @@ ocp.results = {
 
         // If there was an error during leveling, note it
         if (ocp.level.hadError) {
-            // *** Move to styles if this is permanent
-            anal += '<p><i><b><span style="color: red">Warning</span></b>: ' +
-                'Leveling hit an error before completion, therefore this analysis is inaccurate.</p>';
+            anal +=
+                '<p class="resultsFootnote">' +
+                    '<span class="warningKeyword">Warning</span>: ' +
+                    'Leveling hit an error before completion, therefore this analysis is ' +
+                    'inaccurate.' +
+                '</p>';
         }
 
         // Set the content and we're done

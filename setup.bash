@@ -1,32 +1,46 @@
 #!/bin/echo Must be sourced via .
 
+###############################################################################
+# (C) Copyright 2009 by Richard Doll
+#
+# License:
+# You are free to use, copy, or modify this software provided it remains free
+# of charge for all users, the source remains open and unobfuscated, and the
+# author, copyright, license, and warranty information remains intact and
+# clearly visible.
+#
+# Warranty:
+# All content is provided as-is. The user assumes all liability for any
+# direct or indirect damages from usage.
+###############################################################################
+
 # This is a bash/ksh/sh compatible script that must be source'd
 # into the current shell so environment variables, functions, and
 # aliases can be set.
 
 # Project root directory
-export OCP_PROJ="/var/www/ocp"
+export OCP_ROOT="/var/www/ocp"
 
 # Ensure we are in a version under the root
-if [ ".${PWD#$OCP_PROJ/}" = ".$PWD" ] ; then
-    echo "Can only setup while under a version subdir of $OCP_PROJ."
+if [ ".${PWD#$OCP_ROOT/}" = ".$PWD" ] ; then
+    echo "Can only setup while under a version subdir of $OCP_ROOT."
     return 1
 fi
 
 # Get the version from the subdirectory name
-export OCP_VER="${PWD#$OCP_PROJ/}"
+export OCP_VER="${PWD#$OCP_ROOT/}"
 export OCP_VER="${OCP_VER%%/*}"
 
 # Root directory for this version
-export OCP_ROOT="$OCP_PROJ/$OCP_VER"
+export OCP_TOP="$OCP_ROOT/$OCP_VER"
 
 # Quick CD shortcuts
-function cdproj { cd "$OCP_PROJ${@:+/$@}" ;}
-function cdtop { cd "$OCP_ROOT${@:+/$@}" ;}
+function cdroot { cd "$OCP_ROOT${@:+/$@}" ;}
+function cdtop  { cd "$OCP_TOP${@:+/$@}"  ;}
 
 # Function to get the version from the source
 function ocpSourceVersion {
-    perl -ne 'print $1 if /\sVERSION:[^\d]+([\d.]+)/' $OCP_ROOT/scripts/ocp.js
+    perl -ne 'print $1 if /\sVERSION:[^\d]+([\d.]+)/' $OCP_TOP/scripts/ocp.js
 }
 
 # Validate that the source version matches the directory version
@@ -47,43 +61,75 @@ ocpValidateVersions || return 1
 
 
 # Define the files for the project
-export OCP_SRC="\
-    index.html \
-    styles/ocp.css \
-    scripts/ocp.js \
-    scripts/ocp-input.js \
-    scripts/ocp-race.js \
-    scripts/ocp-birth.js \
-    scripts/ocp-cclass.js \
-    scripts/ocp-existing.js \
-    scripts/ocp-order.js \
-    scripts/ocp-level.js \
-    scripts/ocp-results.js \
-    scripts/widget/TitledContentPane.js \
-    scripts/widget/LabeledHorizontalSlider.js \
-    "
+unset OCP_SRC_HTML OCP_SRC_CSS OCP_SRC_JS OCP_SRC_HTML
+while read _file ; do
+    _file="$OCP_TOP/$_file"
+    if [ ".${_file%.html}" != ".$_file" ] ; then
+        export OCP_SRC_HTML="$OCP_SRC_HTML $_file"
+    elif [ ".${_file%.css}" != ".$_file" ] ; then
+        export OCP_SRC_CSS="$OCP_SRC_CSS $_file"
+    elif [ ".${_file%.js}" != ".$_file" ] ; then
+        export OCP_SRC_JS="$OCP_SRC_JS $_file"
+    else
+        export OCP_SRC_MISC="$OCP_SRC_MISC $_file"
+    fi
+done <<EOF
+index.html
+partials/home.html
+partials/planner.html
+partials/instructions.html
+partials/faq.html
+partials/changelog.html
+partials/about.html
+styles/ocp.css
+styles/planner.css
+scripts/ocp.js
+scripts/ocp-loader.js
+scripts/ocp-input.js
+scripts/ocp-race.js
+scripts/ocp-birth.js
+scripts/ocp-cclass.js
+scripts/ocp-existing.js
+scripts/ocp-order.js
+scripts/ocp-level.js
+scripts/ocp-results.js
+scripts/widget/TitledContentPane.js
+scripts/widget/LabeledHorizontalSlider.js
+setup.bash
+NOTES.txt
+EOF
+unset _file
+export OCP_SRC="$OCP_SRC_HTML $OCP_SRC_CSS $OCP_SRC_JS"
 
 # Start up the editor on all files
-alias nedit-all="nedit-nc -g 111x40 $OCP_SRC"
+alias nedit-web="nedit-nc -svrname web -g 100x40 \$OCP_SRC_HTML \
+    \$OCP_SRC_CSS \$OCP_SRC_MISC"
+alias nedit-js="nedit-nc -svrname js -g 100x40 \$OCP_SRC_JS"
+alias nedit-all="nedit-web ; nedit-js"
 
 
 # Backup root directory
-export OCP_BACKUP="$OCP_PROJ/backups"
+export OCP_BACKUP="$OCP_ROOT/backups"
 function cdback { cd "$OCP_BACKUP${@:+/$@}" ;}
 
 # Backup the current version
 function backupsrc {
     ocpValidateVersions &&
-    ( cd "$OCP_ROOT" &&
+    ( cd "$OCP_TOP" &&
       tar -cvzf "$OCP_BACKUP/ocp-`date '+%Y%m%d'`-v$OCP_VER.tar.gz" .
     )
 }
 
 # Backup the original images
 function backuporig {
-    ( cd "$OCP_PROJ/original-images" &&
+    ( cd "$OCP_ROOT/original-images" &&
       tar -cvzf "$OCP_BACKUP/ocp-`date '+%Y%m%d'`-original-images.tar.gz" .
     )
+}
+
+# Backup everything in the current directory except other backups
+function backupcwd {
+    tar -cvzf "backup-`date '+%Y%m%d'`.tar.gz" --exclude=\*.tar.gz .
 }
 
 
@@ -104,20 +150,20 @@ function find_text_files {
 
 # Grep text files
 alias grepcwd='find_text_files -0 . | xargs -0 grep'
-alias grepsrc='find_text_files -0 "$OCP_ROOT" | xargs -0 grep'
+alias grepsrc='find_text_files -0 "$OCP_TOP" | xargs -0 grep'
 function grepver {
     if [ $# -lt 1 ] ; then
         echo "Error: grepver requires at least one argument."
         return 1
     else
         _ver="$1" ; shift
-        find_text_files -0 "$OCP_PROJ/$_ver" | xargs -0 grep ${@:+"$@"}
+        find_text_files -0 "$OCP_ROOT/$_ver" | xargs -0 grep ${@:+"$@"}
     fi
 }
 
 # Check text files for control characters and trailing whitespace
 alias checkcwd='find_text_files -0 . | xargs -0 grep -E "([[:cntrl:]]|[[:space:]]\$)"'
-alias checksrc='find_text_files -0 "$OCP_ROOT" | xargs -0 grep -E "([[:cntrl:]]|[[:space:]]\$)"'
+alias checksrc='find_text_files -0 "$OCP_TOP" | xargs -0 grep -E "([[:cntrl:]]|[[:space:]]\$)"'
 
 # Strip trailing whitespace from all lines in the given files
 alias stripws="perl -i -pe 's/\s+\n$/\n/'"
@@ -151,7 +197,7 @@ function cleandir {
   done
 }
 alias cleancwd='cleandir .'
-alias cleansrc='cleandir "$OCP_ROOT"'
+alias cleansrc='cleandir "$OCP_TOP"'
 
 # Count line mertics for source text files
 function countlines {
@@ -225,7 +271,7 @@ function oldcountdir {
 #            END { printf "%5d\t%s\n", tot, "Total AlphaNum Lines" }'
 #}
 alias oldcountcwd='oldcountdir .'
-alias oldcountsrc='oldcountdir "$OCP_ROOT"'
+alias oldcountsrc='oldcountdir "$OCP_TOP"'
 
 # Count with plain wc
 function wcdir {
@@ -235,7 +281,7 @@ function wcdir {
         xargs wc --lines --chars --max-line-length
 }
 alias wccwd='wcdir .'
-alias wcsrc='wcdir "$OCP_ROOT"'
+alias wcsrc='wcdir "$OCP_TOP"'
 
 # Diff versus current source
 # *** Be awesome if these could compare sub-dirs
@@ -251,14 +297,14 @@ function diffdir {
         diff -r ${@:+"$@"} "$_dir1" "$_dir2"
     fi
 }
-alias diffcwd='diffdir "$OCP_ROOT" .'
+alias diffcwd='diffdir "$OCP_TOP" .'
 function diffver {
     if [ $# -lt 1 ] ; then
         echo "Error: diffver requires at least one argument."
         return 1
     else
         _ver="$1" ; shift
-        diff -r ${@:+"$@"} "$OCP_PROJ/$_ver" "$OCP_ROOT"
+        diff -r ${@:+"$@"} "$OCP_ROOT/$_ver" "$OCP_TOP"
     fi
 }
 

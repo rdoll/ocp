@@ -1,0 +1,657 @@
+@charset "utf-8";
+
+/*===========================================================================*\
+|* (C) Copyright 2009 by Richard Doll
+|*
+|* License:
+|* You are free to use, copy, or modify this software provided it remains free
+|* of charge for all users, the source remains open and unobfuscated, and the
+|* author, copyright, license, and warranty information remains intact and
+|* clearly visible.
+|*
+|* Warranty:
+|* All content is provided as-is. The user assumes all liability for any
+|* direct or indirect damages from usage.
+\*===========================================================================*/
+
+/*===========================================================================*\
+|* planner.css - Oblivion Character Planner planner styles
+|*
+|* *** This is getting large -- split into smaller files?
+\*===========================================================================*/
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the main planner page only
+\*---------------------------------------------------------------------------*/
+
+/* Set up the main pane for the planner */
+/* *** With all attrs and skills at max, leveling details gets a horizontal scrollbar */
+#planner {
+    width: 920px;
+    height: 670px;
+    border: 1px solid #ccc
+}
+
+
+/*
+** Planner input pane
+*/
+
+/* Center content to make multi-line cells look decent */
+#plannerInputPane td {
+    vertical-align: middle;
+}
+
+/* The name of something you can select */
+#plannerInputPane .selectedName {
+    font-weight: bold;
+}
+
+/* The value of selected things */
+#plannerInputPane .selectedValue {
+    font-weight: bold;
+    white-space: nowrap;
+    padding-left: 1em;
+}
+
+/* A special description as a list item */
+#plannerInputPane .specialDescItem {
+    display: list-item;
+    margin-left: 3em;
+    font-size: 75%;
+}
+
+/* Give the level value room to grow into a two digit number without shifting the slider */
+#plannerInputPane #levelValue {
+    width: 2em;
+}
+
+/* The slider to select the level of an existing character */
+#plannerInputPane #levelSlider {
+    width: 500px;
+    margin-left: 1em;
+}
+
+/* A list of attribute details */
+/* *** All 100's for the coreAttrs exceeds one line */
+#plannerInputPane .attrList {
+    margin: 0 0 0 1em;
+    padding: 0;
+}
+
+/* Make this a horizontal list */
+#plannerInputPane .attrList li {
+    display: inline;
+    font-size: 75%;
+}
+
+/* Put a comma between entries in this horizontal list */
+#plannerInputPane .attrList li + li:before {
+    content: ', ';
+}
+
+/* Major skills get highlighted */
+#plannerInputPane .attrList .majorSkill {
+    font-weight: bold;
+}
+
+
+/*
+** Planner order pane
+*/
+
+/* Set a starting width so the center input pane can size itself */
+#plannerOrderPane {
+    width: 150px;
+}
+
+
+/*
+** Planner results pane
+*/
+
+/* Set the starting height of the results area,
+** which allows the center input pane to size itself. */
+#plannerResultsPane {
+    height: 438px;
+}
+
+/* Align starting pane's content side-by-side */
+#resultsInitialPane > div {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* First child is half the width so the second child is nicely offset */
+#resultsInitialPane > div:first-child {
+    width: 50%;
+}
+
+
+/* Add some spacing between cells in the starting stats pane */
+#resultsInitialPane th + th {
+    padding-left: 10px;
+}
+
+/* Add a little space to the first column in the starting stats pane's tables */
+/* *** colgroup margin/padding/width doesn't seem to work */
+/* *** does this still work in the skills table now that we added the Attr verticalized? */
+#resultsInitialPane tr > th:first-child, #resultsInitialPane tr > td:first-child {
+    padding-right: 1em;
+}
+
+
+/* Add some spacing between cells in the analysis pane */
+#resultsAnalysisPane th + th {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* Add a little space to the first column in the analysis pane's tables */
+/* *** colgroup margin/padding/width doesn't seem to work */
+/* *** does this still work in the skills table now that we added the Attr verticalized? */
+#resultsAnalysisPane tr > th:first-child, #resultsAnalysisPane tr > td:first-child {
+    padding-right: 0.5em;
+}
+
+/* Details of maxed skills get a little greyed out */
+#resultsAnalysisPane td.maxed {
+    background-color: #eee;
+}
+
+/* Inside the level details table, pack everything as tight as possible */
+/* Shrink the font size so all max values fits without a scrollbar */
+#levelDetailsTable td.numeric {
+    font-size: smaller;
+    padding-right: 2px;
+}
+
+/* Make all data columns in the level details table the same width */
+#levelDetailsTable th.vertical {
+    width: 30px;
+}
+
+/* Major skills get a special highlight in the level details table */
+#levelDetailsTable td.major {
+    font-weight: bold;
+}
+
+/* Major skills get a special highlight in the initial skills table */
+/* *** Maybe make all major skills bold and italics globally? */
+#resultsInitialSkills tr.major {
+    font-weight: bold;
+}
+
+/* Decorate any results footnote */
+#plannerResultsPane .resultsFootnote {
+    font-style: italic;
+}
+
+/* Make any warning notice stand out */
+#plannerResultsPane .warningKeyword {
+    font-weight: bold;
+    color: red;
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the race dialog
+\*---------------------------------------------------------------------------*/
+
+/*
+** Common race dialog styles
+*/
+
+/* When the race dialog is shown, color the main page to focus attention */
+#raceDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#raceTabContainer {
+    width: 770px;
+    height: 387px;
+    overflow: auto;
+}
+
+
+/*
+** Race overview specific styles
+*/
+
+/* Add some space between the overview of each race */
+#raceOverviewPane .raceOverview + .raceOverview {
+    margin-top: 1em;
+}
+
+/* Align the image and details side-by-side */
+/* Note, the images are natively 220px wide and 300px+ long */
+#raceOverviewPane .raceImage {
+    display: inline-block;
+    width: 110px;
+    border: 2px solid #8D7758;
+    vertical-align: top;
+}
+
+/* The details -- set an explicit width to fit side-by-side with the image */
+/* *** Is there any way to let this auto-size without dropping below the image? */
+#raceOverviewPane .raceDetails {
+    display: inline-block;
+    width: 620px;
+    margin-left: 0.5em;
+}
+
+/* The name of the race gets fancy treatment to stand out */
+#raceOverviewPane .raceName {
+    font-size: larger;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* The description isn't that important */
+#raceOverviewPane .raceDescription {
+    font-size: smaller;
+}
+
+/* A header naming a list */
+#raceOverviewPane .raceListHeader {
+    margin-top: 1em;
+    font-weight: bold;
+}
+
+/* The list of special abilities */
+#raceOverviewPane .raceSpecialList {
+    margin-top: 0;
+    padding-left: 1.5em;
+}
+
+/* An item in the special abilities list */
+#raceOverviewPane .raceSpecialItem {
+}
+
+
+/*
+** Race details specific styles
+*/
+
+/* Crunch the td.numeric padding a little inside this dense table */
+#raceDetailsTable td.numeric {
+    padding-right: 0.5em;
+}
+
+/* Evenly size all race column data in the details table */
+/* *** This doesn't work, but the th setting does...
+#raceDetailsTable colgroup.raceData {
+    width: 165px;
+}
+*/
+/* *** Oddly, many columns are a little smaller than this.... */
+#raceDetailsTable th.raceName {
+    width: 65px;
+}
+
+/* Compress the default spacing between the race selection buttons */
+#raceDetailsTable .dijitButton {
+    margin: 0;
+}
+#raceDetailsTable .dijitButtonNode {
+    padding: 0;
+}
+
+/* Since skill rows span two columns, pad them a little more */
+#raceDetailsTable tr.skill td.numeric {
+    padding-right: 2em;
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the birthsign dialog
+\*---------------------------------------------------------------------------*/
+
+/* When the birth dialog is shown, color the main page to focus attention */
+#birthDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#birthContainer {
+    width: 730px;
+    height: 350px;
+    overflow: auto;
+}
+
+/* The intro text needs to stand out */
+#birthIntro {
+    padding-bottom: 0.5em;
+    border-bottom: 2px solid #aaa;
+    margin-right: 1em;
+}
+
+/* Each birthsign is a fixed sized block that can be placed side-by-side */
+#birthContainer .birthDetails {
+    width: 350px;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 1.5em;
+}
+
+/* Two blocks per "row", pad them to prevent text from colliding in the middle */
+#birthContainer .birthDetailsLeft {
+    margin-right: 0.5em;
+    text-align: left;
+}
+#birthContainer .birthDetailsRight {
+    margin-left: 0.5em;
+    text-align: right;
+}
+
+/* Make all images look selectable */
+#birthContainer .birthImage {
+    border: 2px solid #8D7758;
+    cursor: pointer;
+}
+
+/* Place and pad images for the side they are on */
+/* Note, the images are natively 130px wide and 134px+ long */
+#birthContainer .birthDetailsLeft .birthImage {
+    float: left;
+    width: 130px;
+    margin-right: 0.5em;
+}
+#birthContainer .birthDetailsRight .birthImage {
+    float: right;
+    width: 130px;
+    margin-left: 0.5em;
+}
+
+/* The name of the birthsign gets fancy treatment to stand out */
+#birthContainer .birthName {
+    font-size: larger;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* The description of each birthsign */
+#birthContainer .birthDescription {
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the class dialog
+\*---------------------------------------------------------------------------*/
+
+/*
+** Common class dialog styles
+*/
+
+/* When the class dialog is shown, color the main page to focus attention */
+#classDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#classTabContainer {
+    width: 730px;
+    height: 450px;
+    overflow: auto;
+}
+
+
+/*
+** Class overview specific styles
+*/
+
+/* Add some space between the overview of each class */
+#classOverviewPane .classOverview + .classOverview {
+    margin-top: 1em;
+}
+
+/* Align the image and details side-by-side */
+/* Note, the images are natively 261px wide and 400px long */
+#classOverviewPane .classImage {
+    display: inline-block;
+    width: 110px;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+/* The details -- set an explicit width to fit side-by-side with the image */
+/* *** Is there any way to let this auto-size without dropping below the image? */
+#classOverviewPane .classDetails {
+    display: inline-block;
+    width: 585px;
+    margin-left: 0.5em;
+}
+
+/* The name of the race gets fancy treatment to stand out */
+#classOverviewPane .className {
+    font-size: larger;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* The description isn't that important */
+#classOverviewPane .classDescription {
+/*    font-size: smaller; *** Delete style or at least update comment? */
+    margin-bottom: 1em;
+}
+
+#classOverviewPane .classStatName {
+    font-weight: bold;
+    white-space: nowrap;
+    margin-right: 0.5em;
+}
+
+#classOverviewPane .classStatValue {
+}
+
+
+/*
+** Class details specific styles
+*/
+
+/* Pad the first column a little bit */
+#classDetailsTable tr > th:first-child, #classDetailsTable tr > td:first-child {
+    padding-right: 0.5em;
+}
+
+/* Inside the class details table, pack everything as tight as possible */
+#classDetailsTable td.numeric {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+/* Major skills get a special highlight in the class details table */
+#classDetailsTable td.major {
+    font-weight: bold;
+}
+
+/* Bonuses get a special highlight in the class details table */
+#classDetailsTable td.bonus {
+    color: green;
+}
+
+
+/*
+** Custom class specific styles
+*/
+
+/* Put some space between two input blocks */
+#classCustomPane .classCustomInputs + .classCustomInputs {
+    margin-top: 1em;
+}
+
+/* Header for a section of custom inputs */
+#classCustomPane .customInputHeader {
+    font-size: larger;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+/* Specialization inputs get some spacing */
+#classCustomPane .customInputSpec {
+    margin-left: 1em;
+}
+
+/* Favored attribute inputs get some spacing */
+#classCustomPane .customInputFav {
+    margin-left: 1em;
+}
+
+/* Input section footnote is inserted between the header and the content */
+#classCustomPane .customInputFootnote {
+    font-size: smaller;
+    margin-top: -0.5em;
+}
+
+/* Highlight skills that are specialized */
+#classCustomPane .skillIsSpecialized {
+    font-style: italic;
+    color: blue;
+}
+
+/* Each block of major skill inputs is can be placed side-by-side and above/below one another */
+#classCustomPane .customMajorInputs {
+    display: inline-block;
+    margin-top: 1em;
+    margin-left: 1em;
+}
+
+/* Separate the major inputs table header from the body */
+#classCustomPane .customMajorInputs thead {
+    border-bottom: 1px solid #ccc;
+}
+
+/* Setting a fixed width for major headers makes all major input blocks the same width
+** (because the other columns are always the same width), which allows major input
+** blocks in different "rows" to keep their columns aligned. */
+#classCustomPane .majorAttrHeader {
+    width: 10em;
+}
+
+/* The major checkbox column's header */
+#classCustomPane .majorCheckHeader {
+    font-size: smaller;
+}
+
+/* The major skill designation checkbox's container */
+/* This has to be done outside of the checkbox itself since it is replaced when parsed */
+#classCustomPane .majorCheckContainer {
+    text-align: center;
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the existing character's attributes dialog
+\*---------------------------------------------------------------------------*/
+
+/* When the attributes dialog is shown, color the main page to focus attention */
+#attrDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#attrContainer {
+    width: 720px;
+    overflow: auto;
+}
+
+/* Align attribute slider contents side-by-side */
+#attrContainer #coreAttrContainer, #attrContainer #derivedAttrContainer {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Attribute slider divs get a little spacing */
+#attrContainer #derivedAttrContainer {
+    margin-left: 1em;
+}
+
+/* Header for a list of attributes */
+#attrContainer th {
+    font-size: larger;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 1em;
+}
+
+/* The name of something you can select */
+#attrContainer .selectedName {
+    font-weight: bold;
+}
+
+/* The value of selected things */
+/* Specify a width so it doesn't change when going from a 1 to 3 digit number */
+#attrContainer .selectedValue {
+/*    font-weight: bold; */
+    padding-left: 1em;
+    width: 3em;
+}
+
+/* The slider to set an attribute */
+#attrContainer .attrSlider {
+    width: 200px;
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles specific to the existing character's skills dialog
+\*---------------------------------------------------------------------------*/
+
+/* When the skills dialog is shown, color the main page to focus attention */
+#skillDialog_underlay {
+    background-color: #999;
+}
+
+/* Size the contents of the dialog which sizes the dialog window */
+#skillContainer {
+    width: 690px;
+    overflow: auto;
+}
+
+/* Align skill input groups side-by-side */
+#skillContainer .skillSpecContainer {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Skill input groups get a little spacing */
+#skillContainer .skillSpecContainer + .skillSpecContainer {
+    margin-left: 2em;
+}
+
+/* Header for a list of skills */
+#skillContainer th {
+    border-bottom: 2px solid #ccc;
+}
+
+/* The header text for the table headers */
+#skillContainer .specHeader {
+    font-size: larger;
+}
+#skillContainer .majorHeader {
+    font-size: smaller;
+}
+
+/* Put a little padding between each skill */
+#skillContainer tbody td {
+    padding-top: 0.5em;
+}
+
+/* The name of something you can select */
+/* *** delete this? */
+#skillContainer .selectedName {
+/*    font-weight: bold; */
+}
+
+/* The number spinner to set a skill */
+#skillContainer .skillSpinner {
+    margin-left: 0.5em;
+    width: 70px;
+}
+
+/* The major skill designation checkbox's container */
+/* This has to be done outside of the checkbox itself since it is replaced when parsed */
+#skillContainer .majorCheckContainer {
+    text-align: center;
+}

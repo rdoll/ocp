@@ -379,7 +379,7 @@ ocp.cclass = {
 
 
     // Private: Select predefined class without error checking or notification
-    _selectPredefined: function(predefined) {
+    _selectPredefined: function (predefined) {
         console.debug('entered _selectPredefined:', predefined);
 
         // Set the current class
@@ -390,7 +390,7 @@ ocp.cclass = {
 
     // Public: Validate args, select predefined class, and notify of a change
     //         Should only be called from the selection dialog
-    selectPredefined: function(predefined) {
+    selectPredefined: function (predefined) {
         console.debug('entered selectPredefined:', predefined);
 
         // Validate the selection
@@ -600,14 +600,18 @@ ocp.cclass.classDialog = {
 
         // Add a vertical header for each core attribute
         for (var attr in ocp.coreAttrs) {
-            det += '<th class="vertical" title="' + ocp.coreAttrs[attr].name + ' core attribute">' +
-                ocp.verticalize(attr) + '</th>';
+            det +=
+                '<th class="vertical" title="' + ocp.coreAttrs[attr].name + ' core attribute">' +
+                    ocp.verticalize(attr) +
+                '</th>';
         }
 
         // Add a vertical header for each skill
         for (var skill in ocp.skills) {
-            det += '<th class="vertical" title="' + ocp.skills[skill].name + ' skill">' +
-                ocp.verticalize(skill) + '</th>';
+            det +=
+                '<th class="vertical" title="' + ocp.skills[skill].name + ' skill">' +
+                    ocp.verticalize(skill) +
+                '</th>';
         }
 
         // Complete the header and start the body
@@ -748,7 +752,8 @@ ocp.cclass.classDialog = {
                 // Build a row for each skill
                 for (var skillIndex in coreAttr.skills) {
                     var skill = coreAttr.skills[skillIndex];
-                    var isMajor = (dojo.indexOf(customData.majorSkills, skill) == -1 ? false : true);
+                    var isMajor = (dojo.indexOf(customData.majorSkills, skill) == -1
+                        ? false : true);
                     var inputId = 'classMajorCheck_' + skill;
                     cus +=
                         '<tr>' +
@@ -824,8 +829,9 @@ ocp.cclass.classDialog = {
             if (favAttrsChecked != ocp.CLASS_FAV_ATTR_NUM) {
                 msg +=
                     '<div class="dialogStatusInvalid">' +
-                        'You must have exactly ' + ocp.CLASS_FAV_ATTR_NUM + ' favored attributes (' +
-                        favAttrsChecked + (favAttrsChecked == 1 ? ' is' : ' are') + ' checked).' +
+                        'You must have exactly ' + ocp.CLASS_FAV_ATTR_NUM +
+                        ' favored attributes (' + favAttrsChecked +
+                        (favAttrsChecked == 1 ? ' is' : ' are') + ' checked).' +
                     '</div>';
                 isValid = false;
             }
