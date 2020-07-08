@@ -101,11 +101,6 @@ noscript > div:first-child {
 ** Home module
 */
 
-/* We don't want a margin between the titles and their content */
-#home .moduleTitle + p, #home .moduleSubtitle + p {
-    margin-top: 0;
-}
-
 /* Highlight the bad/good key points */
 #home .homeOcpReason {
     color: red;
@@ -140,6 +135,20 @@ noscript > div:first-child {
     margin-top: 0.5em;
 }
 
+/* A footnote worthy of a little highlighting*/
+#instructions .instructNote {
+    font-style: italic;
+}
+
+/* The first span inside a footnote gets special decoration to denote the type of note */
+#instructions .instructNote > span:first-child {
+    font-weight: bold;
+}
+
+/* Key terms in the instructions get special decoration */
+#instructions .instructKeyword {
+    font-style: italic;
+}
 
 
 /*
@@ -229,11 +238,6 @@ noscript > div:first-child {
 }
 
 
-/* Add some space between versions */
-#changeLog .versionContainer + .versionContainer {
-    margin-top: 1em;
-}
-
 /* Decorate the title of each version */
 /* TODO: Is this green underline too much like a visited link? */
 #changeLog .versionTitle {
@@ -288,16 +292,6 @@ noscript > div:first-child {
     width: 33%;
 }
 
-/* Add some space between subsections of each column */
-#aboutLeftColumn > div + div, #aboutRightColumn > div + div {
-    margin-top: 1em;
-}
-
-/* Add a little "new paragraph" space above */
-#about .newPara {
-    margin-top: 1em;
-}
-
 
 /*---------------------------------------------------------------------------*\
 |* Styles for main page dialogs
@@ -344,7 +338,12 @@ noscript > div:first-child {
 ** Module common styles
 */
 
-/* The title of a major section of a module */
+/* Put some space between sibling module sections and subsections */
+.moduleSection + .moduleSection, .moduleSubsection + .moduleSubsection {
+    margin-top: 1em;
+}
+
+/* The title of a module section */
 .moduleTitle {
     font-size: larger;
     font-weight: bold;
@@ -352,12 +351,19 @@ noscript > div:first-child {
     margin-bottom: 0.5em;
 }
 
-/* The subtitle of a major section of a module */
+/* The subtitle of a module subsection */
 .moduleSubtitle {
     font-weight: bold;
-    /* border-bottom: 1px dotted #999; */
     text-decoration: underline;
     margin: 1em 0 0.5em 0;
+}
+
+/* No top margin for the first paragraph of a section or after a section title */
+.moduleTitle + p, .moduleSubtitle + p {
+    margin-top: 0;
+}
+.moduleSection > p:first-child, .moduleSubsection > p:first-child {
+    margin-top: 0;
 }
 
 /* Add a major amount of emphasis */
@@ -366,8 +372,13 @@ noscript > div:first-child {
     font-style: italic;
 }
 
-/* The name of a specific part of the planner */
-.sectionName {
+/* Citation of a specific part of the planner */
+.plannerSection {
+    font-weight: bold;
+}
+
+/* Major skills get highlighted */
+.majorSkill {
     font-weight: bold;
 }
 
@@ -397,17 +408,27 @@ noscript > div:first-child {
 */
 
 /* Add a little space between buttons in every StackController */
-.dijitStackController .dijitToggleButton + .dijitToggleButton {
+.soria .dijitStackController .dijitToggleButton + .dijitToggleButton {
     margin-left: 10px;
 }
 
 /* Make the contents of a StackContainer stand out */
 /* The min height ensures AJAX messages are visible in a titled content pane */
-.dijitStackContainer {
+.soria .dijitStackContainer {
     border: 1px solid #ccc;
     margin-top: 10px;
     padding: 5px;
     min-height: 4em;
+}
+
+
+/*
+** Dijit tab container styles
+*/
+
+/* Put a few extra pixels between tabs atop a tab container */
+.soria .dijitTab + .dijitTab {
+    margin-left: 4px;
 }
 
 

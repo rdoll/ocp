@@ -21,7 +21,7 @@
 ocp.order = {
 
     // Private: The order attributes will be leveled
-    _attrs: [ 'end', 'str', 'luc', 'int', 'agi', 'spe', 'wil', 'per' ],
+    _attrs: [ 'end', 'str', 'luc', 'itl', 'agi', 'spe', 'wil', 'per' ],
 
     // Private: The DnD source for the order of attributes
     _attrDndSource: null,

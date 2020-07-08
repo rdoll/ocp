@@ -22,7 +22,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.7.2',
+    VERSION: '0.7.3',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -33,7 +33,7 @@ var ocp = {
     MAJOR_NUM: 7,
 
     // Public: Skill bonuses for a skill being major or specialized
-    //         Note: The game says spec bonus is +10, but it's actually +5
+    // Note:   The game says spec bonus is +10, but it's actually +5
     SKILL_BONUS_MAJOR: 20,
     SKILL_BONUS_SPEC: 5,
 
@@ -65,25 +65,25 @@ var ocp = {
     // Public: Define the abbr and full names of all core attributes
     //         Leveling the skills listed increases the level bonus for this stat
     //         Min is set during initialization
-    // TODO: int collides with potential future reserved word -- rename itl?
+    // Note:   Use itl for Intelligence since int is a potential future keyword
     coreAttrs: {
-        str: { name:'Strength',     skills:[ 'bla', 'blu', 'han' ], min:0, max:100 },
-        int: { name:'Intelligence', skills:[ 'alc', 'con', 'mys' ], min:0, max:100 },
-        wil: { name:'Willpower',    skills:[ 'alt', 'des', 'res' ], min:0, max:100 },
-        agi: { name:'Agility',      skills:[ 'mar', 'sec', 'sne' ], min:0, max:100 },
-        spe: { name:'Speed',        skills:[ 'acr', 'ath', 'lig' ], min:0, max:100 },
-        end: { name:'Endurance',    skills:[ 'arm', 'blo', 'hvy' ], min:0, max:100 },
-        per: { name:'Personality',  skills:[ 'ill', 'mer', 'spc' ], min:0, max:100 },
-        luc: { name:'Luck',         skills:[                     ], min:0, max:100 }
+        str: { name: 'Strength',     skills: [ 'bla', 'blu', 'han' ], min: 0, max: 100 },
+        itl: { name: 'Intelligence', skills: [ 'alc', 'con', 'mys' ], min: 0, max: 100 },
+        wil: { name: 'Willpower',    skills: [ 'alt', 'des', 'res' ], min: 0, max: 100 },
+        agi: { name: 'Agility',      skills: [ 'mar', 'sec', 'sne' ], min: 0, max: 100 },
+        spe: { name: 'Speed',        skills: [ 'acr', 'ath', 'lig' ], min: 0, max: 100 },
+        end: { name: 'Endurance',    skills: [ 'arm', 'blo', 'hvy' ], min: 0, max: 100 },
+        per: { name: 'Personality',  skills: [ 'ill', 'mer', 'spc' ], min: 0, max: 100 },
+        luc: { name: 'Luck',         skills: [                     ], min: 0, max: 100 }
     },
 
     // Public: Define the abbr and full names of all derived attributes
     //         Min/max is derived during initialization
     derivedAttrs: {
-        hea: { name:'Health',      min:0, max:0 },
-        mag: { name:'Magicka',     min:0, max:0 },
-        fat: { name:'Fatigue',     min:0, max:0 },
-        enc: { name:'Encumbrance', min:0, max:0 }
+        hea: { name: 'Health',      min: 0, max: 0 },
+        mag: { name: 'Magicka',     min: 0, max: 0 },
+        fat: { name: 'Fatigue',     min: 0, max: 0 },
+        enc: { name: 'Encumbrance', min: 0, max: 0 }
     },
 
     // Public: Arts specializations and the skills they affect
@@ -93,30 +93,29 @@ var ocp = {
         'Stealth': { skills: [ 'acr', 'lig', 'mar', 'mer', 'sec', 'sne', 'spc' ] }
     },
 
-    // Public: Define the abbr, full name, specialization and attribute affected
-    //         for all skills
+    // Public: Define the abbr, full name, specialization and attribute affected for all skills
     skills: {
-        bla: { name:'Blade',        spec:'Combat',  attr:'str' },
-        blu: { name:'Blunt',        spec:'Combat',  attr:'str' },
-        han: { name:'Hand-to-Hand', spec:'Combat',  attr:'str' },
-        alc: { name:'Alchemy',      spec:'Magic',   attr:'int' },
-        con: { name:'Conjuration',  spec:'Magic',   attr:'int' },
-        mys: { name:'Mysticism',    spec:'Magic',   attr:'int' },
-        alt: { name:'Alteration',   spec:'Magic',   attr:'wil' },
-        des: { name:'Destruction',  spec:'Magic',   attr:'wil' },
-        res: { name:'Restoration',  spec:'Magic',   attr:'wil' },
-        mar: { name:'Marksmanship', spec:'Stealth', attr:'agi' },
-        sec: { name:'Security',     spec:'Stealth', attr:'agi' },
-        sne: { name:'Sneak',        spec:'Stealth', attr:'agi' },
-        acr: { name:'Acrobatics',   spec:'Stealth', attr:'spe' },
-        ath: { name:'Athletics',    spec:'Combat',  attr:'spe' },
-        lig: { name:'Light Armor',  spec:'Stealth', attr:'spe' },
-        arm: { name:'Armorer',      spec:'Combat',  attr:'end' },
-        blo: { name:'Block',        spec:'Combat',  attr:'end' },
-        hvy: { name:'Heavy Armor',  spec:'Combat',  attr:'end' },  // Hea collides with Health
-        ill: { name:'Illusion',     spec:'Magic',   attr:'per' },
-        mer: { name:'Mercantile',   spec:'Stealth', attr:'per' },
-        spc: { name:'Speechcraft',  spec:'Stealth', attr:'per' }   // Spe collides with Speed
+        bla: { name: 'Blade',        spec: 'Combat',  attr: 'str' },
+        blu: { name: 'Blunt',        spec: 'Combat',  attr: 'str' },
+        han: { name: 'Hand-to-Hand', spec: 'Combat',  attr: 'str' },
+        alc: { name: 'Alchemy',      spec: 'Magic',   attr: 'itl' },
+        con: { name: 'Conjuration',  spec: 'Magic',   attr: 'itl' },
+        mys: { name: 'Mysticism',    spec: 'Magic',   attr: 'itl' },
+        alt: { name: 'Alteration',   spec: 'Magic',   attr: 'wil' },
+        des: { name: 'Destruction',  spec: 'Magic',   attr: 'wil' },
+        res: { name: 'Restoration',  spec: 'Magic',   attr: 'wil' },
+        mar: { name: 'Marksmanship', spec: 'Stealth', attr: 'agi' },
+        sec: { name: 'Security',     spec: 'Stealth', attr: 'agi' },
+        sne: { name: 'Sneak',        spec: 'Stealth', attr: 'agi' },
+        acr: { name: 'Acrobatics',   spec: 'Stealth', attr: 'spe' },
+        ath: { name: 'Athletics',    spec: 'Combat',  attr: 'spe' },
+        lig: { name: 'Light Armor',  spec: 'Stealth', attr: 'spe' },
+        arm: { name: 'Armorer',      spec: 'Combat',  attr: 'end' },
+        blo: { name: 'Block',        spec: 'Combat',  attr: 'end' },
+        hvy: { name: 'Heavy Armor',  spec: 'Combat',  attr: 'end' },  // Hea collides with Health
+        ill: { name: 'Illusion',     spec: 'Magic',   attr: 'per' },
+        mer: { name: 'Mercantile',   spec: 'Stealth', attr: 'per' },
+        spc: { name: 'Speechcraft',  spec: 'Stealth', attr: 'per' }   // Spe collides with Speed
     },
 
 
@@ -209,7 +208,7 @@ var ocp = {
         totals.hea += 2 * totals.end;
 
         // Magicka is 2 x Intelligence
-        totals.mag += 2 * totals.int;
+        totals.mag += 2 * totals.itl;
 
         // Fatigue is Strength + Willpower + Agility + Endurance
         totals.fat += totals.str + totals.wil + totals.agi + totals.end;
@@ -325,7 +324,7 @@ var ocp = {
         ocp.input.initialize();
         ocp.race.initialize();
         ocp.birth.initialize();
-        ocp.cclass.initialize();
+        ocp.clazz.initialize();
         ocp.existing.initialize();
         ocp.order.initialize();
         ocp.level.initialize();
@@ -345,7 +344,7 @@ var ocp = {
         this.input.notifyChanged();
         this.race.notifyChanged();
         this.birth.notifyChanged();
-        this.cclass.notifyChanged();
+        this.clazz.notifyChanged();
         this.existing.notifyChanged();
         this.order.notifyChanged();
         this.level.notifyChanged();

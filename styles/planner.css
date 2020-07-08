@@ -16,8 +16,6 @@
 
 /*===========================================================================*\
 |* planner.css - Oblivion Character Planner planner styles
-|*
-|* TODO: This is getting large -- split into smaller files?
 \*===========================================================================*/
 
 /*---------------------------------------------------------------------------*\
@@ -26,6 +24,7 @@
 
 /* Set up the main pane for the planner */
 /* TODO: With all attrs and skills at max, leveling details gets a horizontal scrollbar */
+/* TODO: Change to min-width and min-height to allow larger sizes? */
 #planner {
     width: 920px;
     height: 670px;
@@ -88,11 +87,6 @@
 /* Put a comma between entries in this horizontal list */
 #plannerInputPane .attrList li + li:before {
     content: ', ';
-}
-
-/* Major skills get highlighted */
-#plannerInputPane .attrList .majorSkill {
-    font-weight: bold;
 }
 
 
@@ -169,17 +163,6 @@
 /* Make all data columns in the level details table the same width */
 #levelDetailsTable th.vertical {
     width: 30px;
-}
-
-/* Major skills get a special highlight in the level details table */
-#levelDetailsTable td.major {
-    font-weight: bold;
-}
-
-/* Major skills get a special highlight in the initial skills table */
-/* TODO: Maybe make all major skills bold and italics globally? */
-#resultsInitialSkills tr.major {
-    font-weight: bold;
 }
 
 /* Decorate any results footnote */
@@ -392,7 +375,7 @@
 /* Size the contents of the dialog which sizes the dialog window */
 #classTabContainer {
     width: 730px;
-    height: 450px;
+    height: 455px;
     overflow: auto;
 }
 
@@ -430,18 +413,19 @@
     text-decoration: underline;
 }
 
-/* The description isn't that important */
+/* Add some space between the description and the detailed stats */
 #classOverviewPane .classDescription {
-/*    font-size: smaller; TODO: Delete style or at least update comment? */
     margin-bottom: 1em;
 }
 
+/* Make the name of each stat a header */
 #classOverviewPane .classStatName {
     font-weight: bold;
     white-space: nowrap;
     margin-right: 0.5em;
 }
 
+/* No styling necessary for stat values */
 #classOverviewPane .classStatValue {
 }
 
@@ -459,11 +443,6 @@
 #classDetailsTable td.numeric {
     padding-left: 3px;
     padding-right: 3px;
-}
-
-/* Major skills get a special highlight in the class details table */
-#classDetailsTable td.major {
-    font-weight: bold;
 }
 
 /* Bonuses get a special highlight in the class details table */

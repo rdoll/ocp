@@ -1,13 +1,9 @@
-Move cclass _customData into _data ???
-Change cclass to clazz ?
-Change int to itl?
-
 Migrate the hacks in the SetNullis* functions into their
 appropriate files; e.g. add an ocp.order.setOrder(newOrder) ??
 
 Like I did in ocp.level._nextLevel, is it worth creating an
 object for quicker isMajor lookups instead of doing an indexOf?
-If this was done to ocp.cclass.isMajor and ocp.existing.isMajor,
+If this was done to ocp.clazz.isMajor and ocp.existing.isMajor,
 I'd never need to worry about calling ocp.input.isMajor.
 
 Is some memory leaking after each page reload?
@@ -19,13 +15,11 @@ Needed for other browsers perhaps?
 Should include Jump Height (derived from Acrobatics) and
 Water Breathing (derived from Endurance? -- check USEP Water Breathing
 discussion page) in derived attributes?
+Magicka regeneration rate (derived from Magicka and Willpower)?
 
 Should have an Advice top-level page?
 
 Can make planner resize-able with min-width/height?
-
-Release Notes mentioned "if you know of better icons, please let me know".
-Either need HTML in issue/change details and/or proper contact info.
 
 Select a http://creativecommons.org/ license, add it to file headers,
 and add an icon to the footer for it.
@@ -40,12 +34,13 @@ FAQ's non-expanded titles are a little gray. Override to black?
 Keep home.roadrunner.com/~foaminator as home page in about?
 
 Replace all innerHTML references with "content" for compatibility?
+
+Standardize all race and birthsign specials with their real name and their exact effects.
 -----
 
 Neal Notes:
 
 Race overview images cannot be clicked upon -- different from birth and class.
-Custom class dialog too short.
 Webcast video tutorial?
 Up front message if browser is known not to be supported?
 
@@ -89,10 +84,13 @@ Even with these fixed, the styles are still not properly rendered in IE.
 
 TODO: Globally replace title="" attributes with Tooltips?
 TODO: Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
+TODO: Can use [title] CSS selector to find them all...
 
 TODO: Nice set of images (and nice credit page) at http://www.elderstats.com/about/?p=credits
 
-&apos; unsupported in IE?!?
+&apos; unsupported in IE?!? Standardize on something for all HTML apostrophes.
+
+Is it ok to split HTML attribute values across lines? (e.g. index.html's meta content='s)
 
 ------
 <!-- TODO: Probably can never use these.

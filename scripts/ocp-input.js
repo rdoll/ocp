@@ -51,13 +51,13 @@ ocp.input = {
 
     // Public: Return an array of major skills based on char type
     get majors () {
-        return (this.isNewChar ? ocp.cclass.majors : ocp.existing.majors);
+        return (this.isNewChar ? ocp.clazz.majors : ocp.existing.majors);
     },
 
 
     // Public: Return if a skill is major or not based on char type
     isMajor: function (skill) {
-        return (this.isNewChar ? ocp.cclass.isMajor(skill) : ocp.existing.isMajor(skill));
+        return (this.isNewChar ? ocp.clazz.isMajor(skill) : ocp.existing.isMajor(skill));
     },
 
 

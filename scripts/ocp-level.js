@@ -78,7 +78,7 @@ ocp.level = {
         // For new chars, core attributes are the sum of the given selections
         for (var attr in ocp.coreAttrs) {
             totals[attr] = (isNewChar
-                ? ocp.race[attr] + ocp.birth[attr] + ocp.cclass[attr]
+                ? ocp.race[attr] + ocp.birth[attr] + ocp.clazz[attr]
                 : existingTotals[attr]);
         }
 
@@ -97,7 +97,7 @@ ocp.level = {
         // For new chars, skills come mainly from your class, but can have a race bonus
         for (var skill in ocp.skills) {
             totals[skill] = (isNewChar
-                ? ocp.race[skill] + ocp.cclass[skill]
+                ? ocp.race[skill] + ocp.clazz[skill]
                 : existingTotals[skill]);
         }
 
@@ -152,7 +152,7 @@ ocp.level = {
     // Private: Given the current totals, level up into next and wasted
     //          Never change current and return all values in next and wasted
     //
-    // Note:    Yes, this is a very, very complicated process
+    // Note:    This is a very, very complicated process
     //          If you don't _really_ understand how leveling works,
     //          you have little hope of understanding this algorithm.
     _nextLevel: function (current, next, wasted) {

@@ -34,11 +34,13 @@
             Google Chrome will be explicitly supported.
         </issue>
 
-        <issue type="feature" name="Missing complete Instructions">
-            The full instructions will be added in a future version.
+        <issue type="bug" name="The instructions don't properly resize">
+            The instructions do not properly resize resulting in wasted space or unncessary
+            scrollbars. The complete instructions are always visible, so this is merely an
+            annoyance that will be fixed in a future release.
         </issue>
 
-        <issue type="bug" name="Need to report when OCP and/or Dojo scripts don&apos;t run">
+        <issue type="bug" name="Need to report when OCP and/or Dojo scripts don't run">
             Right now there is just a noscript block, but it doesn&apos;t detect when
             the OCP scripts are run but the o.aolcdn.com Dojo ones are not.
         </issue>
@@ -62,6 +64,24 @@
     </knownissues>
 
     <changelog>
+        <version name="0.7.3" type="beta" scope="public" date="23 Aug 2009">
+            <change type="function" name="Instructions content completed">
+                The full instructions were completed and will be maintained from now on.
+            </change>
+            <change type="bug"
+                name="Changed JavaScript variable and property names to avoid potential future keywords" />
+            <change type="bug"
+                name="Increased size of the Class Dialog to fit two Custom class error messages" />
+            <change type="bug"
+                name="Changed the Class Dialog's Detailed Class's skill values to match the Initial Stats results section">
+                Previously, the skill values shown in the Class Dialog's Detailed Stats tab only
+                showed the bonuses above and beyond the minimum skill value. This resulted in the
+                table's values not matching the Initial Stats section, which is confusing. Now the
+                Detailed Stats's values include the minimum skill value and thus matches the
+                output in Initial Stats.
+            </change>
+        </version>
+
         <version name="0.7.2" type="beta" scope="public" date="13 Aug 2009">
             <change type="feature" name="FAQ framework completed">
                 The FAQ module framework was completed so FAQ questions and answers can be

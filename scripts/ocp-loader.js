@@ -132,7 +132,10 @@ ocp.loader.relnotes = {
     _processKnownIssues: function (xmlDom, htmlDom) {
 
         // Container for the known issues
-        var kiHtmlDom = dojo.create('div', { id: 'knownIssues' }, htmlDom);
+        var kiHtmlDom = dojo.create('div', {
+            id: 'knownIssues',
+            class: 'moduleSection'
+        }, htmlDom);
         dojo.create('div', { class: 'moduleTitle', innerHTML: 'Known Issues' }, kiHtmlDom);
 
         // Walk through all known issue issues
@@ -154,9 +157,7 @@ ocp.loader.relnotes = {
 
             // There are no issues -- yay for OCP! :D
             dojo.create('div', {
-                innerHTML: 'There are no known issues or limitations in this version of OCP.',
-                // TODO: Could do this in a cleaner way?
-                style: 'margin-bottom: 1em'  // Simulate the bottom-margin of the dl
+                innerHTML: 'There are no known issues or limitations in this version of OCP.'
             }, kiHtmlDom);
         }
     },
@@ -166,7 +167,10 @@ ocp.loader.relnotes = {
     _processChangeLog: function (xmlDom, htmlDom) {
 
         // Container for the change log
-        var clHtmlDom = dojo.create('div', { id: 'changeLog' }, htmlDom);
+        var clHtmlDom = dojo.create('div', {
+            id: 'changeLog',
+            class: 'moduleSection'
+        }, htmlDom);
         dojo.create('div', { class: 'moduleTitle', innerHTML: 'Change Log' }, clHtmlDom);
 
         // Walk through all change log versions
@@ -192,7 +196,7 @@ ocp.loader.relnotes = {
     _processVersion: function (verNode, clHtmlNode) {
 
         // Container for this version
-        var verHtmlDom = dojo.create('div', { class: 'versionContainer' }, clHtmlNode);
+        var verHtmlDom = dojo.create('div', { class: 'moduleSubsection' }, clHtmlNode);
 
         // Create the header for this version from its attributes
         var verAttrs = ocp.getDomNodeAttrs(verNode,

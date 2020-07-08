@@ -91,7 +91,7 @@ scripts/ocp-contact.js
 scripts/ocp-input.js
 scripts/ocp-race.js
 scripts/ocp-birth.js
-scripts/ocp-cclass.js
+scripts/ocp-clazz.js
 scripts/ocp-existing.js
 scripts/ocp-order.js
 scripts/ocp-level.js
@@ -152,6 +152,7 @@ function find_text_files {
         @ARGV );' -- "${@:-.}"
 }
 
+
 # Grep text files
 alias grepcwd='find_text_files -0 . | xargs -0 grep'
 alias grepsrc='find_text_files -0 "$OCP_TOP" | xargs -0 grep'
@@ -162,8 +163,20 @@ function grepver {
     else
         _ver="$1" ; shift
         find_text_files -0 "$OCP_ROOT/$_ver" | xargs -0 grep ${@:+"$@"}
+        unset _ver
     fi
 }
+function grepid {
+    if [ $# -lt 1 ] ; then
+        echo "Error: grepid requires at least one argument."
+        return 1
+    else
+        _id="$1" ; shift
+        find_text_files -0 "$OCP_TOP" | xargs -0 grep -E '^(|.*\W)'"$_id"'(\W.*|)$' ${@:+"$@"}
+        unset _id
+    fi
+}
+
 
 # Check text files for control characters and trailing whitespace
 alias checkcwd='find_text_files -0 . | xargs -0 grep -E "([[:cntrl:]]|[[:space:]]\$)"'

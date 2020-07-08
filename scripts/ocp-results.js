@@ -78,7 +78,7 @@ ocp.results = {
                         (isNewChar && (ocp.birth[attr] > 0) ? ocp.birth[attr] : '') +
                     '</td>' +
                     '<td class="numeric">' +
-                        (isNewChar && (ocp.cclass[attr] > 0) ? ocp.cclass[attr] : '') +
+                        (isNewChar && (ocp.clazz[attr] > 0) ? ocp.clazz[attr] : '') +
                     '</td>' +
                     '<td class="numeric">' + totals[attr] + '</td>' +
                 '</tr>';
@@ -146,7 +146,7 @@ ocp.results = {
                     var skill = skills[skillIndex];
 
                     // Start the row (noting if it's for a major skill)
-                    res += '<tr' + (ocp.input.isMajor(skill) ? ' class="major"' : '') + '>';
+                    res += '<tr' + (ocp.input.isMajor(skill) ? ' class="majorSkill"' : '') + '>';
 
                     // The first skill means we need to create a vertical skill "header"
                     if (firstSkill) {
@@ -161,8 +161,8 @@ ocp.results = {
                     // Class info for this skill
                     // New chars get the real deal, but existing chars get zero
                     // which is not shown in the results table
-                    var base = (isNewChar ? ocp.cclass.skillBase(skill) : 0);
-                    var spec = (isNewChar ? ocp.cclass.skillSpec(skill) : 0);
+                    var base = (isNewChar ? ocp.clazz.skillBase(skill) : 0);
+                    var spec = (isNewChar ? ocp.clazz.skillSpec(skill) : 0);
 
                     // The rest of the data
                     res +=
@@ -283,7 +283,7 @@ ocp.results = {
             for (var skill in ocp.skills) {
                 var class = 'numeric' + (skill in wasted ? ' worse' :
                     (current[skill] != previous[skill] ? ' changed' : '')) +
-                    (ocp.input.isMajor(skill) ? ' major' : '');
+                    (ocp.input.isMajor(skill) ? ' majorSkill' : '');
                 lev += '<td class="' + class + '"' +
                     (skill in wasted ? ' title="' + wasted[skill] + '"' : '') +
                     '>' + current[skill] + '</td>';

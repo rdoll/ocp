@@ -138,7 +138,7 @@ ocp.existing = {
 
 
     // Private: Called when the level slider changes value
-    //          Note: intermediateChanges=false helps reduce unnecessary notifies
+    // Note:    intermediateChanges=false helps reduce unnecessary notifies
     _levelChanged: function (newValue) {
         console.debug('entered _levelChanged:', newValue);
 

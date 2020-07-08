@@ -30,18 +30,18 @@ ocp.nullis = {
 
         ocp.birth._select('The Thief');
 
-        ocp.cclass._selectCustom('Stealth', ['end', 'luc'],
+        ocp.clazz._selectCustom('Stealth', ['end', 'luc'],
             ['blu', 'con', 'des', 'mar', 'ath', 'hvy', 'ill']);
-        if (ocp.cclass.classDialog._dialogInitialized) {
-            ocp.cclass.classDialog.undo();
+        if (ocp.clazz.classDialog._dialogInitialized) {
+            ocp.clazz.classDialog.undo();
         }
 
         ocp.order._attrDndSource.destroy();
         delete ocp.order._attrDndSource;
         dojo.empty('attrOrderDndSource');
         delete ocp.order._attrs;
-        ocp.order._attrs = ['agi', 'spe', 'end', 'luc', 'str', 'int', 'wil', 'per'];
-        //ocp.order._attrs = ['agi', 'spe', 'end', 'str', 'int', 'wil', 'per', 'luc'];
+        ocp.order._attrs = ['agi', 'spe', 'end', 'luc', 'str', 'itl', 'wil', 'per'];
+        //ocp.order._attrs = ['agi', 'spe', 'end', 'str', 'itl', 'wil', 'per', 'luc'];
         ocp.order._initializeAttrDnd();
 
         ocp.input.isNewChar = true;
@@ -82,7 +82,7 @@ ocp.nullis = {
         wasted[3] = { bla:'', alc:'', mer:'' };
 
         totals[4] = nextLevel(totals[totals.length - 1], {
-            int:5, spe:5, end:5, hea:15, mag:10, fat:5, enc:0,
+            itl:5, spe:5, end:5, hea:15, mag:10, fat:5, enc:0,
             bla:6, alc:7, con:5, sec:2, sne:3, acr:3, ath:5, lig:5, arm:4, blo:6, mer:2
         });
         wasted[4] = { bla:'', sec:'', sne:'', mer:'' };
@@ -143,7 +143,7 @@ ocp.nullis = {
             for (var skill in wasted[level]) {
                 var attr = ocp.skills[skill].attr;
                 if (wasted[level][skill].length < 1) {
-                    wasted[level][skill] = 'Skill ups were wasted because ' +
+                    wasted[level][skill] = 'This skill up was wasted because ' +
                         ocp.coreAttrs[attr].name + ' was not leveled.';
                 }
             }
@@ -154,7 +154,7 @@ ocp.nullis = {
         ocp.existing._totals = totals[maxLevel];
         delete ocp.existing._majors;
         ocp.existing._majors = [];
-        var classMajors = ocp.cclass.majors;
+        var classMajors = ocp.clazz.majors;
         for (var skillIndex in classMajors) {
             ocp.existing._majors.push(classMajors[skillIndex]);
         }

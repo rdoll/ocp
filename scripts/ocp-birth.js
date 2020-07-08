@@ -61,7 +61,7 @@ ocp.birth = {
         'The Lord': {
             attributes: {},
             specials: [
-                'Restore Health (magnitude 6, duration 15, once a day)',
+                'Restore Health (self, magnitude 6, duration 15, once a day)',
                 'Weakness to Fire 25%'
             ],
             image: 'lord.jpg',
@@ -91,7 +91,7 @@ ocp.birth = {
         'The Ritual': {
             attributes: {},
             specials: [
-                'Restore Health (magnitude 200, once a day)',
+                'Restore Health (self, magnitude 200, once a day)',
                 'Turn Undead (target, magnitude 100, duration 30, once a day)'
             ],
             image: 'ritual.jpg',
@@ -104,8 +104,8 @@ ocp.birth = {
             specials: [
                 'Four effects, all at once, once a day -- ' +
                     'Damage Health (touch, magnitude 3, duration 20), ' +
-                    'Dispel (magnitude 90), ' +
-                    'Cure Poison, ' +
+                    'Dispel (self, magnitude 90), ' +
+                    'Cure Poison (self), ' +
                     'Damage Fatigue (self, magnitude 100)'
             ],
             image: 'serpent.jpg',
@@ -116,7 +116,7 @@ ocp.birth = {
 
         'The Shadow': {
             attributes: {},
-            specials: [ 'Inivisibility (duration 60, once a day)' ],
+            specials: [ 'Inivisibility (self, duration 60, once a day)' ],
             image: 'shadow.jpg',
             description: 'Use the Moonshadow power once a day to become Invisible for 60 seconds.'
         },
@@ -139,8 +139,8 @@ ocp.birth = {
         'The Tower': {
             attributes: {},
             specials: [
-                'Open Average lock (once a day)',
-                'Reflect Damage (magnitude 5, duration 120, once a day)'
+                'Open Average lock (touch, once a day)',
+                'Reflect Damage (self, magnitude 5, duration 120, once a day)'
             ],
             image: 'tower.jpg',
             description: 'With the Tower Key power, once a day open a door or container of ' +
@@ -171,7 +171,7 @@ ocp.birth = {
 
     // Public: getters for all data of the currently selected birthsign
     get str () { return this._getAttr(this._birth, 'str'); },
-    get int () { return this._getAttr(this._birth, 'int'); },
+    get itl () { return this._getAttr(this._birth, 'itl'); },
     get wil () { return this._getAttr(this._birth, 'wil'); },
     get agi () { return this._getAttr(this._birth, 'agi'); },
     get spe () { return this._getAttr(this._birth, 'spe'); },

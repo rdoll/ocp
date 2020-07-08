@@ -39,14 +39,14 @@ ocp.race = {
     _data: {
         'Argonian': {
             attributes: {
-                'Male':   { str:40, int:40, wil:30, agi:50, spe:50, end:30, per:30, luc:50 },
-                'Female': { str:40, int:50, wil:40, agi:40, spe:40, end:30, per:30, luc:50 }
+                'Male':   { str:40, itl:40, wil:30, agi:50, spe:50, end:30, per:30, luc:50 },
+                'Female': { str:40, itl:50, wil:40, agi:40, spe:40, end:30, per:30, luc:50 }
             },
             skills: { alc:5, ath:10, bla:5, han:5, ill:5, mys:5, sec:10 },
             specials: [
-                'Resist Disease (magnitude 75, constant)',
-                'Resist Poison (magnitude 100, constant)',
-                'Water Breathing (constant)'
+                'Resist Disease (self, magnitude 75, constant)',
+                'Resist Poison (self, magnitude 100, constant)',
+                'Water Breathing (self, constant)'
             ],
             image: 'argonian.jpg',
             description: 'Little is known and less is understood about the reptilian denizens ' +
@@ -64,14 +64,14 @@ ocp.race = {
 
         'Breton': {
             attributes: {
-                'Male':   { str:40, int:50, wil:50, agi:30, spe:30, end:30, per:40, luc:50, mag:50 },
-                'Female': { str:30, int:50, wil:50, agi:30, spe:40, end:30, per:40, luc:50, mag:50 }
+                'Male':   { str:40, itl:50, wil:50, agi:30, spe:30, end:30, per:40, luc:50, mag:50 },
+                'Female': { str:30, itl:50, wil:50, agi:30, spe:40, end:30, per:40, luc:50, mag:50 }
             },
             skills: { alc:5, alt:5, con:10, ill:5, mys:10, res:10 },
             specials: [
-                'Fortify Maximum Magicka (magnitude 50, constant)',
-                'Resist Magicka (magnitude 50, constant)',
-                'Shield (magnitude 50, duration 60, once a day)'
+                'Fortify Maximum Magicka (self, magnitude 50, constant)',
+                'Resist Magicka (self, magnitude 50, constant)',
+                'Shield (self, magnitude 50, duration 60, once a day)'
             ],
             image: 'breton.jpg',
             description: 'Passionate and eccentric, poetic and flamboyant, intelligent and ' +
@@ -85,13 +85,13 @@ ocp.race = {
 
         'Dark Elf': {
             attributes: {
-                'Male':   { str:40, int:40, wil:30, agi:40, spe:50, end:40, per:30, luc:50 },
-                'Female': { str:40, int:40, wil:30, agi:40, spe:50, end:30, per:40, luc:50 }
+                'Male':   { str:40, itl:40, wil:30, agi:40, spe:50, end:40, per:30, luc:50 },
+                'Female': { str:40, itl:40, wil:30, agi:40, spe:50, end:30, per:40, luc:50 }
             },
             skills: { ath:5, bla:10, blu:5, des:10, lig:5, mar:5, mys:5 },
             specials: [
                 'Summon Ghost (duration 60, once a day)',
-                'Resist Fire (magnitude 75, constant)'
+                'Resist Fire (self, magnitude 75, constant)'
             ],
             image: 'darkelf.jpg',
             description: 'Dark Elves are the dark-skinned Elven peoples of the Eastern Empire. ' +
@@ -109,14 +109,14 @@ ocp.race = {
 
         'High Elf': {
             attributes: {
-                'Male':   { str:30, int:50, wil:40, agi:40, spe:30, end:40, per:40, luc:50, mag:100 },
-                'Female': { str:30, int:50, wil:40, agi:40, spe:40, end:30, per:40, luc:50, mag:100 }
+                'Male':   { str:30, itl:50, wil:40, agi:40, spe:30, end:40, per:40, luc:50, mag:100 },
+                'Female': { str:30, itl:50, wil:40, agi:40, spe:40, end:30, per:40, luc:50, mag:100 }
             },
             skills: { alc:5, alt:10, con:5, des:10, ill:5, mys:10 },
             specials: [
-                'Fortified Maximum Magicka (magnitude 100, constant)',
-                'Weakness to Fire, Frost, and Shock (magnitude 25, constant)',
-                'Resist Desease (magnitude 75, constant)'
+                'Fortified Maximum Magicka (self, magnitude 100, constant)',
+                'Weakness to Fire, Frost, and Shock (self, magnitude 25, constant)',
+                'Resist Desease (self, magnitude 75, constant)'
             ],
             image: 'highelf.jpg',
             description: 'In Imperial speech, the haughty, tall, golden-skinned peoples of ' +
@@ -136,10 +136,10 @@ ocp.race = {
 
         'Imperial': {
             attributes: {
-                'Male':   { str:40, int:40, wil:30, agi:30, spe:40, end:40, per:50, luc:50 },
-                'Female': { str:40, int:40, wil:40, agi:30, spe:30, end:40, per:50, luc:50 }
+                'Male':   { str:40, itl:40, wil:30, agi:30, spe:40, end:40, per:50, luc:50 },
+                'Female': { str:40, itl:40, wil:40, agi:30, spe:30, end:40, per:50, luc:50 }
             },
-            // Note: Official Prima guide book has 5 for hvy
+            // Note: Official Game Guide by Prima has 5 for hvy
             skills: { bla:5, blu:5, han:5, hvy:10, mer:10, spc:10 },
             specials: [
                 'Absorb Fatigure (touch, magnitude 100, once a day)',
@@ -158,13 +158,13 @@ ocp.race = {
 
         'Khajiit': {
             attributes: {
-                'Male':   { str:40, int:40, wil:30, agi:50, spe:40, end:30, per:40, luc:50 },
-                'Female': { str:30, int:40, wil:30, agi:50, spe:40, end:40, per:40, luc:50 }
+                'Male':   { str:40, itl:40, wil:30, agi:50, spe:40, end:30, per:40, luc:50 },
+                'Female': { str:30, itl:40, wil:30, agi:50, spe:40, end:40, per:40, luc:50 }
             },
             skills: { acr:10, ath:5, bla:5, han:10, lig:5, sec:5, sne:5 },
             specials: [
                 'Demoralize (target, magnitude 100, duration 30, once a day)',
-                'Night-Eye (duration 30, unlimited uses)'
+                'Night-Eye (self, duration 30, unlimited uses)'
             ],
             image: 'khajiit.jpg',
             description: 'Khajiit hail from the province of Elsweyr and can vary in appearance ' +
@@ -179,14 +179,14 @@ ocp.race = {
 
         'Nord': {
             attributes: {
-                'Male':   { str:50, int:30, wil:30, agi:40, spe:40, end:50, per:30, luc:50 },
-                'Female': { str:50, int:30, wil:40, agi:40, spe:40, end:40, per:30, luc:50 }
+                'Male':   { str:50, itl:30, wil:30, agi:40, spe:40, end:50, per:30, luc:50 },
+                'Female': { str:50, itl:30, wil:40, agi:40, spe:40, end:40, per:30, luc:50 }
             },
             skills: { arm:5, bla:10, blo:5, blu:10, hvy:10, res:5 },
             specials: [
                 'Frost Damage (touch, magnitude 50, once a day)',
-                'Shield (magnitude 30, duration 60, once a day)',
-                'Resist Frost (magnitude 50, constant)'
+                'Shield (self, magnitude 30, duration 60, once a day)',
+                'Resist Frost (self, magnitude 50, constant)'
             ],
             image: 'nord.jpg',
             description: 'The citizens of Skyrim are a tall and fair-haired people, aggressive ' +
@@ -201,14 +201,14 @@ ocp.race = {
 
         'Orc': {
             attributes: {
-                'Male':   { str:45, int:30, wil:50, agi:35, spe:30, end:50, per:30, luc:50 },
-                'Female': { str:45, int:40, wil:45, agi:35, spe:30, end:50, per:25, luc:50 }
+                'Male':   { str:45, itl:30, wil:50, agi:35, spe:30, end:50, per:30, luc:50 },
+                'Female': { str:45, itl:40, wil:45, agi:35, spe:30, end:50, per:25, luc:50 }
             },
             skills: { arm:10, blo:10, blu:10, han:5, hvy:10 },
             specials: [
                 'Beserk (Fortify Health 20, Fortify Fatigue 200, Fortify Strength 50, ' +
-                    'Drain Agility 100, duration 60, once a day)',
-                'Resist Magicka (magnitude 25, constant)'
+                    'Drain Agility 100, self, duration 60, once a day)',
+                'Resist Magicka (self, magnitude 25, constant)'
             ],
             image: 'orc.jpg',
             description: 'These sophisticated barbarian beast peoples of the Wrothgarian ' +
@@ -225,15 +225,15 @@ ocp.race = {
 
         'Redguard': {
             attributes: {
-                'Male':   { str:50, int:30, wil:30, agi:40, spe:40, end:50, per:30, luc:50 },
-                'Female': { str:40, int:30, wil:30, agi:40, spe:40, end:50, per:40, luc:50 }
+                'Male':   { str:50, itl:30, wil:30, agi:40, spe:40, end:50, per:30, luc:50 },
+                'Female': { str:40, itl:30, wil:30, agi:40, spe:40, end:50, per:40, luc:50 }
             },
             skills: { ath:10, bla:10, blu:10, lig:5, hvy:5, mer:5 },
             specials: [
                 'Adrenaline Rush (Fortify Agility 50, Fortify Speed 50, Fortify Strength 50, ' +
-                    'Fortify Endurance 50, Fortify Health 25, duration 60, once a day)',
-                'Resist Poison (magnitude 75, constant)',
-                'Resist Disease (magnitude 75, constant)'
+                    'Fortify Endurance 50, Fortify Health 25, self, duration 60, once a day)',
+                'Resist Poison (self, magnitude 75, constant)',
+                'Resist Disease (self, magnitude 75, constant)'
             ],
             image: 'redguard.jpg',
             description: 'The most naturally talented warriors in Tamriel, the dark-skinned, ' +
@@ -247,13 +247,13 @@ ocp.race = {
 
         'Wood Elf': {
             attributes: {
-                'Male':   { str:30, int:40, wil:30, agi:50, spe:50, end:40, per:30, luc:50 },
-                'Female': { str:30, int:40, wil:30, agi:50, spe:50, end:30, per:40, luc:50 }
+                'Male':   { str:30, itl:40, wil:30, agi:50, spe:50, end:40, per:30, luc:50 },
+                'Female': { str:30, itl:40, wil:30, agi:50, spe:50, end:30, per:40, luc:50 }
             },
             skills: { acr:5, alc:10, alt:5, lig:5, mar:10, sne:10 },
             specials: [
                 'Command Creature (target, magnitude 20, duration 60, once a day)',
-                'Resist Disease (magnitude 75, constant)'
+                'Resist Disease (self, magnitude 75, constant)'
             ],
             image: 'woodelf.jpg',
             description: 'The Wood Elves are the various barbarian Elven clanfolk of the ' +
@@ -296,7 +296,7 @@ ocp.race = {
 
     // Public: getters for all data of the currently selected race and gender
     get str () { return this._getAttr(this._race, this._gender, 'str'); },
-    get int () { return this._getAttr(this._race, this._gender, 'int'); },
+    get itl () { return this._getAttr(this._race, this._gender, 'itl'); },
     get wil () { return this._getAttr(this._race, this._gender, 'wil'); },
     get agi () { return this._getAttr(this._race, this._gender, 'agi'); },
     get spe () { return this._getAttr(this._race, this._gender, 'spe'); },
@@ -335,7 +335,7 @@ ocp.race = {
 
 
     // Public: Returns the min/max possible value for an attribute
-    //         Note: Initialize is called so ocp.initialize can call these
+    // Note:   Initialize is called so ocp.initialize can call these
     attrMin: function (attr) {
         this._initializeLimits();
         return this._limits[attr].min;
@@ -369,7 +369,7 @@ ocp.race = {
 
 
     // Private: Initialize the min/max limits for all attributes of all races
-    //          Note: This can be called multiple times, so make sure we only init once.
+    // Note:    This can be called multiple times, so make sure we only init once.
     _initializeLimits: function() {
 
         // Only init if we haven't yet
