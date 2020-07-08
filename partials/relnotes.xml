@@ -107,7 +107,7 @@
     </knownissues>
 
     <changelog>
-        <version name="0.8.3" type="beta" scope="wip" date="*** TBD ***">
+        <version name="0.9.1" type="beta" scope="private" date="13 June 2010">
             <change type="feature"
                 name="Use fancy Dojo tooltips instead of browser built-in tooltips">
                 Fancy Dojo tooltips (like on
@@ -122,6 +122,13 @@
                 Notes.
             </change>
             <change type="feature" name="Upgraded to use Dojo 1.4.3">
+                No changes that impact OCP in this point release, but it's always worth staying
+                current.
+            </change>
+        </version>
+
+        <version name="0.9.0" type="beta" scope="private" date="11 April 2010">
+            <change type="feature" name="Upgraded to use Dojo 1.4.2">
                 Dojo 1.4 offers a few improvements and bug fixes over Dojo 1.3.
             </change>
             <change type="feature" name="Race Overview's gender selection is now a full dialog">
@@ -133,15 +140,10 @@
                 With Dojo 1.4, all resizing minor glitches seem to be fixed. All content should
                 always be properly sized regardless of what you do.
             </change>
-            <change type="bug"
-                name="Previously selected menu items no longer stay styled as selected">
-                With Dojo 1.4, previously used menu selections should never get stuck looking
-                selected.
-            </change>
             <change type="feature" name="Updated all copyrights to 2009-2010" />
         </version>
 
-        <version name="0.8.2" type="beta" scope="public" date="18 Dec 2009">
+        <version name="0.8.2" type="beta" scope="public" date="18 December 2009">
             <change type="feature"
                 name="Support selecting a race (and gender) by clicking the images in the race
                     dialog's Overview pane">
@@ -155,7 +157,7 @@
             </change>
         </version>
 
-        <version name="0.8.1" type="beta" scope="private" date="29 Nov 2009">
+        <version name="0.8.1" type="beta" scope="private" date="29 November 2009">
             <change type="feature" name="Added new Advice section">
                 While it is beyond OCP's scope to list all possible advice for maximizing the
                 potency of a new or existing character, the new Advice section should give players
@@ -163,7 +165,7 @@
             </change>
         </version>
 
-        <version name="0.8.0" type="beta" scope="private" date="02 Nov 2009">
+        <version name="0.8.0" type="beta" scope="private" date="02 November 2009">
             <change type="feature"
                 name="Replaced simple section toggle buttons with a proper menu bar">
                 The new menu bar system allows future functionality to be added in a clear and
@@ -176,7 +178,7 @@
                 name="Improved colors of expanding/collapsing items in the FAQ and Change Log" />
         </version>
 
-        <version name="0.7.5" type="beta" scope="private" date="10 Oct 2009">
+        <version name="0.7.5" type="beta" scope="private" date="10 October 2009">
             <change type="feature" name="Simplified Release Notes categories">
                 Release Note items are either a bug or a feature. Remember that items in the Known
                 Issues list will get addressed in a future version unless the item's description
@@ -193,7 +195,7 @@
             <change type="bug" name="Added support and suggestion methods to About section" />
         </version>
 
-        <version name="0.7.4" type="beta" scope="public" date="16 Sep 2009">
+        <version name="0.7.4" type="beta" scope="public" date="16 September 2009">
             <change type="feature" name="Changed OCP's home to ocp.uesp.net">
                 The fine folks at <![CDATA[<a href="http://www.uesp.net">UESP</a>]]> (Unofficial
                 Elder Scrolls Pages) have offered to host OCP. As of this release, OCP's official
@@ -223,7 +225,7 @@
             </change>
         </version>
 
-        <version name="0.7.3" type="beta" scope="public" date="23 Aug 2009">
+        <version name="0.7.3" type="beta" scope="public" date="23 August 2009">
             <change type="feature" name="Instructions content completed">
                 The full instructions were completed and will be maintained from now on.
             </change>
@@ -247,7 +249,7 @@
             </change>
         </version>
 
-        <version name="0.7.2" type="beta" scope="public" date="13 Aug 2009">
+        <version name="0.7.2" type="beta" scope="public" date="13 August 2009">
             <change type="feature" name="FAQ framework completed">
                 The FAQ module framework was completed so FAQ questions and answers can be easily
                 added/modified.
@@ -269,7 +271,7 @@
                 name='Added "still in development" scope to Change Log version types' />
         </version>
 
-        <version name="0.7.1" type="beta" scope="public" date="02 Aug 2009">
+        <version name="0.7.1" type="beta" scope="public" date="02 August 2009">
             <change type="feature" name="Release Notes parsed from XML source completed">
                 The Release Notes module now parses the release notes in XML to generate the Known
                 Issues and Change Log.
@@ -283,7 +285,7 @@
             <change type="bug" name="Cleanly catch and report all AJAX module errors" />
         </version>
 
-        <version name="0.7.0" type="beta" scope="private" date="27 Jul 2009">
+        <version name="0.7.0" type="beta" scope="private" date="27 July 2009">
             <change type="feature" name="Created AJAX framework for all OCP modules">
                 OCP was partioned into modules so each module could be fully rendered without
                 impacting the space of the others. All modules (including the Planner) are loaded
@@ -294,7 +296,7 @@
                 name="Nullis character data is safely set after the Planner has been loaded" />
         </version>
 
-        <version name="0.6.0" type="beta" scope="public" date="17 Jul 2009">
+        <version name="0.6.0" type="beta" scope="public" date="17 July 2009">
             <change type="bug" name="Never &quot;burn&quot; major skills points">
                 Once the 10 major skill points required to level have been spent, do not
                 &quot;burn&quot; any more major skill points while trying to maximize an attribute

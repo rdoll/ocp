@@ -227,10 +227,9 @@ ocp.birth = {
         var det = '';
         var count = 0;
         for (var birth in this._data) {
-            var classSide = (++count % 2 > 0 ? 'Left' : 'Right');
-            var ttPosition = (++count % 2 > 0 ? 'after' : 'before');
             det +=
-                '<div class="birthDetails birthDetails' + classSide + '">' +
+                '<div class="birthDetails birthDetails' + (++count % 2 > 0 ? 'Left' : 'Right') +
+                '">' +
                     '<img src="' + this.IMAGE_DIR + this._data[birth].image + '" ' +
                         'class="birthImage" alt="[' + birth + ' Image]" ' +
                         'title="Select ' + birth + '" ' +

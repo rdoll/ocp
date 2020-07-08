@@ -22,7 +22,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.8.3',
+    VERSION: '0.9.1',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)

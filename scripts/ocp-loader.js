@@ -400,7 +400,7 @@ dojo.declare('ocp.loader.ManagedModule', null, {
         // Set a more specific loading message
         this._container.loadingMessage = 'Loading the ' + this.moduleName + '...';
 
-        // Hook the content download events
+        // Hook the content download error events
         this._container.attr('onDownloadError', dojo.hitch(this, 'onDownloadError'));
         this._container.attr('onContentError',  dojo.hitch(this, 'onContentError'));
     },
