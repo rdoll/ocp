@@ -148,6 +148,7 @@ ocp.results = {
 
 
     // Private: Re-display all leveling details
+    // *** It'd be nice if this didn't use literals for column counts
     _updateLeveling: function () {
 
         // The new leveling contents
@@ -166,7 +167,7 @@ ocp.results = {
             '<thead>' +
                 '<tr>' +
                     '<th></th>' +
-                    '<th colspan="11">Attributes</th>' +
+                    '<th colspan="12">Attributes</th>' +
                     '<th colspan="21">Skills</th>' +
                 '</tr>' +
                 '<tr class="last">' +
@@ -174,7 +175,7 @@ ocp.results = {
 
         // Add a vertical header for each core attribute
         for (var attr in ocp.coreAttrs) {
-            lev += '<th class="vertical" title="' + ocp.coreAttrs[attr].name + ' attribute">' +
+            lev += '<th class="vertical" title="' + ocp.coreAttrs[attr].name + ' core attribute">' +
                 ocp.verticalize(attr) + '</th>';
         }
 
@@ -387,7 +388,7 @@ ocp.results = {
                     '<td class="numeric">' + data[attr].start + '</td>' +
                     '<td class="numeric' +
                         (data[attr].max < ocp.coreAttrs[attr].max ?
-                            ' worse" title="Failed to reach the maximum possible value"' : '"') + '>' +
+                            ' worse" title="Failed to reach the maximum possible value."' : '"') + '>' +
                         data[attr].max +
                     '</td>' +
                     '<td class="numeric">' + data[attr].level + '</td>' +

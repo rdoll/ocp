@@ -61,6 +61,8 @@
         dojo.require('dijit.layout.TabContainer');
         dojo.require('dijit.Menu');
         dojo.require('dijit.Tooltip');
+        // *** Globally replace title="" attributes with Tooltips?
+        // *** Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
     //]]></script>
 
     <!-- Load the OCP scripts in order -->
@@ -335,7 +337,7 @@
         <div dojoType="dijit.layout.ContentPane" id="skillContainer">
 
             <!-- Form for all skill settings (div instead of form to work around IE bug) -->
-            <div dojoType="ocp.widget.SkillForm" id="skillForm"
+            <div dojoType="dijit.form.Form" id="skillForm"
                 encType="multipart/form-data" action="" method="">
 
                 <!-- Skills -->

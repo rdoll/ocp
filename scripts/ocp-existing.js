@@ -368,6 +368,19 @@ ocp.existing.skillDialog = {
     _dialog: null,
     _form: null,
 
+    // Private: For speed, store references to the Dijit elements for every skill
+    _spinner: {},
+    _checkbox: {},
+
+    // Private: Tracks the validity of the form's contents
+    _formValid: true,
+
+    // Private: The number of major skill checkboxes currently checked
+    _majorsChecked: 0,
+
+    // Private: The function currently connected to the fade out animation
+    _fadeOutHook: null,
+
 
     // Public: Initialize ourselves
     initialize: function() {
@@ -391,9 +404,12 @@ ocp.existing.skillDialog = {
     _initializeDialog: function() {
         console.log('entered ocp.existing.skillDialog._initializeDialog');
 
-        // Hook into the methods that manipulate the form controlling this dialog
+        // Hook into events that manipulate this dialog
+        dojo.connect(this._dialog, 'onCancel', this, 'cancel');
+        dojo.connect(this._dialog, 'onShow', this, 'onShow');
+
+        // Hook into events that manipulate the form inside this dialog
         dojo.connect(this._form, 'onSubmit', this, 'submit');
-        dojo.connect(this._form, 'onCancel', this, 'cancel');
         dojo.connect(this._form, 'onValidStateChange', this, '_formValidityChanged');
 
         // For lack of a better mechanism to divide up the skills,
@@ -451,14 +467,19 @@ ocp.existing.skillDialog = {
         // Insert the results (parsing the code for Dojo markups)
         dojo.html.set(dojo.byId('skillInputsContainer'), ski, { parseContent: true });
 
+        // Now that they are all created, store references to all spinners and checkboxes
+        for (var skill in ocp.skills) {
+            this._spinner[skill] = dijit.byId('skillSpinner_' + skill);
+            this._checkbox[skill] = dijit.byId('majorCheck_' + skill);
+        }
+
         // Connect the form to the new children we injected
         this._form.connectChildren();
     },
 
 
-    // Private: Called whenever the validity of our form's contents changes
-    _formValidityChanged: function (isValid) {
-        console.log('entered ocp.existing.skillDialog._formValidityChanged', isValid);
+    // Private: Update the dialog to reflect our current validity
+    _updateValidity: function() {
 
         // The submit button and validity status message
         var submitButton = dijit.byId('skillDialogSubmit');
@@ -468,7 +489,7 @@ ocp.existing.skillDialog = {
         // ***         invalid changes (e.g. spinner and majors wrong shows spinner wrong
         // ***         messsage, but fix spinner and since form is still invalid, spinner
         // ***         is wrong message won't be shown).
-        if (isValid) {
+        if (this._formValid) {
             // We are now valid
             // Enable the submit button and set a good status message
             submitButton.attr('disabled', false);
@@ -479,9 +500,18 @@ ocp.existing.skillDialog = {
             // Diable the button and display the reason
             submitButton.attr('disabled', true);
             // *** styles
-            dojo.place('<span style="color:red">' + this._form.invalidReason + '</span>',
+            dojo.place('<span style="color:red">One or more skill values is invalid.</span>',
                 msgDom, 'only');
         }
+    },
+
+
+    // Private: Called whenever the validity of our form's contents changes
+    //          The form only tracks validity of spinners, not checkboxes
+    _formValidityChanged: function (isValid) {
+        // Store the new validity and update the dialog to reflect it
+        this._formValid = isValid;
+        this._updateValidity();
     },
 
 
@@ -490,11 +520,11 @@ ocp.existing.skillDialog = {
         console.log('entered ocp.existing.skillDialog.checkboxChanged', skill);
 
         // The spinner and checkbox for this skill
-        var checkbox = dijit.byId('majorCheck_' + skill);
-        var spinner = dijit.byId('skillSpinner_' + skill);
+        var spinner = this._spinner[skill];
+        var checkbox = this._checkbox[skill];
 
-        // Set the spinners new min value
-        var wasValid = spinner.isValid();  // Need to store since we're changing constaints
+        // Set the spinners new min constraint
+        var wasValid = spinner.isValid();  // Need to store since we're changing constraints
         var min = (checkbox.checked ? ocp.SKILL_MAJOR_MIN : ocp.SKILL_MIN);
         var constrain = spinner.attr('constraints');
         constrain.min = min;
@@ -514,6 +544,9 @@ ocp.existing.skillDialog = {
                 }
             }
         }
+
+        // Since a checkbox changed, update our validity
+        this._updateValidity();
     },
 
 
@@ -527,6 +560,7 @@ ocp.existing.skillDialog = {
 
         // We should never be allowed to submit with invalid data,
         // but if we somehow did, stop it here
+        // *** Add checkbox validation check here
         if (this._form.validate()) {
 
             // Get a complex object with all of our form's values
@@ -549,8 +583,7 @@ ocp.existing.skillDialog = {
 
             // Erm... This should never happen...
             // Gracefully tell the user something is invalid and inhibit the submission.
-            console.debug('Cannot submit with invalid data!',
-                this._form._numChecked(), this._form._invalidWidgets);
+            console.debug('Cannot submit with invalid data!', this._form._invalidWidgets);
             alert('Cannot submit changes until all skill values are valid\n' +
                 'and exactly seven major skills are selected.');
             return false;
@@ -563,12 +596,15 @@ ocp.existing.skillDialog = {
         console.log('entered ocp.existing.skillDialog.undo');
 
         // Assign our values to each spinner and checkbox
+        // Any modified constraints are fixed when the checkbox's value is changed
+        // and our checkboxChanged method gets called
         for (var skill in ocp.skills) {
-            dijit.byId('skillSpinner_' + skill).attr('value', ocp.existing._totals[skill]);
-            dijit.byId('majorCheck_' + skill).attr('value', ocp.existing.isMajor(skill));
+            this._spinner[skill].attr('value', ocp.existing._totals[skill]);
+            this._checkbox[skill].attr('value', ocp.existing.isMajor(skill));
         }
 
         // Then just to be careful, validate the contents
+        // *** Still need this?
         this._form.validate();
     },
 
@@ -579,10 +615,10 @@ ocp.existing.skillDialog = {
 
         // Reset any constraints we changed when a checkbox was toggled
         for (var skill in ocp.skills) {
-                
+
             // The spinner and checkbox for this skill
-            var checkbox = dijit.byId('majorCheck_' + skill);
-            var spinner = dijit.byId('skillSpinner_' + skill);
+            var spinner = this._spinner[skill];
+            var checkbox = this._checkbox[skill];
 
             // Set the spinners new min value based on the checkboxes reset value
             var min = (checkbox._resetValue ? ocp.SKILL_MAJOR_MIN : ocp.SKILL_MIN);
@@ -593,9 +629,53 @@ ocp.existing.skillDialog = {
     },
 
 
+    // Public: When the dialog is shown, clean up any unfired hooks and update validity
+    onShow: function() {
+        console.log('entered ocp.existing.skillDialog.onShow');
+
+        // If a fade out hook never fired (because the dialog was shown before
+        // the fade out animation ended), fire it now
+        // The hook disconnects itself and resets the value of _fadeOutHook
+        if (this._fadeOutHook != null) {
+            this._fadeOutHook();
+        }
+
+        // Update the validity info (especially important if this is our first time shown)
+        // *** Gah! This doesn't work because this onShow isn't connected for the first showing!
+        this._updateValidity();
+    },
+
+
     // Public: Cancel all changes and close the dialog
+    //         To prevent the browser from rendering the "undo" changes,
+    //         do the "undo" when the dialog is not visible
     cancel: function() {
-        this.undo();
+        console.log('entered ocp.existing.skillDialog.cancel');
+
+        // Hiding the dialog really means starting its fade out animation
         this._dialog.hide();
+
+        // Define locals for use inside closures
+        var _this = this;
+        var handle = null;
+
+        // When the fade out animation ends, safely disconnect and then undo all changes
+        // Setting this as our fade out hook enables it to be called by onShow in the
+        // unlikely event that the user was able to call the dialog's show (which does a
+        // fade out stop -- which doesn't call onEnd) before the fade out animation ended.
+        this._fadeOutHook = function() {
+            console.log('in fadeOutHook');
+            // From closure: _this, handle
+            dojo.disconnect(handle);
+            handle = null;
+            _this._fadeOutHook = null;
+            dojo.hitch(_this, 'undo')();
+        }
+
+        // When the fade out animation ends, run the hook
+        handle = dojo.connect(this._dialog._fadeOut, 'onEnd', this._fadeOutHook);
+
+        // This tests the dialog being shown before the fade out ends
+        //this._dialog.show();
     }
 };
