@@ -1,2 +1,0 @@
-Fix level bug (grep BUG in ocp-level.js)
-Move cclass _customData into _data
