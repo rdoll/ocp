@@ -138,6 +138,7 @@
     <script type="text/javascript" src="scripts/ocp-order.js"></script>
     <script type="text/javascript" src="scripts/ocp-level.js"></script>
     <script type="text/javascript" src="scripts/ocp-results.js"></script>
+    <script type="text/javascript" src="scripts/ocp-nullis.js"></script>
 </head>
 
 <body class="soria">
@@ -210,6 +211,15 @@
                 id="aboutContentPane" class="loaderManagedContainer"
                 href="partials/about.html">
                 <!-- Contents filled via AJAX request -->
+            </div>
+
+            <div dojoType="ocp.widget.TitledContentPane" title="xhrGet Test"
+                id="xhrGetTestContentPane">
+                In #xhrgetTestContentPane.
+                <div id="xhrgetTest">
+                    In #xhrgetTest.
+                    <!-- Contents filled via AJAX request -->
+                </div>
             </div>
         </div>
     </div>

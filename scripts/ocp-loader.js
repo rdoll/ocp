@@ -20,19 +20,71 @@
 
 ocp.loader = {
 
-    // Public: The list of modules the loader is managing, indexed by CSS ID
+    // Private: The list of modules the loader is managing, indexed by CSS ID
     _managedModules: {},
+
+
+    _xhrGetDeferred: null,
 
 
     // Public: Initialize ourselves
     initialize: function() {
         // Hook the content download error functions for all managed containers
-        dojo.query('.loaderManagedContainer').forEach(dojo.hitch(this, 'hookContainer'));
+        dojo.query('.loaderManagedContainer').forEach(dojo.hitch(this, 'hookManagedContainer'));
+
+        var container = dijit.byId('xhrGetTestContentPane');
+        var _this = this;
+        container.attr('onShow', function () {
+            // From closure: _this, container
+            _this._xhrGetDeferred = dojo.xhrGet({
+                url: 'zpartials/xhrGetTest.txt',
+                handleAs: 'text',
+                preventCache: false,
+                timeout: 15 * 1000, // 15 seconds
+
+                load: function (data, ioArgs) {
+                    // From closure: container
+                    console.debug('xhrGetTest load: data=', data, ', ioArgs=', ioArgs);
+                    try {
+                        // Format data here
+                        container.attr('content', '<pre>' + data + '</pre>');
+                        delete container.onShow;
+                        _this._xhrGetDeferred = null;
+                    } catch (error) {
+                        var retryScript = "dijit.byId('xhrGetTestContentPane').onShow();";
+                        var errMsg =
+                            '<div class="loadingError">' +
+                                'Failed to download the xhrGetTest.' +
+                            '</div>' +
+                            '<div class="loadingErrorMessage">' + error + '</div>' +
+                            '<button dojoType="dijit.form.Button" onClick="' + retryScript + '">' +
+                                'Try Again' +
+                            '</button>';
+                        container.attr('content', errMsg);
+                    }
+                },
+
+                error: function (error, ioArgs) {
+                    console.debug('xhrGetTest error: error=', error, ', ioArgs=', ioArgs);
+                    var retryScript = "dijit.byId('xhrGetTestContentPane').onShow();";
+                    var errMsg =
+                        '<div class="loadingError">' +
+                            'Failed to download the xhrGetTest.' +
+                        '</div>' +
+                        '<div class="loadingErrorMessage">' + error + '</div>' +
+                        '<button dojoType="dijit.form.Button" onClick="' + retryScript + '">' +
+                            'Try Again' +
+                        '</button>';
+                    container.attr('content', errMsg);
+                }
+            });
+            console.debug('_xhrGetDeferred=', _this._xhrGetDeferred);
+        });
     },
 
 
     // Public: Hook the content download error functions for a given container
-    hookContainer: function (container) {
+    hookManagedContainer: function (container) {
         // Add the new managed module to our list of managed modules
         var id = container.id;
         this._managedModules[id] = new ocp.loader.ManagedModule({ containerId: id });
@@ -48,23 +100,41 @@ ocp.loader = {
 
             var container = this._managedModules[moduleId]._container;
             if (container.isLoaded) {
+
                 // The container's contents have already been loaded, so just run the function
                 runFunc();
             } else {
-                // The container's contents have not been loaded.
-                // Connect to it's onLoad and then load it.
-                // When loaded, disconnect ourselves and run the function.
-                // *** Connect leak possible if multiple invocations on broken content?
+
+                // The container's contents have not been loaded, so track when the
+                // loading has occurred and run the function after.
                 // *** Race condition with plannerContentPane's onDownloadEnd="" markup?
-                var handle = dojo.connect(container, 'onDownloadEnd', function () {
-                    // From closure: handle, runFunc
-                    dojo.disconnect(handle);
-                    handle = null;
+                var handles = [];
+
+                // On success, disconnect everything and run the function
+                handles.push(dojo.connect(container, 'onDownloadEnd', function () {
+                    //console.debug('entered runAfterLoaded onDownloadEnd');
+                    // From closure: handles, runFunc
+                    dojo.forEach(handles, dojo.disconnect);
+                    handles = null;
                     runFunc();
-                });
+                }));
+
+                // On any failure, just disconnect everything
+                handles.push(dojo.connect(container, 'onDownloadError', function () {
+                    //console.debug('entered runAfterLoaded onDownloadError');
+                    // From closure: handles
+                    dojo.forEach(handles, dojo.disconnect);
+                    handles = null;
+                }));
+                handles.push(dojo.connect(container, 'onContentError', function () {
+                    //console.debug('entered runAfterLoaded onContentError');
+                    // From closure: handles
+                    dojo.forEach(handles, dojo.disconnect);
+                    handles = null;
+                }));
             }
 
-            // Switch to the given module, loading it if necessary
+            // Switch to the given module, which will load it
             dijit.byId('ocpStackContainer').selectChild(moduleId);
         } else {
             throw 'ocp.loader.runAfterLoaded is not managing moduleId "' + moduleId + '".';

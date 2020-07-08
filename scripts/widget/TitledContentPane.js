@@ -15,8 +15,8 @@
 /*
 ** TitledContentPane.js
 **
-** Define a content pane with a fixed title.
-** It's identical to a dijit.TitlePane without the button to show/hide the contents.
+** Define a content pane with a fixed title that allows preprocessing of downloaded content.
+** The look is identical to a dijit.TitlePane without the button to show/hide the contents.
 **
 ** Note that this is placed under the top-level namespace of ocp.* which
 ** means this can only be loaded *after* ocp.* has been defined.
@@ -48,6 +48,17 @@ dojo.declare('ocp.widget.TitledContentPane',
                 // The content is just as in a regular content pane
                 '<div class="ocpTitledContentPaneContent" dojoAttachPoint="containerNode">' +
                 '</div>' +
-            '</div>'
+            '</div>',
+
+
+        // If the content is real and a pre-processing method exists, invoke it
+        // Regardless, set the content to this data
+        _setContent: function (content, isFake) {
+            if ((!isFake) && (this.preprocessContent)) {
+                console.debug('_setContent: content=', content, ', isFake=', isFake);
+                this.preprocessContent(content);
+            }
+            this.inherited(arguments);
+        }
     }
 );
