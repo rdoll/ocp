@@ -144,6 +144,12 @@ ocp.contact = {
     onShow: function () {
         //console.debug('entered onShow');
 
+// This makes the 2nd time thru work correctly...
+// Is this focus related somehow?!?
+if (dijit._masterTT && dijit._masterTT.aroundNode) {
+    dijit.hideTooltip(dijit._masterTT.aroundNode);
+}
+
         // Initialize the unpacked content
         // We need to wait for the dialog to be shown so the decode container is properly sized
         this._initializeUnpacked();
@@ -292,7 +298,8 @@ dojo.declare('ocp.contact.letterDecoder', null, {
             // No value means a required arg was missing
             throw 'Missing ' + argName + ' in ocp.contact.letterDecoder construction.';
         } else {
-            // The value is either a bad because it is a default or it was given and is bad
+            // The value is bad either because it was required and not specified (and thus the
+            // invalid default value was found) or it was given and is invalid
             throw 'Missing or invalid ' + argName + ' "' + argValue +
                 '" in ocp.contact.letterDecoder construction.';
         }
@@ -332,7 +339,7 @@ dojo.declare('ocp.contact.letterDecoder', null, {
             unit: 'px',
             delay: 400,  // in milliseconds -- this covers the Dialog's fadeIn time
             duration: ocp.getRandomInt(3000, 6000),  // in milliseconds
-            rate: 100, // 10 frames per second
+            rate: 100, // milliseconds between frames = 10 frames per second
             onAnimate: dojo.hitch(this, '_setRandomLetter'),
             onEnd: dojo.hitch(this, '_onDecodingDone')
         });

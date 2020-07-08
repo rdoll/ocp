@@ -1,3 +1,5 @@
+*** Contact me links with Tooltip's letter decoder's animation is way too fast ***
+
 Tooltips:
 - They don't work on buttons or images per-release notes known issue
 - The Dojo dialog's cancel button uses a browser default title= tooltip
