@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -22,7 +22,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.8.2',
+    VERSION: '0.8.3',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -252,9 +252,7 @@ var ocp = {
             if (dojo.hasAttr(domNode, attrName)) {
 
                 // The node has this attr, so add it to the return results
-                // TODO: Use getAttribute instead of dojo.attr() because of
-                // TODO: Dojo 1.3.2 bug http://trac.dojotoolkit.org/ticket/8991
-                attrs[attrName] = domNode.getAttribute(attrName);
+                attrs[attrName] = dojo.attr(domNode, attrName);
             } else {
 
                 // This attr doesn't exist -- throw an error if it is required
@@ -275,9 +273,99 @@ var ocp = {
     },
 
 
+    // Private: Returns an object with the tooltip arguments specified in the given tooltip's
+    //          message or undefined if there was an error with the tooltip options.
+    _parseTooltip: function (tooltipText) {
+        var args = {
+            cursor: '',    // Default to no cursor style
+            position: [],  // Default to using dijit.Tooltip.defaultPosition
+            message: ''    // Default to no message
+        };
+
+        // Find any options at the start of the tooltip text (and return the options list)
+        var optsRe = /^\[([^\[\]]*)\]/;
+        var optsList = tooltipText.match(optsRe);
+        if (optsList == null) {
+            // No options, so the message is the entire text
+            args.message = tooltipText;
+        } else {
+            // The message is the text without the options
+            args.message = tooltipText.replace(optsRe,'');
+
+            // Process the options list from the match
+            var optsArray = optsList[1].split(',');
+            for (var optIndex in optsArray) {
+                var opt = optsArray[optIndex];
+                if (opt == 'help') {
+                    // Note that we need to use the help cursor
+                    args.cursor = 'help';
+                } else if (opt.match('(above|below|before|after)')) {
+                    // Push the positioning options in the order they are found
+                    args.position.push(opt);
+                } else {
+                    console.error('Unknown OCP Tooltip option "' + opt + '"');
+                    return undefined;
+                }
+            }
+        }
+
+        return args;
+    },
+
+
+    // Public:  Converts all ocpTooltip attributes on nodes under searchRoot to Dojo tooltips
+    // Format:  <tag ... ocpTooltip="Message with some &lt;b&gt;bold text&lt;/b&gt;" ...>
+    // or       <tag ... ocpTooltip="[option,option,...]Configure the tooltip with options ...">
+    // Options: help = apply the 'cursor: help' style to the node to indicate it has a tooltip
+    //          above, below, before, after = try to place the tooltip in these positions
+    //              (in the order specified) as per dijit.Tooltip.defaultPosition.
+    replaceTooltips: function (searchRoot){
+        const ttAttrName = 'ocpTooltip';
+
+        // Find all nodes under the searchRoot that have the tooltip attribute
+        var _this = this;
+        dojo.query('[' + ttAttrName + ']', dojo.byId(searchRoot)).forEach(function (ttNode) {
+            // From closure: _this, ttAttrName
+
+            // Delete the attr to prevent the possibility of attaching multiple tooltips
+            var msg = dojo.attr(ttNode, ttAttrName);
+            dojo.removeAttr(ttNode, ttAttrName);
+
+            // Get the options from the tooltip's message
+            var ttArgs = _this._parseTooltip(msg);
+            if (ttArgs) {
+
+                // No errors processing options, so process the tooltip
+                if (ttArgs.message.length == 0) {
+                    console.warn('Ignoring empty tooltip message on', ttNode,
+                        'with ttArgs=', ttArgs);
+                } else {
+
+                    // Create and attach the tooltip
+                    console.log('Attaching tooltip to', ttNode, 'with ttArgs=', ttArgs);
+                    var tt = new dijit.Tooltip({
+                        label: ttArgs.message,
+                        position: ttArgs.position
+                    });
+                    if (ttArgs.cursor) {
+                        dojo.style(ttNode, 'cursor', ttArgs.cursor);
+                    }
+                    tt.addTarget(ttNode);
+                }
+            }
+        });
+    },
+
+
     // Initialize ourselves and the main content (but not the planner)
     initialize: function() {
         console.debug('entered initialize');
+
+        // Default to placing tooltips above the node they are attached to, otherwise below them
+        dijit.Tooltip.defaultPosition = ['above', 'below'];
+
+        // Initialize the tooltips on the main page
+        this.replaceTooltips('aboutFooter');
 
         // Grab a handle to the main container
         this._mainContainer = dijit.byId('ocpStackContainer');
@@ -287,9 +375,6 @@ var ocp = {
 
         // Initialize the min/max stats for attributes
         this._initializeAttrs();
-
-        // Initialize resize event trapping
-        this._initializeResizeHooks();
 
         // Initialize our main page children
         ocp.loader.initialize();
@@ -343,30 +428,6 @@ var ocp = {
         // Magicka is an exception since races and birthsigns can give bonuses.
         // Add these bonuses to the max derived from the core attributes.
         this.derivedAttrs.mag.max += ocp.race.attrMax('mag') + ocp.birth.attrMax('mag');
-    },
-
-
-    // Private: Initializes hooks to propagate resize events to modules.
-    //          We are using doLayout=false to let children size themselves, but that also
-    //          inhibits the propagation of resize events to children, so do it ourselves.
-    _initializeResizeHooks: function () {
-
-        // The main module container
-        var mainCont = this._mainContainer;
-
-        // After the main module container calls it's resize, we get called
-        dojo.connect(mainCont, 'resize', function () {
-            // Closure: mainCont
-            //console.log('mainCont resize');
-
-            // Resize the currently selected child
-            // The first resize does most of the work, but if we started with a vertical scrollbar
-            // that was removed after the first resize, the space for where the scrollbar was
-            // remains. So we do a second resize to handle this case. It's a little expensive,
-            // but we shouldn't be getting lots of resize events so it's acceptable.
-            mainCont.selectedChildWidget.resize();
-            mainCont.selectedChildWidget.resize();
-        });
     },
 
 

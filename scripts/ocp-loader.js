@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -280,6 +280,7 @@ ocp.loader.relnotes = {
             id: 'changelogVersion_' + verAttrs.name.replace(/\W/g, '_'),
             class: 'versionItem',
             open: false,
+            doLayout: false,
             title: verText
         }, dojo.create('div', null, clHtmlNode));
 
@@ -399,9 +400,18 @@ dojo.declare('ocp.loader.ManagedModule', null, {
         // Set a more specific loading message
         this._container.loadingMessage = 'Loading the ' + this.moduleName + '...';
 
-        // Hook the content download error events
+        // Hook the content download events
+        this._container.attr('onDownloadEnd',   dojo.hitch(this, 'onDownloadEnd'));
         this._container.attr('onDownloadError', dojo.hitch(this, 'onDownloadError'));
         this._container.attr('onContentError',  dojo.hitch(this, 'onContentError'));
+    },
+
+
+    // Public: Called after the ContentPane's content has been downloaded and set
+    onDownloadEnd: function () {
+        console.debug('entered onDownloadEnd');
+        // Replace all OCP tooltips with real tooltips
+        ocp.replaceTooltips(this._containerId);
     },
 
 

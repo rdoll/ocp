@@ -1,8 +1,25 @@
-Dojo error on the *first* (and only first) selection of a gender from the dialog:
-    _3 is null
-    anonymous()                                  dojo.js (line 42)
-    anonymous()                                  dojo.js (line 16)
-    [Break on this error] (42 out of range 16)   dojo.js (line 42)
+Dojo 1.4 changes todo:
+http://docs.dojocampus.org/releasenotes/1.4
+    - recheck if ocp.loader.ManagedModule.onContentError's dojo 1.3.2 bug workaround still exists
+    - tooltips can be dynamically attached to nodes. might allow me to dynamically
+      search for title= attributes and replace with a custom tooltip.
+        when done, add this to release notes
+        extend search to everywhere, not just results.
+        test all.
+        continue replacing title='s with ocpTooltip='s
+        continue testing tooltips in all of the results
+        don't forget about tooltips in dialogs (like on images)
+        careful, there is a tooltip on the gender sub-dialog
+        when tooltips are done, check memory usage after lots of recalcs
+        check tooltip placement of warnings in all locations of leveling details
+        need html formatting of all leveling warnings?
+        should I add a call to ocp.replaceTooltips into ocp.loader.ManageModule so it
+            happens automatically after a module is loaded? yeah, i think so.
+            *** yeah, but now the onDownloadEnd collides with the ocp.initializePlanner call
+        the default dijit.Dialog's cancel button has a title= tooltip
+            create a new one with an ocpTooltip= attribute? or hack the real one live somehow?
+
+Is regenerating the entire results pane still worth it with all the tooltips being created now?
 
 In race gender selection sub-dialog, show stat differences? Or keep all stats in details?
 
@@ -28,9 +45,6 @@ Select a http://creativecommons.org/ license, add it to file headers,
 and add an icon to the footer for it.
 
 Standardize all race and birthsign specials with their real name and their exact effects.
-
-Would be nice if I could support HTML markup in Rel Notes XML descriptions.
-This would be most useful if 0.7.4's new home change could have links.
 
 #faq and #changeLog .dijitTitlePane* styles are almost identical. If icons change,
 see if I can combine these into one set of generic styles.
@@ -144,30 +158,35 @@ The W3C Markup validator says it is XHTML 1.0 Strict valid, but will it work in 
 -->
 
 ---------
+Starting with Dojo 1.4, all layout containers get a doLayout=false.
+This allows the children of the layout container widget to size themselves.
+They even seem to resize themselves after the parent changes sizes (e.g. from a
+browser resize). This seems backwards to me, but that's what works as of Dojo 1.4 and
+means the resize hooks are no longer necessary.
 
-Without the ocp._initializeResizeHooks, the instructions nested Tab container was not
-resizing properly. Here are the old comments describing the issue:
+    Without the ocp._initializeResizeHooks, the instructions nested Tab container was not
+    resizing properly. Here are the old comments describing the issue:
 
-<!-- TODO: ocpStackContainer is sized via the dimensions of instructionsOverview and
-     TODO: does not resize when a different tab is selected resulting in scrollbars. -->
-<!-- TODO: Switching from Home/Planner/expanded FAQ/Release Notes to Instructions puts a
-     TODO: horizontal scrollbar in Instructions. Oddly, collapsed FAQ and About don't.
-     TODO: I think it's related to having the scrollbar on the RHS of the browser window.
-     TODO: Can fix it by a dijit.byId('instructionsContentPane').resize() after
-     TODO: Instructions has been selected and has the horizontal scrollbar.
-     TODO: Is the root cause the doLayout=false? -->
-<!-- TODO: Also the instructions are not resized when the browser is resized. -->
+    <!-- TODO: ocpStackContainer is sized via the dimensions of instructionsOverview and
+         TODO: does not resize when a different tab is selected resulting in scrollbars. -->
+    <!-- TODO: Switching from Home/Planner/expanded FAQ/Release Notes to Instructions puts a
+         TODO: horizontal scrollbar in Instructions. Oddly, collapsed FAQ and About don't.
+         TODO: I think it's related to having the scrollbar on the RHS of the browser window.
+         TODO: Can fix it by a dijit.byId('instructionsContentPane').resize() after
+         TODO: Instructions has been selected and has the horizontal scrollbar.
+         TODO: Is the root cause the doLayout=false? -->
+    <!-- TODO: Also the instructions are not resized when the browser is resized. -->
 
-With ocp._initializeResizeHooks the browser resize problems are gone, but the Planner does
-resize a little more than it should; e.g. when you shrink the browser's width, the planner's
-input area gets taller instead of remaining the same and using a horizontal scrollbar.
+    With ocp._initializeResizeHooks the browser resize problems are gone, but the Planner does
+    resize a little more than it should; e.g. when you shrink the browser's width, the planner's
+    input area gets taller instead of remaining the same and using a horizontal scrollbar.
 
-However, the switching from Release Notes (with a vertical scrollbar) to Instructions (that
-should be without a vertical scrollbar) still results in the Instructions having a horizontal
-scrollbar. Two dijit.byId('instructionsContentPane').resize()'s fixes it, but connecting to
-instructionsContentPane's onShow or ocpStackController's onSelectChild and doing the two
-resizes never worked (the content had no size and only the min-height for loader messages
-was honored).
+    However, the switching from Release Notes (with a vertical scrollbar) to Instructions (that
+    should be without a vertical scrollbar) still results in the Instructions having a horizontal
+    scrollbar. Two dijit.byId('instructionsContentPane').resize()'s fixes it, but connecting to
+    instructionsContentPane's onShow or ocpStackController's onSelectChild and doing the two
+    resizes never worked (the content had no size and only the min-height for loader messages
+    was honored).
 
 =========
 Publishing Checklist:

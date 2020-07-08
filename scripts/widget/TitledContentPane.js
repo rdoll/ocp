@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -17,6 +17,9 @@
 **
 ** Define a content pane with a fixed title that allows preprocessing of downloaded content.
 ** The look is identical to a dijit.TitlePane without the button to show/hide the contents.
+** As of Dojo 1.4, dijit.TitlePane supports disabling of the show/hide button, but 1) it
+** doesn't completely hide it and 2) even if it did work 100%, this is still needed for
+** preprocessing downloaded content.
 **
 ** Note that this is placed under the top-level namespace of ocp.* which
 ** means this can only be loaded *after* ocp.* has been defined.

@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -38,6 +38,7 @@ ocp.results = {
         this._updateInitialSkills();
         this._updateLeveling();
         this._updateAnalysis();
+        ocp.replaceTooltips('resultsStackContainer');
     },
 
 
@@ -58,9 +59,11 @@ ocp.results = {
             '<thead>' +
                 '<tr class="last">' +
                     '<th>Attribute</th>' +
-                    '<th title="Starting values for the selected Race and Gender">Race</th>' +
-                    '<th title="Bonuses for the selected Birthsign">Birth</th>' +
-                    '<th title="Bonuses for selected class Favored Attributes">Fav</th>' +
+                    '<th ocpTooltip="[help]Starting values for the selected Race and Gender">' +
+                        'Race</th>' +
+                    '<th ocpTooltip="[help]Bonuses for the selected Birthsign">Birth</th>' +
+                    '<th ocpTooltip="[help]Bonuses for the selected Class&apos;s Favored ' +
+                        'Attributes">Fav</th>' +
                     '<th>Total</th>' +
                 '</tr>' +
             '</thead>';
@@ -127,11 +130,12 @@ ocp.results = {
             '<thead>' +
                 '<tr class="last">' +
                     '<th colspan="2">Skill</th>' +
-                    '<th title="Base skill values for the selected class: ' +
-                        ocp.SKILL_MAJOR_MIN + ' for Majors and ' + ocp.SKILL_MIN +
-                        ' for Minors">Base</th>' +
-                    '<th title="Bonuses for the selected class Specialization">Spec</th>' +
-                    '<th title="Bonuses for the selected Race">Race</th>' +
+                    '<th ocpTooltip="[help]Base skill values for the selected Class: ' +
+                        '&lt;br /&gt; ' + ocp.SKILL_MAJOR_MIN + ' for Majors and ' +
+                        ocp.SKILL_MIN + ' for Minors">Base</th>' +
+                    '<th ocpTooltip="[help]Bonuses for the selected Class&apos;s ' +
+                        'Specialization">Spec</th>' +
+                    '<th ocpTooltip="[help]Bonuses for the selected Race">Race</th>' +
                     '<th>Total</th>' +
                 '</tr>' +
             '</thead>';
@@ -152,8 +156,8 @@ ocp.results = {
                     if (firstSkill) {
                         res +=
                             '<td rowspan="' + skills.length + '" class="vertical" ' +
-                                'title="Skills that affect ' + ocp.coreAttrs[attr].name + '"' +
-                            '>' +
+                                'ocpTooltip="[help,before,after]Skills that affect ' +
+                                    ocp.coreAttrs[attr].name + '">' +
                                 ocp.verticalize(attr) +
                             '</td>';
                     }
@@ -211,12 +215,13 @@ ocp.results = {
                     '<th colspan="21">Skills</th>' +
                 '</tr>' +
                 '<tr class="last">' +
-                    '<th title="Level">Lv</th>';
+                    '<th ocpTooltip="[help,after]Level">Lv</th>';
 
         // Add a vertical header for each core attribute
         for (var attr in ocp.coreAttrs) {
             lev +=
-                '<th class="vertical" title="' + ocp.coreAttrs[attr].name + ' core attribute">' +
+                '<th class="vertical" ' +
+                    'ocpTooltip="[help]' + ocp.coreAttrs[attr].name + ' core attribute">' +
                     ocp.verticalize(attr) +
                 '</th>';
         }
@@ -224,8 +229,8 @@ ocp.results = {
         // Add a vertical header for each derived attribute
         for (var attr in ocp.derivedAttrs) {
             lev +=
-                '<th class="vertical" title="' + ocp.derivedAttrs[attr].name +
-                    ' derived attribute">' +
+                '<th class="vertical" ' +
+                    'ocpTooltip="[help]' + ocp.derivedAttrs[attr].name + ' derived attribute">' +
                     ocp.verticalize(attr) +
                 '</th>';
         }
@@ -233,7 +238,7 @@ ocp.results = {
         // Add a vertical header for each skill
         for (var skill in ocp.skills) {
             lev +=
-                '<th class="vertical" title="' + ocp.skills[skill].name + ' skill">' +
+                '<th class="vertical" ocpTooltip="[help]' + ocp.skills[skill].name + ' skill">' +
                     ocp.verticalize(skill) +
                 '</th>';
         }
@@ -272,7 +277,7 @@ ocp.results = {
                 '<tr>' +
                     '<td class="numeric">' +
                         '<a href="javascript:ocp.level.setExisting(' + level + ')" ' +
-                            'title="Set existing character details to these level ' +
+                            'ocpTooltip="[after]Set existing character details to these level ' +
                                 level + ' values"' +
                         '>' +
                             level +
@@ -284,7 +289,7 @@ ocp.results = {
                 var styleClass = 'numeric' + (attr in wasted ? ' worse' :
                     (current[attr] != previous[attr] ? ' changed' : ''));
                 lev += '<td class="' + styleClass + '"' +
-                    (attr in wasted ? ' title="' + wasted[attr] + '"' : '') +
+                    (attr in wasted ? ' ocpTooltip="[help]' + wasted[attr] + '"' : '') +
                     '>' + current[attr] + '</td>';
             }
 
@@ -293,7 +298,7 @@ ocp.results = {
                 var class = 'numeric' + (attr in wasted ? ' worse' :
                     (current[attr] != previous[attr] ? ' changed' : ''));
                 lev += '<td class="' + class + '"' +
-                    (attr in wasted ? ' title="' + wasted[attr] + '"' : '') +
+                    (attr in wasted ? ' ocpTooltip="[help]' + wasted[attr] + '"' : '') +
                     '>' + current[attr] + '</td>';
             }
 
@@ -303,7 +308,7 @@ ocp.results = {
                     (current[skill] != previous[skill] ? ' changed' : '')) +
                     (isMajor[skill] ? ' majorSkill' : '');
                 lev += '<td class="' + class + '"' +
-                    (skill in wasted ? ' title="' + wasted[skill] + '"' : '') +
+                    (skill in wasted ? ' ocpTooltip="[help]' + wasted[skill] + '"' : '') +
                     '>' + current[skill] + '</td>';
             }
 

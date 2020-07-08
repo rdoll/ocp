@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free

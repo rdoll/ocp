@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -232,8 +232,10 @@ ocp.clazz = {
 
     // Private: Currently selected custom class info
     //          When _custom is true, this data supercedes _predefined
+    // Note:    name is currently hard coded and never changes
     _custom: false,
     _customData: {
+        name: 'Custom',
         specialization: '',
         favoredAttrs: {},
         majorSkills: {},
@@ -445,8 +447,7 @@ ocp.clazz = {
     _update: function() {
 
         // Update selected label
-        dojo.place('<span>' + (this._custom ? 'Custom' : this._predefined) + '</span>',
-            'classValue', 'only');
+        dojo.place('<span>' + this.name + '</span>', 'classValue', 'only');
 
         // Fill in the selected details
         var det =

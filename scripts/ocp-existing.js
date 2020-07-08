@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -533,8 +533,10 @@ ocp.existing.skillDialog = {
                 ski +=
                     '<tr>' +
                         '<td>' +
-                            // TODO: Setting for="existingMajorCheck_..." allows clicking
-                            // TODO: on this label to toggle the major checkbox.
+                            // Setting for="existingMajorCheck_..." allows clicking on this
+                            // label to toggle the major checkbox, but I don't really like that.
+                            // Setting for="skillSpinner_..." just gives the skill value number
+                            // spinner focus when you click on the label.
                             '<label for="skillSpinner_' + skill + '" class="selectedName">' +
                                 ocp.skills[skill].name + ':' +
                             '</label>' +
@@ -747,12 +749,30 @@ ocp.existing.skillDialog = {
         // Note that we are doing multiple changes
         this._doingManyChanges = true;
 
-        // Assign our values to each spinner and checkbox
-        // To prevent the spinner from possibly having an invalid value,
-        // set the checkbox first so checkboxChanged can alter the spinner's
-        // constraints as appropriate.
+        // When the checkbox's value is changed (from attr), the checkboxChanged onChange handler
+        // updates the constraints on the corresponding skill's value spinner. After the spinner's
+        // constraints are changed, we can safely update the spinner's value.
+        //
+        // In Dojo 1.3 and earlier, the checkbox's attr method fired the onChange handler
+        // before it returned. However in Dojo 1.4, the onChange handler's invocation is queued
+        // such that the attr method returns without onChange being called. This results in
+        // the spinner's attr being called before checkboxChanged get called -- and the spinner's
+        // value ends up being wrong (and perhaps even invalid).
+        //
+        // Unfortunately, there is no interface to properly know when the checkbox's value has
+        // actually been set, so we use a nasty hack that uses a private member to turn off all
+        // onChange's, do the update, manaully run our checkboxChanged onChange handler, and then
+        // update the spinner.
+        //
+        // Note: This same hack is used below by reset.
+        //
+        // TODO: Remove this hack that accesses private data if Dojo ever implements a clear
+        // TODO: way to determine when a checkbox's onChange has actually occurred.
         for (var skill in ocp.skills) {
+            this._checkbox[skill]._onChangeActive = false;
             this._checkbox[skill].attr('value', ocp.existing.isMajor(skill));
+            this._checkbox[skill]._onChangeActive = true;
+            this.checkboxChanged(skill);
             this._spinner[skill].attr('value', ocp.existing._totals[skill]);
         }
 
@@ -769,13 +789,30 @@ ocp.existing.skillDialog = {
         // Note that we are doing multiple changes
         this._doingManyChanges = true;
 
-        // Reset both inputs for each skill, but do the checkbox first.
-        // When the checkbox's value changes, checkedChanged gets called and
-        // alters the constraints and (possibly) value of the spinner.
-        // Since the spinner's constraints don't get reset, this
-        // prevents the spinner from having an invalid value.
+        // When the checkbox's value is changed (from reset), the checkboxChanged onChange handler
+        // updates the constraints on the corresponding skill's value spinner. After the spinner's
+        // constraints are changed, we can safely reset the spinner to its original value.
+        //
+        // In Dojo 1.3 and earlier, the checkbox's reset method fired the onChange handler
+        // before it returned. However in Dojo 1.4, the onChange handler's invocation is queued
+        // such that the reset method returns without onChange being called. This results in
+        // the spinner's reset being called before checkboxChanged get called -- and the spinner's
+        // value ends up being wrong (and perhaps even invalid).
+        //
+        // Unfortunately, there is no interface to properly know when the checkbox's value has
+        // actually been reset, so we use a nasty hack that uses a private member to turn off all
+        // onChange's, do the reset, manaully run our checkboxChanged onChange handler, and then
+        // reset the spinner.
+        //
+        // Note: This same hack is used above by undo.
+        //
+        // TODO: Remove this hack that accesses private data if Dojo ever implements a clear
+        // TODO: way to determine when a checkbox's reset has actually occurred.
         for (var skill in ocp.skills) {
+            this._checkbox[skill]._onChangeActive = false;
             this._checkbox[skill].reset();
+            this._checkbox[skill]._onChangeActive = true;
+            this.checkboxChanged(skill);
             this._spinner[skill].reset();
         }
 

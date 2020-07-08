@@ -1,5 +1,5 @@
 <!--
-    (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+    (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 
     License:
     You are free to use, copy, or modify this software provided it remains free
@@ -13,11 +13,11 @@
 -->
 
 <!-- Usage instructions -->
-<div dojoType="dijit.layout.TabContainer" id="instructions">
+<div dojoType="dijit.layout.TabContainer" id="instructions" doLayout="false">
 
     <!-- Overview -->
     <div dojoType="dijit.layout.ContentPane" id="instructionsOverview" title="Overview"
-        selected="true">
+        selected="true" doLayout="false">
         <div class="moduleSection">
             <p>
                 To get the most out of OCP, you need at least a basic understanding of Oblivion's
@@ -83,7 +83,8 @@
                     When you hover your mouse over most abbreviations, buttons, links, and color
                     highlights, a tooltip with more details may be shown (like
                     <span class="majorSkill"
-                        title="Hvy is the abbreviation for the Heavy Armor skill">Hvy</span>).
+                        ocpTooltip="[help]Hvy is the abbreviation for the Heavy Armor skill"
+                        >Hvy</span>).
                 </li>
                 <li>
                     Skills are often grouped by which attribute they affect.
@@ -103,7 +104,8 @@
     </div>
 
     <!-- Character Details -->
-    <div dojoType="dijit.layout.ContentPane" id="instructionsDetails" title="Character Details">
+    <div dojoType="dijit.layout.ContentPane" id="instructionsDetails" title="Character Details"
+        doLayout="false">
         <div class="moduleSection">
             <p>
                 The biggest part of OCP is selecting your character's details. Whether you have an
@@ -263,7 +265,8 @@
     </div>
 
     <!-- Leveling Order -->
-    <div dojoType="dijit.layout.ContentPane" id="instructionsOrder" title="Leveling Order">
+    <div dojoType="dijit.layout.ContentPane" id="instructionsOrder" title="Leveling Order"
+        doLayout="false">
         <div class="moduleSection">
             <p>
                 The <span class="plannerSection">Leveling Order</span> is the order that the
@@ -305,7 +308,8 @@
     </div>
 
     <!-- Leveling Results -->
-    <div dojoType="dijit.layout.ContentPane" id="instructionsResults" title="Leveling Results">
+    <div dojoType="dijit.layout.ContentPane" id="instructionsResults" title="Leveling Results"
+        doLayout="false">
         <div class="moduleSection">
             <p>
                 The information in <span class="plannerSection">Leveling Results</span> is the

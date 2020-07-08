@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -43,15 +43,13 @@ ocp.contact = {
     // Private: The set of decoding letter children
     _letterDecoders: [],
 
+    // Private: Whether the unpacked contents have been initialized or not
+    _unpackedInitialized: false,
+
 
     // Public: Initialize ourselves
     initialize: function () {
-
-        // Initialize the dialog
         this._initializeDialog();
-
-        // Initialize the unpacked address container inside the dialog
-        this._initializeUnpacked();
     },
 
 
@@ -84,36 +82,45 @@ ocp.contact = {
     // Private: Initialize the unpacked email address contents of the dialog
     _initializeUnpacked: function () {
 
-        // Unpack the email address
-        this._unpackedAddress = dojo.map(this._packedAddress, function (chCode) {
-            return String.fromCharCode(chCode)
-        }).join('');
+        // Only run this once
+        if (!this._unpackedInitialized) {
 
-        // Build a hyperlink to the unpacked address inside the decoding container
-        // Start it hidden so any text decoration isn't rendered, but it still takes up space
-        this._unpackedContainer = dojo.create('a', {
-            href: 'mailto:' + this._unpackedAddress + '?subject=Oblivion%20Character%20Planner',
-            visibility: 'hidden'
-        }, this._decodeContainer);
+            // Unpack the email address
+            this._unpackedAddress = dojo.map(this._packedAddress, function (chCode) {
+                return String.fromCharCode(chCode)
+            }).join('');
 
-        // The hyperlink's contents are a span for each letter so we can obtain
-        // boundary/position information for each letter.
-        // Every letter starts hidden so spacing/sizing is correct, but it's still invisible
-        for (var letterIndex in this._unpackedAddress) {
-            dojo.create('span', {
-                innerHTML: this._unpackedAddress.charAt(letterIndex),
-                visibility: 'hidden'
-            }, this._unpackedContainer);
+            // Build a hyperlink to the unpacked address inside the decoding container
+            // Start it hidden so any text decoration isn't rendered, but it still takes up space
+            this._unpackedContainer = dojo.create('a', {
+                href: 'mailto:' + this._unpackedAddress + '?subject=Oblivion%20Character%20Planner',
+                style: { visibility: 'hidden' }
+            }, this._decodeContainer);
+
+            // The hyperlink's contents are a span for each letter so we can obtain
+            // boundary/position information for each letter.
+            // Every letter starts hidden so spacing/sizing is correct, but it's still invisible
+            for (var letterIndex in this._unpackedAddress) {
+                dojo.create('span', {
+                    innerHTML: this._unpackedAddress.charAt(letterIndex),
+                    style: { visibility: 'hidden' }
+                }, this._unpackedContainer);
+            }
+
+            // Center the unpacked container in the decode container
+            var dcBox = dojo.contentBox(this._decodeContainer);
+            var ucBox = dojo.marginBox(this._unpackedContainer);
+            //console.log(dcBox, ucBox, dojo.position(this._decodeContainer),
+            //    dojo.position(this._unpackedContainer));
+            dojo.style(this._unpackedContainer, {
+                top:  Math.floor((dcBox.h - ucBox.h) / 2) + 'px',
+                left: Math.floor((dcBox.w - ucBox.w) / 2) + 'px',
+                position: 'absolute'
+            });
+
+            // Note that we've already initialized the unpacked data
+            this._unpackedInitialized = true;
         }
-
-        // Center the unpacked container in the decode container
-        var dcBox = dojo.contentBox(this._decodeContainer);
-        var ucBox = dojo.marginBox(this._unpackedContainer);
-        dojo.style(this._unpackedContainer, {
-            top:  Math.floor((dcBox.h - ucBox.h) / 2) + 'px',
-            left: Math.floor((dcBox.w - ucBox.w) / 2) + 'px',
-            position: 'absolute'
-        });
     },
 
 
@@ -136,6 +143,10 @@ ocp.contact = {
     // Public: Called when the contact dialog is shown
     onShow: function () {
         //console.debug('entered onShow');
+
+        // Initialize the unpacked content
+        // We need to wait for the dialog to be shown so the decode container is properly sized
+        this._initializeUnpacked();
 
         // Ensure the unpacked container is completely invisible
         this._setUnpackedVisible(false);

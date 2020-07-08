@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -606,7 +606,7 @@ ocp.level = {
         }
 
         // TODO: Can check that no attr got more than 10 skill points?
-        // TODO: Or can the algoritm use a minor for the attr and waste a major for the levelup?
+        // TODO: Or can the algorithm use a minor for the attr and waste a major for the levelup?
 
 
         // All checks passed, so return success

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ###############################################################################
-# (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+# (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 #
 # License:
 # You are free to use, copy, or modify this software provided it remains free
@@ -158,8 +158,8 @@ scripts/ocp-order.js
 scripts/ocp-level.js
 scripts/ocp-results.js
 scripts/ocp-nullis.js
-scripts/widget/TitledContentPane.js
 scripts/widget/LabeledHorizontalSlider.js
+scripts/widget/TitledContentPane.js
 ocpsetup.bash
 test/NOTES.txt
 EOF
@@ -420,7 +420,7 @@ function gimp-png-to-jpg {
             ;                     1 force creation of a baseline JPEG
             ;                       0 frequency of restart markers
             ;                         in rows, 0 = no restart markers
-            ;                         0 DCT algoritm to use
+            ;                         0 DCT algorithm to use
    )
 )
 (dmmConvertPNGtoJPG "$x" "$f")

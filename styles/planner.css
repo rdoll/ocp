@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 /*===========================================================================*\
-|* (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+|* (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 |*
 |* License:
 |* You are free to use, copy, or modify this software provided it remains free
@@ -23,10 +23,9 @@
 \*---------------------------------------------------------------------------*/
 
 /* Set up the main pane for the planner */
-/* TODO: With all attrs and skills at max, leveling details gets a horizontal scrollbar */
 #planner {
     min-width: 920px;
-    min-height: 670px;
+    min-height: 680px;
     border: 1px solid #ccc
 }
 
@@ -71,7 +70,6 @@
 }
 
 /* A list of attribute details */
-/* TODO: All 100's for the coreAttrs exceeds one line */
 #plannerInputPane .attrList {
     margin: 0 0 0 1em;
     padding: 0;
@@ -253,30 +251,36 @@
 ** Race overview gender selection sub-dialog specific styles
 */
 
-/* Add a nice border to the dialog */
-.raceGenderDialog {
-    border: 2px solid #ccc;
-    padding: 0.5em;
+/* Ensure the gender dialog is never smaller than the title */
+.genderDialog {
+    min-width: 255px;
 }
 
-/* When the dialog has focus, change the border's color */
-.raceGenderDialog:hover, .raceGenderDialog:focus {
-    border: 2px solid #aaa;
+/* Set a smaller amount of padding for this small dialog */
+.genderDialog .dijitDialogPaneContent {
+    padding: 5px !important;
+}
+
+/* Add a nice border to the dialog and center the content */
+.genderDialog .genderDialogContainer {
+    border: 2px solid #ccc;
+    padding: 0.5em;
+    text-align: center;
 }
 
 /* Make the race name stand out a bit */
-.raceGenderDialog .raceName {
+.genderDialog .raceName {
     font-weight: bold;
 }
 
 /* Add space above buttons */
-.raceGenderDialog .dijitButton {
-    margin-top: 0.5em;
+.genderDialog .dijitButton {
+    margin-top: 1em;
 }
 
 /* Add space between two buttons */
-.raceGenderDialog .dijitButton + .dijitButton {
-    margin-left: 1em;
+.genderDialog .dijitButton + .dijitButton {
+    margin-left: 2em;
 }
 
 
@@ -646,7 +650,6 @@
 }
 
 /* The name of something you can select */
-/* TODO: delete this? */
 #skillContainer .selectedName {
 /*    font-weight: bold; */
 }

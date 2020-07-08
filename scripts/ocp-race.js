@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+** (C) Copyright 2009-2010 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -372,16 +372,6 @@ ocp.race = {
                 _this._initializeDialog();
         });
 
-        // When the race dialog is closed, hide any gender dialog
-        dojo.connect(this._raceDialog, 'onCancel', function () {
-            ocp.race.closeGenderDialog();
-        });
-
-        // When the current tab changes, hide any gender dialog
-        dojo.subscribe('raceTabContainer-selectChild', function () {
-            ocp.race.closeGenderDialog();
-        });
-
         // Select an initial race
         this._select('Argonian', 'Male');
     },
@@ -440,7 +430,7 @@ ocp.race = {
                     '<img src="' + this.IMAGE_DIR + this._data[race].image + '" ' +
                         'class="raceImage" alt="[' + race + ' Image]" ' +
                         'title="Select ' + race + '" ' +
-                        'onClick="ocp.race.openGenderDialog(\'' + race + '\', event)" ' +
+                        'onClick="ocp.race.openGenderDialog(\'' + race + '\')" ' +
                     '/>' +
                     '<div class="raceDetails">' +
                         '<div class="raceName">' + race + '</div>' +
@@ -597,89 +587,55 @@ ocp.race = {
     },
 
 
-    // Public: Open a gender selection dialog for the selected overview image
-    openGenderDialog: function(race, event) {
-        console.debug('entered openGenderDialog:', race, event);
+    // Public: Open a gender selection dialog for the given race
+    openGenderDialog: function(race) {
+        console.debug('entered openGenderDialog:', race);
 
-        // Store the currently open dialog's race (if any)
-        var currentRace = this._genderDialog ? this._genderDialog.race : undefined;
+        // Create a new dialog for this race
+        // Since these are dynamically recreated for each race, be paranoid and use
+        // classes instead of ids to apply styles
+        this._genderDialog = new dijit.Dialog({
+            title: "Choose Your Character's Gender",
+            class: 'genderDialog',
+            content:
+                '<div class="genderDialogContainer">' +
+                    '<div>' +
+                        'Gender of your <span class="raceName">' + race + '</span> character?' +
+                    '</div>' +
+                    '<button dojoType="dijit.form.Button" ' +
+                        'type="submit" ' +
+                        'title="Select Male ' + race + '" ' +
+                        'onclick="ocp.race.selectGenderDialog(\'' + race + '\', \'Male\')" ' +
+                    '>' +
+                        'Male' +
+                    '</button>' +
+                    '<button dojoType="dijit.form.Button" ' +
+                        'type="submit" ' +
+                        'title="Select Female ' + race + '" ' +
+                        'onclick="ocp.race.selectGenderDialog(\'' + race + '\', \'Female\')" ' +
+                    '>' +
+                        'Female' +
+                    '</button>' +
+                '</div>'
+        });
 
-        // Close any currently open dialog
-        this.closeGenderDialog();
-
-        // If the new race is different from the current race, open the new dialog
-        if (currentRace != race) {
-
-            // Note that TooltipDialog's are supposed to be controlled by another widget
-            // (typically a dijit.form.DropDownButton). Rather than mess with creating a
-            // fake/invisible button, just work with the TooltipDialog directly.
-
-            // Create a tooltip dialog storing our race
-            var dialog = new dijit.TooltipDialog({
-                race: race,
-                content:
-                    '<div class="raceGenderDialog">' +
-                        '<div>' +
-                            'Gender of your <span class="raceName">' + race + '</span> ' +
-                            'character?' +
-                        '</div>' +
-                        '<button dojoType="dijit.form.Button" ' +
-                            'type="submit" ' +
-                            'title="Select Male ' + race + '" ' +
-                            'onclick="ocp.race.selectGenderDialog(\'' + race +
-                                '\', \'Male\')" ' +
-                        '>' +
-                            'Male' +
-                        '</button>' +
-                        '<button dojoType="dijit.form.Button" ' +
-                            'type="submit" ' +
-                            'title="Select Female ' + race + '" ' +
-                            'onclick="ocp.race.selectGenderDialog(\'' + race +
-                                '\', \'Female\')" ' +
-                        '>' +
-                            'Female' +
-                        '</button>' +
-                    '</div>'
-            });
-
-            // Initialize and prep the dialog for display
-            dialog.startup();
-            dijit.popup.prepare(dialog.domNode);
-
-            // Save the current focus in the race dialog
-            dialog.savedFocus = dijit.getFocus(this._raceDialog);
-
-            // Display the dialog at the overall position the user clicked
-            dijit.popup.open({
-                popup: dialog,
-                parent: dijit.byId('raceOverviewPane'), // Fake parent is the overview pane
-                x: event.clientX,
-                y: event.clientY,
-                orient: 'L',
-                onClose: function () {
-                    console.debug('genderDialog onClose');
-                },
-                onCancel: function () {
-                    console.debug('genderDialog onCancel');
-                    ocp.race.closeGenderDialog();
-                },
-                onExecute: function () {
-                    // This never seems to get called, but keep just in case
-                    console.debug('genderDialog onExecute');
-                    ocp.race.closeGenderDialog();
-                }
-            });
-
-            // Store the dialog for later referencing
-            this._genderDialog = dialog;
-        }
+        // Show the dialog
+        this._genderDialog.show();
     },
 
 
     // Public: Select a race and gender from the gender selection dialog and close everything
     selectGenderDialog: function(race, gender) {
         console.debug('entered selectGenderDialog:', race, gender);
+
         ocp.race.select(race, gender);
+
+        // Since we are going to close the race dialog too, stop the gender dialog from
+        // trying to restore its focus after its fade out animation (since we will have
+        // closed the race dialog long before then so trying to refocus to a race dialog
+        // element will understandably fail).
+        this._genderDialog.refocus = false;
+
         this.closeGenderDialog();
         this._raceDialog.hide();
     },
@@ -689,11 +645,8 @@ ocp.race = {
     closeGenderDialog: function() {
         if (this._genderDialog) {
             console.debug('entered closeGenderDialog');
-            dijit.popup.close(this._genderDialog);
-            // TODO: If this got called because the user switched to the Details tab,
-            // TODO: this actually sets the focus to the Overview tab -- which is wrong.
-            dijit.focus(this._genderDialog.savedFocus);
-            this._genderDialog.destroyRecursive();
+            this._genderDialog.hide();
+            this._genderDialog.destroy();
             delete this._genderDialog;
             this._genderDialog = null;
         }
@@ -723,9 +676,6 @@ ocp.race = {
 
                 // Notify that something has changed
                 ocp.notifyChanged();
-
-                // Clear any lingering gender selection dialog (tho there shouldn't be one)
-                this.closeGenderDialog();
             } else {
                 var msg = 'Unknown gender "' + gender + '" selected for race "' + race + '".';
                 console.error(msg);
