@@ -1,7 +1,7 @@
 #!/bin/echo Must be sourced via .
 
 ###############################################################################
-# (C) Copyright 2009 by Richard Doll
+# (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 #
 # License:
 # You are free to use, copy, or modify this software provided it remains free
@@ -87,6 +87,7 @@ styles/ocp.css
 styles/planner.css
 scripts/ocp.js
 scripts/ocp-loader.js
+scripts/ocp-contact.js
 scripts/ocp-input.js
 scripts/ocp-race.js
 scripts/ocp-birth.js

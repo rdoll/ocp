@@ -1,5 +1,5 @@
 <!--
-    (C) Copyright 2009 by Richard Doll
+    (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 
     License:
     You are free to use, copy, or modify this software provided it remains free
@@ -26,22 +26,19 @@
 
 <ocp>
     <knownissues>
-        <issue type="feature"
-            name="Only officially supported browser is FireFox 3.0/3.5">
+        <issue type="feature" name="Only officially supported browser is FireFox 3.0/3.5">
             While OCP is being designed with browser portability in mind, it only officially
             runs on FireFox 3.0/3.5 because OCP is being developed on it. All other standards
             compliant browsers may or may not work, but no version of IE works yet. In
             future OCP versions, the major releases of Internet Explorer, Opera, Safari, and
-            Google Chrome will be supported.
+            Google Chrome will be explicitly supported.
         </issue>
 
-        <issue type="feature"
-            name="Missing full Instructions, FAQ, and About content">
-            The full content for these will be added in a future version.
+        <issue type="feature" name="Missing complete Instructions">
+            The full instructions will be added in a future version.
         </issue>
 
-        <issue type="bug"
-            name="Need to report when OCP and/or Dojo scripts didn&apos;t run">
+        <issue type="bug" name="Need to report when OCP and/or Dojo scripts don&apos;t run">
             Right now there is just a noscript block, but it doesn&apos;t detect when
             the OCP scripts are run but the o.aolcdn.com Dojo ones are not.
         </issue>
@@ -65,7 +62,26 @@
     </knownissues>
 
     <changelog>
-        <version name="0.7.1" type="beta" scope="public" date="TBD">
+        <version name="0.7.2" type="beta" scope="public" date="13 Aug 2009">
+            <change type="feature" name="FAQ framework completed">
+                The FAQ module framework was completed so FAQ questions and answers can be
+                easily added/modified.
+            </change>
+            <change type="function" name="FAQ content completed">
+                An initial pass of FAQ content was completed and will be maintained from now on.
+            </change>
+            <change type="feature" name="About content completed">
+                The Credits, License, and Warranty information was completed and
+                will be maintained from now on.
+            </change>
+            <change type="function"
+                name='Added fun email address "decoder" dialog for contacting me'>
+            </change>
+            <change type="bug"
+                name='Added "still in development" scope to Change Log version types' />
+        </version>
+
+        <version name="0.7.1" type="beta" scope="public" date="02 Aug 2009">
             <change type="feature" name="Release Notes parsed from XML source completed">
                 The Release Notes module now parses the release notes in XML to
                 generate the Known Issues and Change Log.
@@ -76,11 +92,10 @@
                 will be maintained from now on.
             </change>
 
-            <change type="function" name="Cleanly catch and report all AJAX module errors">
-            </change>
+            <change type="function" name="Cleanly catch and report all AJAX module errors" />
         </version>
 
-        <version name="0.7.0" type="beta" scope="development" date="27 Jul 2009">
+        <version name="0.7.0" type="beta" scope="private" date="27 Jul 2009">
             <change type="feature" name="Created AJAX framework for all OCP modules">
                 OCP was partioned into modules so each module could be fully rendered
                 without impacting the space of the others. All modules (including the
@@ -88,8 +103,7 @@
             </change>
 
             <change type="bug"
-                name="Nullis character data is safely set after the Planner has been loaded">
-            </change>
+                name="Nullis character data is safely set after the Planner has been loaded" />
         </version>
 
         <version name="0.6.0" type="beta" scope="public" date="17 Jul 2009">

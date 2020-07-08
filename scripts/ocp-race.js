@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll
+** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -423,7 +423,9 @@ ocp.race = {
                     '/>' +
                     '<div class="raceDetails">' +
                         '<div class="raceName">' + race + '</div>' +
-                        '<div class="raceDescription">' + this._data[race].description + '</div>' +
+                        '<div class="raceDescription">' +
+                            this._data[race].description +
+                        '</div>' +
                         '<div class="raceListHeader">Special Abilities and Weaknesses:</div>' +
                         '<ul class="raceSpecialList">';
 

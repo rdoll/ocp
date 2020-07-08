@@ -1,5 +1,5 @@
 <!--
-    (C) Copyright 2009 by Richard Doll
+    (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 
     License:
     You are free to use, copy, or modify this software provided it remains free
@@ -14,5 +14,103 @@
 
 <!-- Frequently Asked Questions -->
 <div id="faq">
-    Sorry, these is no FAQ yet...
+    <div id="faqButtons">
+        <button dojoType="dijit.form.Button" onclick="ocp.faqExpandAll(true)">Expand All</button>
+        <button dojoType="dijit.form.Button" onclick="ocp.faqExpandAll(false)">Collapse All</button>
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title="My existing character's attributes/skills are beyond the range of OCP's inputs."
+    >
+        <p>
+            The attribute and skill inputs for existing characters only support the range of
+            unmodified values. When inputing your values, make sure your character is not under
+            any spell, ability, or item effects and has no damaged attributes or skills.
+        </p>
+        <p>
+            Additionally, OCP does not support skills lowered below their initial values by a
+            jail sentence nor attributes/skills raised beyond 100 from items (like the
+            <a href="http://www.uesp.net/wiki/Oblivion:Oghma_Infinium">Oghma Infinium</a>) or
+            quest rewards (like from
+            <a href="http://www.uesp.net/wiki/Oblivion:Origin_of_the_Gray_Prince">Origin of the
+            Gray Prince</a>).
+        </p>
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title="Why doesn't the leveling algorithm assume skills can be lowered by serving a jail sentence or increased by item/quest rewards?"
+    >
+        Not only would this significantly complicate the already complex leveling algorithm, but
+        not everyone believes this is an acceptable way to continue leveling after all major
+        skills have been maxed.
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title="How can I do a side-by-side comparison of different character configurations?"
+    >
+        OCP does't support any innate way to do this because it would overly complicate the
+        interface. It's best to simply open a new instance of OCP in its own browser window for
+        every character configuration you want to compare.
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title="Why did you write OCP?"
+    >
+        <p>
+            When I got Oblivion, I hit the net figure out how I should configure a character for
+            my playstyle. While I found lots of info about the complexities and pitfalls of
+            Oblivion's leveling process, the only concrete character info was templates that
+            others had used. Character templates are great as examples, but if you want to tweak
+            one aspect of a template, you are usually at a loss to gauge the full impact of the
+            change.
+        </p>
+        <p>
+            It was obvious that a tool was needed, but the only one I found was purely for setup
+            -- it didn't do any analysis. For me, the key question is "Can this character
+            configuration maximize all attributes with a less-than-perfect playstyle?" While
+            playing the game, I don't want to be a slave to the occassional stray Mercantile,
+            Acrobatics, or Athletics skill up. After considering the options for a tool with this
+            kind of analysis, I settled on a web browser application so it would be easily
+            accessible to all Oblivion users.
+        </p>
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title="Who is this Nullis character?"
+    >
+        <p>
+            Nullis is my first Oblivion character and one that I created using OCP. He is a Male
+            Khajiit specializing in Stealth Bow attacks -- a kind of medieval sniper. Because of
+            OCP, I was able to craft a custom class that allows me to maximize all attributes
+            while being able to safely waste a few skill points each level.
+        </p>
+        <p>
+             For fun, I added the complete details of Nullis into OCP. When you
+             <a href="javascript:ocp.nullis.safeSetNow();">load Nullis' data</a>, you can see his
+             New Character data, a snapshot of his Existing Character data, and the Leveling Order
+             I (roughly) followed. Additionally, I added the actual past level data to the
+             Leveling Details results. These details are just for fun and they are lost upon any
+             changes to the <span class="sectionName">Character Details</span> or <span
+             class="sectionName">Leveling Order</span>.
+         </p>
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title="Why doesn't OCP have more detailed leveling controls like the historical level up data you added with Nullis?"
+    >
+        One of the goals for OCP is that it needs to be easy to use. The leveling paradigm in
+        Oblivion is complex enough, but if users have to set 100 different inputs just to get a
+        meaningful result, OCP would be useless to all but the most hardcore players. Therefore,
+        beyond the requisite <span class="sectionName">Character Data</span>, OCP uses a simple
+        <span class="sectionName">Leveling Order</span> to control the leveling algoritm.
+    </div>
+
+    <div dojoType="dijit.TitlePane" class="faqItem" open="false"
+        title='Why does your email address have to be "decoded"?'
+    >
+        Some spam bots can parse through web page sources looking for email addresses, so I
+        encoded mine. It's not strictly necessary, but it's also an excuse to make a visually fun
+        decoding process when you click on
+        <a href="javascript:ocp.contact.dialog.show()">Richard Doll</a>.
+    </div>
 </div>

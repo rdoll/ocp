@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll
+** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -635,7 +635,8 @@ ocp.cclass.classDialog = {
 
             // For each attribute, list a bonus or nothing
             for (var attr in ocp.coreAttrs) {
-                var bonus = (dojo.indexOf(data.favoredAttrs, attr) == -1 ? 0 : ocp.ATTR_BONUS_FAV);
+                var bonus =
+                    (dojo.indexOf(data.favoredAttrs, attr) == -1 ? 0 : ocp.ATTR_BONUS_FAV);
                 det +=
                     '<td class="numeric' + (bonus > 0 ? ' bonus' : '') + '">' +
                         (bonus > 0 ? bonus : '' )+

@@ -1,7 +1,7 @@
 @charset "utf-8";
 
 /*===========================================================================*\
-|* (C) Copyright 2009 by Richard Doll
+|* (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 |*
 |* License:
 |* You are free to use, copy, or modify this software provided it remains free
@@ -37,7 +37,7 @@ html, body {
 \*---------------------------------------------------------------------------*/
 
 /* Make the no scripts supported warning message stand out */
-noscript div {
+noscript > div:first-child {
     color: red;
     font-weight: bold;
     font-size: 125%;
@@ -101,13 +101,22 @@ noscript div {
 ** Home module
 */
 
+/* We don't want a margin between the titles and their content */
 #home .moduleTitle + p, #home .moduleSubtitle + p {
     margin-top: 0;
 }
 
+/* Highlight the bad/good key points */
 #home .homeOcpReason {
     color: red;
     margin: 1em 2em;
+}
+#home .homeOcpSolution {
+    color: green;
+    font-weight: bold;
+    font-size: larger;
+    text-align: center;
+    margin: 0;
 }
 
 /* Align list bullets with the start of normal text */
@@ -121,6 +130,7 @@ noscript div {
 }
 
 
+
 /*
 ** Instructions module
 */
@@ -130,9 +140,59 @@ noscript div {
     margin-top: 0.5em;
 }
 
-/* The name of a specific part of the OCP planner */
-#instructions .sectionName {
-    font-weight: bold;
+
+
+/*
+** FAQ module
+*/
+
+
+/* Initialize a counter to number the questions */
+#faq {
+    counter-reset: faqQuestion;
+}
+
+/* The expand/collapse buttons are a little less important than usual buttons */
+#faqButtons {
+    font-size: smaller;
+    margin-bottom: 0.5em;
+}
+
+/* Clear the borders and background of a FAQ item's title */
+#faq .faqItem .dijitTitlePaneTitle {
+    background: #FFFFFF !important;
+    border: 0 !important;
+    outline: 0 !important;
+}
+
+/* Add the question counter to the question */
+#faq .faqItem .dijitTitlePaneTextNode:before {
+    content: counter(faqQuestion) ". ";
+    counter-increment: faqQuestion;
+}
+
+/* Clear the borders for the answer */
+#faq .faqItem .dijitTitlePaneContentOuter {
+    border: 0 !important;
+}
+
+/* Clear the outline when an answer is selected and align it with the question */
+#faq .faqItem .dijitTitlePaneContentInner {
+    padding: 0 2em !important;
+    outline: 0 !important;
+}
+
+/* Add spacing between FAQ items */
+#faq .faqItem + .faqItem {
+    margin-top: 0.5em;
+}
+
+/* Remove all preset paragraph margins, but add spacing between them in a single answer */
+#faq .faqItem p {
+    margin: 0;
+}
+#faq .faqItem p + p {
+    margin-top: 1em;
 }
 
 
@@ -212,6 +272,70 @@ noscript div {
 }
 
 
+/*
+** About module
+*/
+
+/* Make a two column layout:
+** The left column is half width.
+** The right column is a little less than half width (to make a margin) and floated right.
+*/
+#aboutLeftColumn {
+    width: 65%;
+}
+#aboutRightColumn {
+    float: right;
+    width: 33%;
+}
+
+/* Add some space between subsections of each column */
+#aboutLeftColumn > div + div, #aboutRightColumn > div + div {
+    margin-top: 1em;
+}
+
+/* Add a little "new paragraph" space above */
+#about .newPara {
+    margin-top: 1em;
+}
+
+
+/*---------------------------------------------------------------------------*\
+|* Styles for main page dialogs
+\*---------------------------------------------------------------------------*/
+
+/*
+** Contact dialog
+*/
+
+/* When the contact dialog is shown, color the main page to focus attention */
+#contactDialog_underlay {
+    background-color: #999;
+}
+
+/* We shouldn't overflow, but if we do, show scrollbars */
+#contactContentPane {
+    overflow: auto;
+}
+
+#contactContentPane .decodingInProgress {
+    text-decoration: blink;
+    color: red;
+}
+#contactContentPane .decodingComplete {
+    color: green;
+}
+
+/* Decorate the container for the decoding animation */
+/* By sizing this and the fixed size of the intro text, the dialog is sized */
+#contactDecodeContainer {
+    border: 1px solid #ccc;
+    margin-top: 0.5em;
+    width: 300px;
+    height: 50px;
+    position: relative;
+}
+
+
 /*---------------------------------------------------------------------------*\
 |* Generic styles for all content
 \*---------------------------------------------------------------------------*/
@@ -240,6 +364,11 @@ noscript div {
 .majorEmphasis {
     font-weight: bold;
     font-style: italic;
+}
+
+/* The name of a specific part of the planner */
+.sectionName {
+    font-weight: bold;
 }
 
 

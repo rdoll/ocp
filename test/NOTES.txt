@@ -29,6 +29,17 @@ Either need HTML in issue/change details and/or proper contact info.
 
 Select a http://creativecommons.org/ license, add it to file headers,
 and add an icon to the footer for it.
+
+In Change Log, tag each release as public release or dev release and
+use a top level toggle to control showing/hiding them?
+
+Ok that faq's TitlePane title="" attrs go really long?
+
+FAQ's non-expanded titles are a little gray. Override to black?
+
+Keep home.roadrunner.com/~foaminator as home page in about?
+
+Replace all innerHTML references with "content" for compatibility?
 -----
 
 Neal Notes:
@@ -82,3 +93,32 @@ TODO: Use some kind of decoration to indicate a tooltip is available (dashed und
 TODO: Nice set of images (and nice credit page) at http://www.elderstats.com/about/?p=credits
 
 &apos; unsupported in IE?!?
+
+------
+<!-- TODO: Probably can never use these.
+     TODO: W3C FAQ indicates the page/CSS referenced should validate 100% cleanly.
+     TODO: Between the additional tag attributes (e.g. dojoType) and the
+     TODO: browser specific styles (e.g. -moz-border-radius), that will never happen.
+<div id="aboutValidators">
+    <a href="http://validator.w3.org/check?uri=referer">
+        <img src="http://www.w3.org/Icons/valid-xhtml10-blue"
+            alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+    </a>
+    <a href="http://jigsaw.w3.org/css-validator/check/referer">
+        <img style="border:0;width:88px;height:31px"
+            src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+            alt="Valid CSS!" />
+    </a>
+</div>
+-->
+=========
+Publishing Checklist:
+
+- Version number is correct and ocp._initializeVersions's beta literal is correct
+- relnotes.xml has the correct info for this version including the release date
+- images/icons converted to real files instead of links
+- index.html and ocp.css uses o.aolcdn.com instead of local dojotoolkit
+    + includes djConfig baseUrl and modulePaths changes
+- Comment out ocp.loader.hookManagedContainer's preventing caching
+- .htaccess updated to make this version "latest"
+- Upload all except dojotoolkit link, setup.bash file, and test directory

@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll
+** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -22,7 +22,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.7.1',
+    VERSION: '0.7.2',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -234,7 +234,7 @@ var ocp = {
                 attrs[attrName] = domNode.getAttribute(attrName);
             } else {
 
-                // This attr doesn't exist -- barf if it is required
+                // This attr doesn't exist -- throw an error if it is required
                 if (wantedAttrs[attrName]) {
                     throw 'Error: ' + domNode.nodeName + ' element missing required ' +
                         attrName + ' attribute in ' + domNode.baseURI;
@@ -246,16 +246,25 @@ var ocp = {
     },
 
 
+    // Public: Returns a random integer inclusively between the min and max
+    getRandomInt: function (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+
+
     // Initialize ourselves and the main content (but not the planner)
     initialize: function() {
+        console.debug('entered initialize');
+
         // Initialize the version numbers in the about info
         this._initializeVersions();
 
         // Initialize the min/max stats for attributes
         this._initializeAttrs();
 
-        // Initialize the loader
+        // Initialize our main page children
         ocp.loader.initialize();
+        ocp.contact.initialize();
     },
 
 
@@ -309,6 +318,7 @@ var ocp = {
 
     // Public: Initializes the planner module after it has been successfully downloaded
     initializePlanner: function () {
+        console.debug('entered initializePlanner');
 
         // Intialize the planner's children
         // During this initialization, no notifications are allowed
@@ -340,5 +350,14 @@ var ocp = {
         this.order.notifyChanged();
         this.level.notifyChanged();
         this.results.notifyChanged();
+    },
+
+
+    // Public: Expand or collapse all of the FAQ's answers
+    faqExpandAll: function (expanded) {
+        dojo.query('#faq .faqItem').forEach( function (titlePane) {
+            // From closure: expanded
+            dijit.byId(titlePane.id).attr('open', expanded);
+        });
     }
 };

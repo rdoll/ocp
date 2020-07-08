@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll
+** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -385,7 +385,7 @@ ocp.results = {
 
         /*
         ** Now generate the HTML for the new analysis
-        ** TODO: Add "key level snapshots"? e.g. level 10 stats, level 15 stats, level 20 stats, ...
+        ** TODO: Add "key level snapshots"? e.g. level 10/15/20/... stats
         ** TODO: How to handle this for existing characters that may be past some key levels?
         */
 

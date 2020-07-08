@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll
+** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -141,8 +141,8 @@ ocp.loader.relnotes = {
 
             // There are issues -- walk through them
             dojo.create('div', {
-                innerHTML: 'The following known issues and limitations exist in the ' +
-                    'current version of OCP:'
+                innerHTML:
+                    'The following known issues and limitations exist in this version of OCP:'
             }, kiHtmlDom);
             var kiHtmlListNode = dojo.create('dl', null, kiHtmlDom);
             var _this = this;
@@ -154,8 +154,9 @@ ocp.loader.relnotes = {
 
             // There are no issues -- yay for OCP! :D
             dojo.create('div', {
-                innerHTML: 'There are no known issues or limitations for the current ' +
-                    'release of OCP.'
+                innerHTML: 'There are no known issues or limitations in this version of OCP.',
+                // TODO: Could do this in a cleaner way?
+                style: 'margin-bottom: 1em'  // Simulate the bottom-margin of the dl
             }, kiHtmlDom);
         }
     },
@@ -196,13 +197,19 @@ ocp.loader.relnotes = {
         // Create the header for this version from its attributes
         var verAttrs = ocp.getDomNodeAttrs(verNode,
             { name: true, type: false, scope: true, date: false });
+        var verText = 'Version ' + verAttrs.name +
+            ('type' in verAttrs ? ' ' + verAttrs.type : '');
+        if (verAttrs.scope == 'wip') {
+            verText += ' is still in development';
+        } else {
+            verText +=
+                (verAttrs.scope == 'public' ? ' publicly released' : ' privately completed') +
+                ('date' in verAttrs ? ' on ' + verAttrs.date : '');
+        }
         dojo.create('div', {
             id: 'changelogVersion_' + verAttrs.name.replace(/\W/g, '_'),
             class: 'versionTitle',
-            innerHTML: 'Version ' + verAttrs.name +
-                ('type' in verAttrs ? ' ' + verAttrs.type : '') +
-                (verAttrs.scope == 'public' ? ' publicly released' : ' completed') +
-                ('date' in verAttrs ? ' on ' + verAttrs.date : '')
+            innerHTML: verText
         }, verHtmlDom);
 
         // Walk through all changes for this version
@@ -257,6 +264,7 @@ ocp.loader.relnotes = {
 /*
 ** Define a helper class to trap the content download errors for a ContentPane using an href.
 */
+
 dojo.provide('ocp.loader.ManagedModule');
 dojo.declare('ocp.loader.ManagedModule', null, {
 
@@ -308,8 +316,7 @@ dojo.declare('ocp.loader.ManagedModule', null, {
     // Public: Called when the ContentPane's content failed to download
     //         The return value string is set as the ContentPane's content
     onDownloadError: function (error) {
-        console.error('onDownloadError, containerId=', this.containerId,
-            ', error=', error);
+        console.error('onDownloadError, containerId=', this.containerId, ', error=', error);
         return this._errorMessage(error, 'download');
     },
 
@@ -320,8 +327,7 @@ dojo.declare('ocp.loader.ManagedModule', null, {
     // TODO:   the content is never updated. En lieu of a fix, manually set the "fake" content
     // TODO:   and return nothing.
     onContentError: function (error) {
-        console.error('onContentError, containerId=', this.containerId,
-            ', error=', error);
+        console.error('onContentError, containerId=', this.containerId, ', error=', error);
         this._container._setContent(this._errorMessage(error, 'parse'), true);
         return undefined;
     },

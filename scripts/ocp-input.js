@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll
+** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -36,7 +36,8 @@ ocp.input = {
 
     // Public: Set the input data to either a new (true) or existing (false) character
     set isNewChar (newChar) {
-        this._stackContainer.selectChild(newChar ? 'inputNewCharacter' : 'inputExistingCharacter');
+        this._stackContainer.selectChild(
+            newChar ? 'inputNewCharacter' : 'inputExistingCharacter');
         return this.isNewChar;
     },
 

@@ -1,5 +1,5 @@
 /*
-** (C) Copyright 2009 by Richard Doll
+** (C) Copyright 2009 by Richard Doll, All Rights Reserved.
 **
 ** License:
 ** You are free to use, copy, or modify this software provided it remains free
@@ -72,7 +72,9 @@ ocp.birth = {
 
         'The Lover': {
             attributes: {},
-            specials: [ 'Paralyze (touch, duration 10) and lose 120 points of Fatigue once a day' ],
+            specials: [
+                'Paralyze (touch, duration 10) and lose 120 points of Fatigue once a day'
+            ],
             image: 'lover.jpg',
             description: 'Use the Lover&apos;s Kiss power once a day to paralyze an opponent ' +
                 'for 10 seconds at the cost of 120 points of Fatigue.'
@@ -82,7 +84,8 @@ ocp.birth = {
             attributes: { mag:50 },
             specials: [],
             image: 'mage.jpg',
-            description: 'The Mage ability confers a permanent bonus of 50 points to your Magicka.'
+            description: 'The Mage ability confers a permanent bonus of 50 points to your ' +
+                'Magicka.'
         },
 
         'The Ritual': {
