@@ -221,6 +221,9 @@ ocp.cclass = {
     // Private: Currently selected custom class info
     //          When _custom is true, this data supercedes _predefined
     //          Note: No rhyme or reason behind default values
+    // *** Lots of code could be simplified if I added _customData to _data
+    // *** Would use new .custom:boolean property to mark predefined vs. custom
+    // *** Would preclude ever being able to set a custom name, tho (name is _data index)
     _custom: false,
     _customData: {
         specialization: '',
@@ -241,22 +244,23 @@ ocp.cclass = {
     // Private: Return the value of a favored attr
     //          Favorites get a 5 point bonus, others get 0
     _getAttr: function (attr) {
-        return (this._getCurrent().favoredAttrs.indexOf(attr) == -1 ? 0 : ocp.ATTR_BONUS_FAV);
+        return (dojo.indexOf(this._getCurrent().favoredAttrs, attr) == -1
+            ? 0 : ocp.ATTR_BONUS_FAV);
     },
 
     // Private: Get the major/minor base value for a skill
     //          Major skills start at 25 and minor skills at 5
     _getSkillBase: function (skill) {
-        return (this._getCurrent().majorSkills.indexOf(skill) == -1 ?
-            ocp.SKILL_MIN : ocp.SKILL_MAJOR_MIN);
+        return (dojo.indexOf(this._getCurrent().majorSkills, skill) == -1
+            ? ocp.SKILL_MIN : ocp.SKILL_MAJOR_MIN);
     },
 
     // Private: Get the skill specialization value for a skill
     //          Specialized skills get 5 bonus points, others get 0
     //          Note: The game says it's a +10 bonus, but it's actually +5
     _getSkillSpec: function (skill) {
-        return (this._getCurrent().specialization == ocp.skills[skill].spec ?
-            ocp.SKILL_BONUS_SPEC : 0);
+        return (this._getCurrent().specialization == ocp.skills[skill].spec
+            ? ocp.SKILL_BONUS_SPEC : 0);
     },
 
     // Private: Return the total skill value for this skill
@@ -265,47 +269,9 @@ ocp.cclass = {
     },
 
 
-    // Public: getters for all data of the currently selected class
-    get name ()   { return (this._custom ? this._customData.name : this._predefined); },
-    get spec ()   { return this._getCurrent().specialization; },
-    get favs ()   { return this._getCurrent().favoredAttrs; },
-    get majors () { return this._getCurrent().majorSkills; },
-
-    get str () { return this._getAttr('str'); },
-    get int () { return this._getAttr('int'); },
-    get wil () { return this._getAttr('wil'); },
-    get agi () { return this._getAttr('agi'); },
-    get spe () { return this._getAttr('spe'); },
-    get end () { return this._getAttr('end'); },
-    get per () { return this._getAttr('per'); },
-    get luc () { return this._getAttr('luc'); },
-
-    get bla () { return this._getSkill('bla'); },
-    get blu () { return this._getSkill('blu'); },
-    get han () { return this._getSkill('han'); },
-    get alc () { return this._getSkill('alc'); },
-    get con () { return this._getSkill('con'); },
-    get mys () { return this._getSkill('mys'); },
-    get alt () { return this._getSkill('alt'); },
-    get des () { return this._getSkill('des'); },
-    get res () { return this._getSkill('res'); },
-    get mar () { return this._getSkill('mar'); },
-    get sec () { return this._getSkill('sec'); },
-    get sne () { return this._getSkill('sne'); },
-    get acr () { return this._getSkill('acr'); },
-    get ath () { return this._getSkill('ath'); },
-    get lig () { return this._getSkill('lig'); },
-    get arm () { return this._getSkill('arm'); },
-    get blo () { return this._getSkill('blo'); },
-    get hvy () { return this._getSkill('hvy'); },
-    get ill () { return this._getSkill('ill'); },
-    get mer () { return this._getSkill('mer'); },
-    get spc () { return this._getSkill('spc'); },
-
-
     // Public: Returns if a given skill is a major skill for the current class
     isMajor: function (skill) {
-        return (this.majors.indexOf(skill) == -1 ? false : true);
+        return (dojo.indexOf(this._getCurrent().majorSkills, skill) == -1 ? false : true);
     },
 
     // Public: Return the base and specialization values of each skill
@@ -348,14 +314,30 @@ ocp.cclass = {
 
         // There's no real method to pick initial major skills, so just go through the skills
         // per spec until we reach the number we need (which should be all for the first spec).
-        for each (var spec in ocp.specs) {
-            for each (var skill in spec.skills) {
-                data.majorSkills.push(skill);
+        for (var spec in ocp.specs) {
+            var skills = ocp.specs[spec].skills;
+            for (var skillIndex in skills) {
+                data.majorSkills.push(skills[skillIndex]);
                 if (data.majorSkills.length >= ocp.MAJOR_NUM) {
                     return;
                 }
             }
         }
+    },
+
+
+    // Private: Create public data members with the values for the current class
+    _createGetters: function() {
+        for (var attr in ocp.coreAttrs) {
+            this[attr] = this._getAttr(attr);
+        }
+        for (var skill in ocp.skills) {
+            this[skill] = this._getSkill(skill);
+        }
+        var current = this._getCurrent();
+        this.spec = current.specialization;
+        this.favs = current.favoredAttrs;
+        this.majors = current.majorSkills;
     },
 
 
@@ -366,6 +348,10 @@ ocp.cclass = {
         // Set the current class
         this._custom = false;
         this._predefined = predefined;
+
+        // Since lame browsers don't support getters, create public data members
+        // with read-only values for the newly selected class
+        this._createGetters();
     },
 
 
@@ -404,6 +390,10 @@ ocp.cclass = {
         this._customData.favoredAttrs = favs;
         delete this._customData.majorSkills;
         this._customData.majorSkills = majors;
+
+        // Since lame browsers don't support getters, create public data members
+        // with read-only values for the newly selected class
+        this._createGetters();
     },
 
 
@@ -525,7 +515,8 @@ ocp.cclass.classDialog = {
                     '<img src="' + ocp.cclass.IMAGE_DIR + data.image + '" ' +
                         'class="classImage" alt="[' + cclass + ' Image]" ' +
                         'title="Select ' + cclass + '" ' +
-                        'onClick="ocp.cclass.selectPredefined(\'' + cclass + '\')" />' +
+                        'onClick="ocp.cclass.selectPredefined(\'' + cclass + '\')" ' +
+                    '/>' +
                     '<div class="classDetails">' +
                         '<div class="className">' + cclass + '</div>' +
                         '<div class="classDescription">' + data.description + '</div>' +
@@ -560,15 +551,15 @@ ocp.cclass.classDialog = {
         // Start the details table with its header columns
         var det =
             '<table id="classDetailsTable">' +
-                '<colgroup />' +
-                '<colgroup span="8" />' +
-                '<colgroup span="3" class="firstMajor" />' +
-                '<colgroup span="3" class="first" />' +
-                '<colgroup span="3" class="first" />' +
-                '<colgroup span="3" class="first" />' +
-                '<colgroup span="3" class="first" />' +
-                '<colgroup span="3" class="first" />' +
-                '<colgroup span="3" class="first" />' +
+                '<colgroup></colgroup>' +
+                '<colgroup span="8"></colgroup>' +
+                '<colgroup span="3" class="firstMajor"></colgroup>' +
+                '<colgroup span="3" class="first"></colgroup>' +
+                '<colgroup span="3" class="first"></colgroup>' +
+                '<colgroup span="3" class="first"></colgroup>' +
+                '<colgroup span="3" class="first"></colgroup>' +
+                '<colgroup span="3" class="first"></colgroup>' +
+                '<colgroup span="3" class="first"></colgroup>' +
             '<thead>' +
                 '<tr>' +
                     '<th></th>' +
@@ -611,7 +602,7 @@ ocp.cclass.classDialog = {
 
             // For each attribute, list a bonus or nothing
             for (var attr in ocp.coreAttrs) {
-                var bonus = (data.favoredAttrs.indexOf(attr) == -1 ? 0 : ocp.ATTR_BONUS_FAV);
+                var bonus = (dojo.indexOf(data.favoredAttrs, attr) == -1 ? 0 : ocp.ATTR_BONUS_FAV);
                 det +=
                     '<td class="numeric' + (bonus > 0 ? ' bonus' : '') + '">' +
                         (bonus > 0 ? bonus : '' )+
@@ -620,15 +611,16 @@ ocp.cclass.classDialog = {
 
             // For each skill, list a bonus or nothing
             for (var skill in ocp.skills) {
-                var majorBonus = (data.majorSkills.indexOf(skill) == -1 ? 0 : ocp.SKILL_BONUS_MAJOR);
-                var specBonus = (ocp.specs[data.specialization].skills.indexOf(skill) == -1
+                var majorBonus = (dojo.indexOf(data.majorSkills, skill) == -1
+                    ? 0 : ocp.SKILL_BONUS_MAJOR);
+                var specBonus = (dojo.indexOf(ocp.specs[data.specialization].skills, skill) == -1
                     ? 0 : ocp.SKILL_BONUS_SPEC);
                 var bonus = majorBonus + specBonus;
                 det +=
                     '<td class="numeric' + (bonus > 0 ? ' bonus' : '') +
-                        (majorBonus > 0 ? ' major' : '') +
-                        '">' +
-                        (bonus > 0 ? bonus : '' )+
+                        (majorBonus > 0 ? ' major' : '') + '"' +
+                    '>' +
+                        (bonus > 0 ? bonus : '' ) +
                     '</td>';
             }
 
@@ -678,7 +670,7 @@ ocp.cclass.classDialog = {
         // Initialize the favored attributes
         var cus = '<div class="customInputHeader">Favored Attributes:</div>';
         for (var attr in ocp.coreAttrs) {
-            var isFav = (customData.favoredAttrs.indexOf(attr) == -1 ? false : true);
+            var isFav = (dojo.indexOf(customData.favoredAttrs, attr) == -1 ? false : true);
             var inputId = 'favCheck_' + attr;
             cus +=
                 '<input dojoType="dijit.form.CheckBox" type="checkbox" ' +
@@ -725,8 +717,9 @@ ocp.cclass.classDialog = {
                     '<tbody>';
 
                 // Build a row for each skill
-                for each (var skill in coreAttr.skills) {
-                    var isMajor = (customData.majorSkills.indexOf(skill) == -1 ? false : true);
+                for (var skillIndex in coreAttr.skills) {
+                    var skill = coreAttr.skills[skillIndex];
+                    var isMajor = (dojo.indexOf(customData.majorSkills, skill) == -1 ? false : true);
                     var inputId = 'classMajorCheck_' + skill;
                     cus +=
                         '<tr>' +
@@ -844,7 +837,9 @@ ocp.cclass.classDialog = {
         console.debug('entered classDialog.specRadioChanged', spec, selected);
 
         // For the skills affected, add or remove the "is specialized" class
-        for each (var skill in ocp.specs[spec].skills) {
+        var skills = ocp.specs[spec].skills;
+        for (var skillIndex in skills) {
+            var skill = skills[skillIndex];
             if (selected) {
                 dojo.addClass(this._majorLabel[skill], 'skillIsSpecialized');
             } else {
@@ -935,7 +930,7 @@ ocp.cclass.classDialog = {
         var customData = ocp.cclass._customData;
         for (var attr in ocp.coreAttrs) {
             this._favCheckbox[attr].attr('value',
-                (customData.favoredAttrs.indexOf(attr) == -1 ? false : true));
+                (dojo.indexOf(customData.favoredAttrs, attr) == -1 ? false : true));
         }
         for (var spec in ocp.specs) {
             this._specRadio[spec].attr('value',
@@ -943,7 +938,7 @@ ocp.cclass.classDialog = {
         }
         for (var skill in ocp.skills) {
             this._majorCheckbox[skill].attr('value',
-                (customData.majorSkills.indexOf(skill) == -1 ? false : true));
+                (dojo.indexOf(customData.majorSkills, skill) == -1 ? false : true));
         }
 
         // Done with the many changes, so update validity

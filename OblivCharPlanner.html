@@ -5,11 +5,21 @@
 
 <!--
     Author: Richard Doll
-    Copyright (C) 2009 by Richard Doll
+    (C) Copyright 2009 by Richard Doll
     Written with Dojo 1.3.1
-    Developed on FireFox 3.0.*, but should be DOM and JavaScript 1.5 compatible.
-*** "for each" and array "indexOf" are JavaScript 1.6 constructs...
-*** Need to test on IE or warn if user isn't using FireFox ***
+    Developed on FireFox 3.0.*.
+
+    For IE compatibility (IE parses this as HTML because XHTML is unsupported),
+    this roughly follows http://www.w3.org/TR/xhtml-media-types/
+    The key difference is elements that _can_ have contents do NOT use /> shorthand.
+
+    For JavaScript browser compatibility:
+    http://en.wikipedia.org/wiki/Comparison_of_layout_engines_(ECMAScript)
+    Using "for" (and dereferencing an index) instead of "for each"
+    Using "dojo.indexOf" instead of "Array.indexOf"
+    Since IE doesn't support getters, converted them to public data members,
+    to run-time generated read-only public data members, and/or to functions.
+
 *** Need license details and copyright info atop every file
 *** Globally replace title="" attributes with Tooltips?
 *** Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
@@ -40,11 +50,11 @@
     <!-- Load styles (Dijit theme followed by OCP specific) -->
     <!-- *** Add charset="utf-8" to all <link> tags? -->
     <!-- *** Want these styles too? http://o.aolcdn.com/dojo/1.3/dojo/resources/dojo.css -->
+    <!--
     <link rel="stylesheet" type="text/css"
         href="http://o.aolcdn.com/dojo/1.3/dijit/themes/soria/soria.css" />
-    <!--
-    <link rel="stylesheet" type="text/css" href="dojotoolkit/dijit/themes/soria/soria.css" />
     -->
+    <link rel="stylesheet" type="text/css" href="dojotoolkit/dijit/themes/soria/soria.css" />
     <link rel="stylesheet" type="text/css" href="styles/ocp.css" />
 
     <!-- Configure and load the Dojo toolkit -->
@@ -78,14 +88,14 @@
 
             // The base URL for our custom modules is our current directory
             // Required for XD CDN -- comment out for local Dojo installation
-            baseUrl: './',
+            //baseUrl: './',
 
             // Our custom ocp resources are located under our ./scripts/widget directory
             // (which makes the name of our resources ocp.widget.*)
             // Use top for local Dojo and bottom for XD CDN installation
             modulePaths: {
-                //'ocp': '../../scripts'
-                'ocp': 'scripts'
+                'ocp': '../../scripts'
+                //'ocp': 'scripts'
             },
 
             // Called after everything on the page and everything in djConfig.require has loaded
@@ -112,10 +122,10 @@
             }
         };
     //]]></script>
-    <!--
     <script type="text/javascript" src="dojotoolkit/dojo/dojo.js"></script>
-    -->
+    <!--
     <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"></script>
+    -->
 
     <!-- Load the OCP scripts in order (no initialization allowed yet) -->
     <script type="text/javascript" src="scripts/ocp.js"></script>
@@ -140,26 +150,41 @@
         not support JavaScript or you need to enable it for these pages.</h3>
     </noscript>
 
-    <p>Something about how to use this thing...</p>
+    <!--- *** Add complete usage instructions -->
+    <p>
+        Complete usage instructions will accompany the full release, but essentially
+        this browser-based tool can be used to evaluate the potential maximums of any
+        new or existing Oblivion character. For details on why this is important and some
+        strategies for addressing the "leveling problem", the
+        articles at <a href="http://www.uesp.net/">UESP</a> are highly recommended (especially
+        <a href="http://www.uesp.net/wiki/Oblivion:Leveling">Leveling</a>,
+        <a href="http://www.uesp.net/wiki/Oblivion:Efficient_Leveling">Efficient Leveling</a>, and
+        <a href="http://www.uesp.net/wiki/Oblivion:Character_Creation">Character Creation</a>).
+    </p>
 
     <!-- Better warn the user about beta issues -->
     <!-- Use inline styles so this warning can be easily (and hopefully soon) removed -->
     <div style="background-color: #ccc; border: 1px solid black; padding: 5px; margin: 10px; width: 880px">
         <div>
-            <span style="font-weight: bold; font-style: italic; color: red;">Warning:</span>
-            This <b>beta</b> is still in development and has the following known issues and limitations:
+            <span style="font-weight: bold; font-style: italic; color: red;">Important Note:</span>
+            This fully functional <b>beta</b> is still in development and has the following
+            known issues and limitations:
             <ol>
                 <li>
                     FireFox 3.0.* is the only officially supported browser. All
                     other browsers may or may not work (IE is known NOT to work).
                 </li>
                 <li>
-                    This uses the Dojo Toolkit from the AOL CDN so you must allow
-                    JavaScript from both this server and from o.aol.cdn.
+                    You must allow JavaScript on this server and from o.aolcdn.com.
+                    For speed, the AOL CDN provides a "local" copy of the Dojo Toolkit.
                 </li>
                 <li>
-                    There is a small memory leak on page loading. After doing many,
-                    many page reloads, you should close and reopen your browser.
+                    There may be a small memory leak on page loading. After doing many,
+                    many page reloads, you should close/reopen your browser.
+                </li>
+                <li>
+                    The colors/styles are currently minimal, yet (hopefully) informative.
+                    Upon release, the colors/styles will be made much "sexier".
                 </li>
             </ol>
         </div>
@@ -328,13 +353,14 @@
     <!-- Footer with about info -->
     <div id="aboutFooter">
         <div id="aboutPrograms">
-            Using <a href="http://www.dojotoolkit.org/">Dojo Toolkit v<span id="dojoVersion" /></a>
+            Using
+            <a href="http://www.dojotoolkit.org/">Dojo v<span id="dojoVersion">-none-</span></a>
         </div>
 
         <div id="aboutAuthors">
-            <!-- *** Put email addy link here? -->
+            <!-- *** Put email addy link here? Encoded in some way, perhaps? -->
             <div>&copy;Copyright 2009 Richard Doll</div>
-            <div>Oblivion Character Planner (OCP) version <span id="ocpVersion" /></div>
+            <div>Oblivion Character Planner (OCP) version <span id="ocpVersion">-none-</span></div>
         </div>
 
         <div id="aboutImages">

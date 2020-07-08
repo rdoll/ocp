@@ -717,13 +717,13 @@ html, body {
 
 /* The title bar is basically dijitDialogTitleBar without the moveable/button stuff */
 .soria .ocpTitledPaneTitleBar {
-/*
     background: #FAFAFA url(../dojotoolkit/dijit/themes/soria/images/titleBar.png)
         repeat-x scroll left top;
-*/
+/*
     background: #FAFAFA
         url(http://o.aolcdn.com/dojo/1.3.1/dijit/themes/soria/images/titleBar.png)
         repeat-x scroll left top;
+*/
     border: 1px solid #cccccc;
     padding: 5px 6px 3px;
 }

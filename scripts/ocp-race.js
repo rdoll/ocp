@@ -4,8 +4,6 @@
 ** Everything related to race.
 ** Note: Race usually means Gender and Race since the gender affects starting attributes.
 **
-** *** Gah: int is a potential future reserved word! Change to ite? Or put all fields in quotes? ***
-**
 ** All of these images were converted to JPG from the individual race details pages under
 ** http://www.elderscrolls.com/codex/races_map.htm
 ** Note: The JPG conversion eliminated the transparency present in the source GIFs.
@@ -276,45 +274,10 @@ ocp.race = {
         return (skill in skills ? skills[skill] : 0);
     },
 
-
-    // Public: getters for all data of the currently selected race and gender
-    get str () { return this._getAttr(this._race, this._gender, 'str'); },
-    get int () { return this._getAttr(this._race, this._gender, 'int'); },
-    get wil () { return this._getAttr(this._race, this._gender, 'wil'); },
-    get agi () { return this._getAttr(this._race, this._gender, 'agi'); },
-    get spe () { return this._getAttr(this._race, this._gender, 'spe'); },
-    get end () { return this._getAttr(this._race, this._gender, 'end'); },
-    get per () { return this._getAttr(this._race, this._gender, 'per'); },
-    get luc () { return this._getAttr(this._race, this._gender, 'luc'); },
-
-    get hea () { return this._getAttr(this._race, this._gender, 'hea'); },
-    get mag () { return this._getAttr(this._race, this._gender, 'mag'); },
-    get fat () { return this._getAttr(this._race, this._gender, 'fat'); },
-    get enc () { return this._getAttr(this._race, this._gender, 'enc'); },
-
-    get bla () { return this._getSkill(this._race, 'bla'); },
-    get blu () { return this._getSkill(this._race, 'blu'); },
-    get han () { return this._getSkill(this._race, 'han'); },
-    get alc () { return this._getSkill(this._race, 'alc'); },
-    get con () { return this._getSkill(this._race, 'con'); },
-    get mys () { return this._getSkill(this._race, 'mys'); },
-    get alt () { return this._getSkill(this._race, 'alt'); },
-    get des () { return this._getSkill(this._race, 'des'); },
-    get res () { return this._getSkill(this._race, 'res'); },
-    get mar () { return this._getSkill(this._race, 'mar'); },
-    get sec () { return this._getSkill(this._race, 'sec'); },
-    get sne () { return this._getSkill(this._race, 'sne'); },
-    get acr () { return this._getSkill(this._race, 'acr'); },
-    get ath () { return this._getSkill(this._race, 'ath'); },
-    get lig () { return this._getSkill(this._race, 'lig'); },
-    get arm () { return this._getSkill(this._race, 'arm'); },
-    get blo () { return this._getSkill(this._race, 'blo'); },
-    get hvy () { return this._getSkill(this._race, 'hvy'); },
-    get ill () { return this._getSkill(this._race, 'ill'); },
-    get mer () { return this._getSkill(this._race, 'mer'); },
-    get spc () { return this._getSkill(this._race, 'spc'); },
-
-    get specials () { return this._data[this._race].specials; },
+    // Private: Gets the specials for a given race
+    _getSpecials: function (race) {
+        return this._data[race].specials;
+    },
 
 
     // Public: Returns the min/max possible value for an attribute
@@ -360,8 +323,10 @@ ocp.race = {
 
             // Search through all attributes for all races and genders
             this._limits = {};
-            for each (var race in this._data) {
-                for each (var gender in race.attributes) {
+            for (var raceIndex in this._data) {
+                var attributes = this._data[raceIndex].attributes;
+                for (var genderIndex in attributes) {
+                    var gender = attributes[genderIndex];
                     for (var attr in gender) {
 
                         // If this attr doesn't have limits yet, set initial ones
@@ -369,7 +334,7 @@ ocp.race = {
                             this._limits[attr] = { min:9999, max:0 };
                         }
 
-                        // Update the min/max if necessary
+                        // Update the min/max as necessary
                         if (gender[attr] < this._limits[attr].min) {
                             this._limits[attr].min = gender[attr];
                         }
@@ -400,7 +365,8 @@ ocp.race = {
             over +=
                 '<div class="raceOverview">' +
                     '<img src="' + this.IMAGE_DIR + this._data[race].image + '" ' +
-                        'class="raceImage" alt="[' + race + ' Image]" />' +
+                        'class="raceImage" alt="[' + race + ' Image]" ' +
+                    '/>' +
                     '<div class="raceDetails">' +
                         '<div class="raceName">' + race + '</div>' +
                         '<div class="raceDescription">' + this._data[race].description + '</div>' +
@@ -408,9 +374,9 @@ ocp.race = {
                         '<ul class="raceSpecialList">';
 
             var specs = this._data[race].specials;
-            specs = (specs.length > 0 ? specs : [ "No special abilities or weaknesses." ]);
-            for each (var spec in specs) {
-                over += '<li class="raceSpecialItem">' + spec + '</li>';
+            specs = (specs.length > 0 ? specs : [ 'No special abilities or weaknesses.' ]);
+            for (var specIndex in specs) {
+                over += '<li class="raceSpecialItem">' + specs[specIndex] + '</li>';
             }
 
             over += '</ul></div></div>';
@@ -428,14 +394,14 @@ ocp.race = {
         var det = '<table id="raceDetailsTable">';
 
         // Use column groups to apply styles dividing each column
-        det += '<colgroup span="2" />';
+        det += '<colgroup span="2"></colgroup>';
         var firstRace = true;
         for (var race in this._data) {
 //          *** raceData's width doesn't work here -- using th.raceName instead
 //          det += '<colgroup span="2" class="raceData' +
-//              (firstRace ? '' : ' first') + '" />';
+//              (firstRace ? '' : ' first') + '"></colgroup>';
             det += '<colgroup span="2"' +
-                (firstRace ? '' : ' class="first"') + ' />';
+                (firstRace ? '' : ' class="first"') + '></colgroup>';
             firstRace = false;
         }
 
@@ -471,8 +437,10 @@ ocp.race = {
         det += '<tbody>';
         for (var attr in ocp.coreAttrs) {
             det += '<tr><td colspan="2">' + ocp.coreAttrs[attr].name + '</td>';
-            for each (var race in this._data) {
-                for each (var gender in race.attributes) {
+            for (var raceIndex in this._data) {
+                var attributes = this._data[raceIndex].attributes;
+                for (var genderIndex in attributes) {
+                    var gender = attributes[genderIndex];
                     var extra = '';
                     if (attr != 'luc') {  // Luck is the same for everyone, not better/worse
                         extra = (gender[attr] > 40 ? 'better' : (gender[attr] < 40 ? 'worse' : ''));
@@ -486,12 +454,14 @@ ocp.race = {
 
         // Since two races have Magicka bonuses, show a Magicka row too
         det += '<tbody><tr><td colspan="2">' + ocp.derivedAttrs.mag.name + '</td>';
-        for each (var race in this._data) {
-            for each (var gender in race.attributes) {
+        for (var raceIndex in this._data) {
+            var attributes = this._data[raceIndex].attributes;
+            for (var genderIndex in attributes) {
+                var gender = attributes[genderIndex];
                 if ('mag' in gender) {
                     det += '<td class="numeric better">' + gender.mag + '</td>';
                 } else {
-                    det += '<td class="numeric" />';
+                    det += '<td class="numeric"></td>';
                 }
             }
         }
@@ -512,15 +482,19 @@ ocp.race = {
         var rowEven = true;
         for (var attr in ocp.coreAttrs) {
             var firstSkill = true;
-            for each (var skill in ocp.coreAttrs[attr].skills) {
+            var skills = ocp.coreAttrs[attr].skills;
+            for (var skillIndex in skills) {
+                var skill = skills[skillIndex];
                 det += '<tr class="skill ' + (rowEven ? 'even' : 'odd') + '">';
 
                 // The first skill means we need to create a vertical skill "header"
                 if (firstSkill) {
-                    det += '<td rowspan="' + ocp.coreAttrs[attr].skills.length +
-                        '" class="vertical" title="Skills that affect ' +
-                            ocp.coreAttrs[attr].name + '">' +
-                        ocp.verticalize(attr) + '</td>';
+                    det +=
+                        '<td rowspan="' + skills.length + '" class="vertical" ' +
+                            'title="Skills that affect ' + ocp.coreAttrs[attr].name + '"' +
+                        '>' +
+                            ocp.verticalize(attr) +
+                        '</td>';
                 }
 
                 det += '<td>' + ocp.skills[skill].name + '</td>';
@@ -551,6 +525,19 @@ ocp.race = {
         // Set the current race/gender
         this._race = race;
         this._gender = gender;
+
+        // Since lame browsers don't support getters, create public data members
+        // with read-only values for the newly selected race and gender
+        for (var attr in ocp.coreAttrs) {
+            this[attr] = this._getAttr(race, gender, attr);
+        }
+        for (var attr in ocp.derivedAttrs) {
+            this[attr] = this._getAttr(race, gender, attr);
+        }
+        for (var skill in ocp.skills) {
+            this[skill] = this._getSkill(race, skill);
+        }
+        this.specials = this._getSpecials(race);
     },
 
 
@@ -599,8 +586,8 @@ ocp.race = {
         if (specs.length == 0) {
             list = '<span class="specialDescItem">No special abilities or weaknesses.</span>';
         } else {
-            for each (var spec in specs) {
-                list += '<span class="specialDescItem">' + spec + '</span>';
+            for (var specIndex in specs) {
+                list += '<span class="specialDescItem">' + specs[specIndex] + '</span>';
             }
         }
         dojo.place(list, 'raceSpecials', 'only');

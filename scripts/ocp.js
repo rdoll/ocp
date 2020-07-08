@@ -9,7 +9,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.42',
+    VERSION: '0.5.1',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -313,9 +313,9 @@ var ocp = {
         ocp.order._attrDndSource.destroy();
         delete ocp.order._attrDndSource;
         dojo.empty('attrOrderDndSource');
-        delete ocp.order._attrs;
-        ocp.order._attrs = ['agi', 'spe', 'end', 'luc', 'str', 'int', 'wil', 'per'];
-        //ocp.order._attrs = ['agi', 'spe', 'end', 'str', 'int', 'wil', 'per', 'luc'];
+        delete ocp.order.attrs;
+        ocp.order.attrs = ['agi', 'spe', 'end', 'luc', 'str', 'int', 'wil', 'per'];
+        //ocp.order.attrs = ['agi', 'spe', 'end', 'str', 'int', 'wil', 'per', 'luc'];
         ocp.order._initializeAttrDnd();
 
         ocp.input._stackContainer.selectChild('inputNewCharacter');
@@ -396,13 +396,23 @@ var ocp = {
         wasted[9] = { bla:'', mer:'', spc:'' };
 
         var maxLevel = totals.length - 1;
+
+        for (var lvl = 1; lvl <= maxLevel; lvl++) {
+            for (var skill in wasted[lvl]) {
+                var attr = ocp.skills[skill].attr;
+                wasted[lvl][skill] = 'Skill ups were wasted because ' +
+                    ocp.coreAttrs[attr].name + ' was not leveled.';
+            }
+        }
+
         dijit.byId('levelSlider').attr('value', maxLevel);
-        delete ocp.existing._totals;
-        ocp.existing._totals = totals[maxLevel];
-        delete ocp.existing._majors;
-        ocp.existing._majors = [];
-        for each (var skill in ocp.cclass.majors) {
-            ocp.existing.majors.push(skill);
+        delete ocp.existing.totals;
+        ocp.existing.totals = totals[maxLevel];
+        delete ocp.existing.majors;
+        ocp.existing.majors = [];
+        var classMajors = ocp.cclass.majors;
+        for (var skillIndex in classMajors) {
+            ocp.existing.majors.push(classMajors[skillIndex]);
         }
         if (ocp.existing.attrDialog._dialog._alreadyInitialized) {
             ocp.existing.attrDialog.undo();
@@ -421,9 +431,9 @@ var ocp = {
         ocp.level._totals = totals;
         ocp.level._wasted = wasted;
         ocp.level._updateLeveling();
-        ocp.existing._level = 1;
+        ocp.existing.level = 1;
         ocp.results._updateLeveling();
-        ocp.existing._level = maxLevel;
+        ocp.existing.level = maxLevel;
         ocp.level._totals = saveTotals;
         ocp.level._wasted = saveWasted;
     }

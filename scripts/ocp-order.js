@@ -6,15 +6,11 @@
 
 ocp.order = {
 
-    // Private: The order attributes will be leveled
-    _attrs: [ 'end', 'str', 'luc', 'int', 'agi', 'spe', 'wil', 'per' ],
+    // Public: The order attributes will be leveled
+    attrs: [ 'end', 'str', 'luc', 'int', 'agi', 'spe', 'wil', 'per' ],
 
     // Private: The DnD source for the order of attributes
     _attrDndSource: null,
-
-
-    // Public: getters for our data
-    get attrs () { return this._attrs; },
 
 
     // Public: Initialize ourselves
@@ -46,7 +42,8 @@ ocp.order = {
         });
 
         // Insert the children using name/attr per the creator above
-        for each (var attr in this._attrs) {
+        for (var attrIndex in this.attrs) {
+            var attr = this.attrs[attrIndex];
             source.insertNodes(false, [{ name: ocp.coreAttrs[attr].name, attr: attr }]);
         }
 
@@ -94,7 +91,7 @@ ocp.order = {
 
         // Set the new order and notify that something has changed
         console.debug('entered _attrOrderChanged:', newOrder);
-        this._attrs = newOrder;
+        this.attrs = newOrder;
         ocp.notifyChanged();
     },
 

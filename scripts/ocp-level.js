@@ -20,13 +20,12 @@ ocp.level = {
     // Skill Points: 0  1  2  3  4  5  6  7  8  9  10
     _attrBonus:    [ 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 5 ],
 
-    // Private: An error was hit during the leveling process
-    _error: false,
+    // Public: An error was hit during the leveling process
+    error: false,
 
 
-    // Public: getters for our data
-    get levelMax () { return this._totals.length - 1; },
-    get hadError () { return this._error; },
+    // Public: accessor for max level
+    levelMax: function () { return this._totals.length - 1; },
 
     // Public: accessors for per-level total and wasted data
     levelTotals: function (level) { return this._totals[level]; },
@@ -94,8 +93,8 @@ ocp.level = {
         this._wasted = [];
 
         // Store the new totals (and an empty wasted) for the starting level
-        this._totals[ocp.input.levelMin] = totals;
-        this._wasted[ocp.input.levelMin] = {};
+        this._totals[ocp.input.levelMin()] = totals;
+        this._wasted[ocp.input.levelMin()] = {};
     },
 
 
@@ -116,7 +115,9 @@ ocp.level = {
 
         // If we don't have enough points in all major skills combined, we can't level
         var points = 0;
-        for each (var skill in ocp.input.majors) {
+        var majors = ocp.input.majors();
+        for (var skillIndex in majors) {
+            var skill = majors[skillIndex];
             if (totals[skill] < ocp.SKILL_MAX) {
                 points += ocp.SKILL_MAX - totals[skill];
                 if (points >= ocp.LEVELUP_MAJOR_POINTS) {
@@ -159,7 +160,8 @@ ocp.level = {
 
         // Based on the order, determine which attributes to level
         var attrsToLevel = [];
-        for each (var attr in attrOrder) {
+        for (var attrIndex in attrOrder) {
+            var attr = attrOrder[attrIndex];
             if (current[attr] < ocp.coreAttrs[attr].max) {
                 attrsToLevel.push(attr);
                 if (attrsToLevel.length >= ocp.LEVELUP_ATTRS_MAX) {
@@ -178,8 +180,11 @@ ocp.level = {
         // determine which skills could yield an attribute bonus
         // This is in the order of desirability, just like attrs
         var bonusSkills = [];
-        for each (var attr in attrsToLevel) {
-            for each (var skill in ocp.coreAttrs[attr].skills) {
+        for (var attrIndex in attrsToLevel) {
+            var attr = attrsToLevel[attrIndex];
+            var skills = ocp.coreAttrs[attr].skills;
+            for (var skillIndex in skills) {
+                var skill = skills[skillIndex];
                 if (current[skill] < ocp.SKILL_MAX) {
                     bonusSkills.push(skill);
                 }
@@ -193,7 +198,8 @@ ocp.level = {
 
         // In this first pass, only check the skills that would also
         // yield a bonus to the attributes we are leveling.
-        for each (var skill in bonusSkills) {
+        for (var skillIndex in bonusSkills) {
+            var skill = bonusSkills[skillIndex];
 
             // Only useful if this is a major skill
             if (ocp.input.isMajor(skill)) {
@@ -229,7 +235,7 @@ ocp.level = {
                     var attrPoints = leveled[attr] + attrMax;
 
                     // Total number of skill points to get the attrPoints bonus
-                    var skillPoints = this._attrBonus.indexOf(attrPoints);
+                    var skillPoints = dojo.indexOf(this._attrBonus, attrPoints);
 
                     // Now subtract the skill ups we've already done
                     skillPoints -= bonus[attr];
@@ -283,16 +289,19 @@ ocp.level = {
             for (var attrIndex = attrOrder.length - 1; attrIndex >= 0; attrIndex--) {
                 var attr = attrOrder[attrIndex];
                 // Don't add dupes
-                if (burnAttrs.indexOf(attr) == -1) {
+                if (dojo.indexOf(burnAttrs, attr) == -1) {
                     burnAttrs.push(attr);
                 }
             }
 
             // Now go through the attributes we might burn
-            for each (var attr in burnAttrs) {
+            for (var attrIndex in burnAttrs) {
+                var attr = burnAttrs[attrIndex];
 
                 // Check skills for this attr
-                for each (var skill in ocp.coreAttrs[attr].skills) {
+                var skills = ocp.coreAttrs[attr].skills;
+                for (var skillIndex in skills) {
+                    var skill = skills[skillIndex];
 
                     // If this is a major skill, check it
                     if (ocp.input.isMajor(skill)) {
@@ -341,9 +350,14 @@ ocp.level = {
         }
 
 
+        // *** BUG: These are implied as minor skills, but we never check for it!
+        // *** BUG: This means we can consume more than 10 points in major skills!
+        // *** BUG: With all defaults, choose Warrior class to see bug.
+
         // Now that we have the major skills raised to increase our level,
-        // raise as many other skills we need to maximize the attribute bonuses
-        for each (var attr in attrsToLevel) {
+        // raise as many other minor skills we need to maximize the attribute bonuses
+        for (var attrIndex in attrsToLevel) {
+            var attr = attrsToLevel[attrIndex];
 
             // Determine the max number of skill points we can use to
             // raise this attr (up to the max of 5 bonus points)
@@ -355,7 +369,9 @@ ocp.level = {
 
                 // Order this attr's skills to check minors first and majors last
                 var skillsForAttr = [];
-                for each (var skill in ocp.coreAttrs[attr].skills) {
+                var skills = ocp.coreAttrs[attr].skills;
+                for (var skillIndex in skills) {
+                    var skill = skills[skillIndex];
                     if (ocp.input.isMajor(skill)) {
                         skillsForAttr.push(skill);      // Put major at end
                     } else {
@@ -364,7 +380,8 @@ ocp.level = {
                 }
 
                 // Check each skill for this attribute
-                for each (var skill in skillsForAttr) {
+                for (var skillIndex in skillsForAttr) {
+                    var skill = skillsForAttr[skillIndex];
 
                     // Max number of skill points we could raise this skill.
                     // There's no need to go beyond the 10 total bonus points
@@ -389,7 +406,7 @@ ocp.level = {
                         var attrPoints = leveled[attr] + attrMax;
 
                         // Total number of skill points to get the attrPoints bonus
-                        var skillPoints = this._attrBonus.indexOf(attrPoints);
+                        var skillPoints = dojo.indexOf(this._attrBonus, attrPoints);
 
                         // Now subtract the skill ups we've already done
                         skillPoints -= bonus[attr];
@@ -474,10 +491,10 @@ ocp.level = {
     _updateLeveling: function () {
 
         // Assume no error was hit during the leveling process
-        this._error = false;
+        this.error = false;
 
         // Always the totals for the current level
-        var current = this._totals[ocp.input.levelMin];
+        var current = this._totals[ocp.input.levelMin()];
 
         // Keep leveling until we hit the max level or until we hit a failsafe limit.
         // If this is a new character, the failsafe is simply the max level.
@@ -499,7 +516,7 @@ ocp.level = {
                 current = next;
             } else {
                 // Failure -- abort the process (nextLevel generated a log about why already)
-                this._error = true;
+                this.error = true;
                 return;
             }
         }
@@ -507,7 +524,7 @@ ocp.level = {
         // It's an error if we hit the failsafe
         if (failsafe <= 0) {
             console.warn('ocp.level._updateLeveling hit failsafe!');
-            this._error = true;
+            this.error = true;
         }
     }
 };

@@ -7,8 +7,6 @@
 ** http://www.elderscrolls.com/codex/codex_birthsigns.htm
 **
 ** Descriptions also taken from http://www.elderscrolls.com/codex/codex_birthsigns.htm
-**
-** *** Should show attributes in input summary?
 */
 
 ocp.birth = {
@@ -153,29 +151,17 @@ ocp.birth = {
         return (attr in attrs ? attrs[attr] : 0);
     },
 
-
-    // Public: getters for all data of the currently selected race and gender
-    get str () { return this._getAttr(this._birth, 'str'); },
-    get int () { return this._getAttr(this._birth, 'int'); },
-    get wil () { return this._getAttr(this._birth, 'wil'); },
-    get agi () { return this._getAttr(this._birth, 'agi'); },
-    get spe () { return this._getAttr(this._birth, 'spe'); },
-    get end () { return this._getAttr(this._birth, 'end'); },
-    get per () { return this._getAttr(this._birth, 'per'); },
-    get luc () { return this._getAttr(this._birth, 'luc'); },
-
-    get hea () { return this._getAttr(this._birth, 'hea'); },
-    get mag () { return this._getAttr(this._birth, 'mag'); },
-    get fat () { return this._getAttr(this._birth, 'fat'); },
-    get enc () { return this._getAttr(this._birth, 'enc'); },
-
-    get specials () { return this._data[this._birth].specials; },
+    // Private: Gets the specials for a given race
+    _getSpecials: function (birth) {
+        return this._data[birth].specials;
+    },
 
 
     // Public: Returns the max possible value for an attribute
     attrMax: function (attr) {
         var max = 0;
-        for each (var birth in this._data) {
+        for (var birthIndex in this._data) {
+            var birth = this._data[birthIndex];
             if ((attr in birth.attributes) && (birth.attributes[attr] > max)) {
                 max = birth.attributes[attr];
             }
@@ -216,7 +202,8 @@ ocp.birth = {
                     '<img src="' + this.IMAGE_DIR + this._data[birth].image + '" ' +
                         'class="birthImage" alt="[' + birth + ' Image]" ' +
                         'title="Select ' + birth + '" ' +
-                        'onClick="ocp.birth.select(\'' + birth + '\')" />' +
+                        'onClick="ocp.birth.select(\'' + birth + '\')" ' +
+                    '/>' +
                     '<div class="birthName">' + birth + '</div>' +
                     '<div class="birthDescription">' + this._data[birth].description + '</div>' +
                 '</div>';
@@ -233,6 +220,16 @@ ocp.birth = {
 
         // Set the current birthsign
         this._birth = birth;
+
+        // Since lame browsers don't support getters, create public data members
+        // with read-only values for the newly selected birthsign
+        for (var attr in ocp.coreAttrs) {
+            this[attr] = this._getAttr(birth, attr);
+        }
+        for (var attr in ocp.derivedAttrs) {
+            this[attr] = this._getAttr(birth, attr);
+        }
+        this.specials = this._getSpecials(birth);
     },
 
 
@@ -266,6 +263,7 @@ ocp.birth = {
 
 
     // Private: Update our generated content
+    // *** Should add attributes to list of specials?
     _update: function() {
 
         // Update selected label
@@ -277,8 +275,8 @@ ocp.birth = {
         if (specs.length == 0) {
             list = '<span class="specialDescItem">No special abilities.</span>';
         } else {
-            for each (var spec in specs) {
-                list += '<span class="specialDescItem">' + spec + '</span>';
+            for (var specIndex in specs) {
+                list += '<span class="specialDescItem">' + specs[specIndex] + '</span>';
             }
         }
         dojo.place(list, 'birthSpecials', 'only');
