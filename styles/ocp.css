@@ -162,9 +162,10 @@ html, body {
     background-color: #eee;
 }
 
-
 /* Inside the level details table, pack everything as tight as possible */
+/* Shrink the font size so all max values fits without a scrollbar */
 #levelDetailsTable td.numeric {
+    font-size: smaller;
     padding-right: 2px;
 }
 
@@ -193,32 +194,30 @@ html, body {
 #aboutFooter {
     margin-top: 1em;
     border-top: 1px solid #ccc;
-    padding-top: 0.5em;
     margin-left: 10px;
     width: 900px;
     font-size: smaller;
-    text-align: center;
-    vertical-align: top;
     position: relative;
 }
 
-/* No border around clickable images */
-#aboutFooter a img {
-    border: 0;
-}
-
+/* The programs used are tacked to the left */
 #aboutPrograms {
     position: absolute;
-    top: 1em;
+    top: 0.5em;
     left: 0;
 }
 
+/* The authors are centered */
 #aboutAuthors {
+    margin-top: 0.5em;
+    text-align: center;
 }
 
-#aboutValidators {
+/* The image credits are tacked to the right */
+#aboutImages {
+    text-align: right;
     position: absolute;
-    top: 1em;
+    top: 0.5em;
     right: 0;
 }
 
@@ -421,7 +420,7 @@ html, body {
 /* Size the contents of the dialog which sizes the dialog window */
 #classTabContainer {
     width: 730px;
-    height: 440px;
+    height: 450px;
     overflow: auto;
 }
 
@@ -498,6 +497,75 @@ html, body {
 /* Bonuses get a special highlight in the class details table */
 #classDetailsTable td.bonus {
     color: green;
+}
+
+
+/*
+** Custom class specific styles
+*/
+
+/* Put some space between two input blocks */
+#classCustomPane .classCustomInputs + .classCustomInputs {
+    margin-top: 1em;
+}
+
+/* Header for a section of custom inputs */
+#classCustomPane .customInputHeader {
+    font-size: larger;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+/* Specialization inputs get some spacing */
+#classCustomPane .customInputSpec {
+    margin-left: 1em;
+}
+
+/* Favored attribute inputs get some spacing */
+#classCustomPane .customInputFav {
+    margin-left: 1em;
+}
+
+/* Input section footnote is inserted between the header and the content */
+#classCustomPane .customInputFootnote {
+    font-size: smaller;
+    margin-top: -0.5em;
+}
+
+/* Highlight skills that are specialized */
+#classCustomPane .skillIsSpecialized {
+    font-style: italic;
+    color: blue;
+}
+
+/* Each block of major skill inputs is can be placed side-by-side and above/below one another */
+#classCustomPane .customMajorInputs {
+    display: inline-block;
+    margin-top: 1em;
+    margin-left: 1em;
+}
+
+/* Separate the major inputs table header from the body */
+#classCustomPane .customMajorInputs thead {
+    border-bottom: 1px solid #ccc;
+}
+
+/* Setting a fixed width for major headers makes all major input blocks the same width
+** (because the other columns are always the same width), which allows major input
+** blocks in different "rows" to keep their columns aligned. */
+#classCustomPane .majorAttrHeader {
+    width: 10em;
+}
+
+/* The major checkbox column's header */
+#classCustomPane .majorCheckHeader {
+    font-size: smaller;
+}
+
+/* The major skill designation checkbox's container */
+/* This has to be done outside of the checkbox itself since it is replaced when parsed */
+#classCustomPane .majorCheckContainer {
+    text-align: center;
 }
 
 
@@ -611,6 +679,7 @@ html, body {
 }
 
 /* The major skill designation checkbox's container */
+/* This has to be done outside of the checkbox itself since it is replaced when parsed */
 #skillContainer .majorCheckContainer {
     text-align: center;
 }

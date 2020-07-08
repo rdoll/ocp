@@ -9,7 +9,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.40',
+    VERSION: '0.42',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -52,6 +52,7 @@ var ocp = {
     // Public: Define the abbr and full names of all core attributes
     //         Leveling the skills listed increases the level bonus for this stat
     //         Min is set during initialization
+    // *** int collides with potential future reserved word -- rename itl?
     coreAttrs: {
         str: { name:'Strength',     skills:[ 'bla', 'blu', 'han' ], min:0, max:100 },
         int: { name:'Intelligence', skills:[ 'alc', 'con', 'mys' ], min:0, max:100 },

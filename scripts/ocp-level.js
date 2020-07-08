@@ -415,7 +415,7 @@ ocp.level = {
                         if (ocp.input.isMajor(skill)) {
                             wasted[skill] = 'This major skill was raised for the attribute bonus on ' +
                                 ocp.coreAttrs[attr].name + ', but the skill up did not count towards ' +
-                                'the 10 major points necessary to level.';
+                                'the ' + ocp.LEVELUP_MAJOR_POINTS + ' major points necessary to level.';
                         }
 
                         // The leveling is done.
@@ -446,7 +446,7 @@ ocp.level = {
                 (ocp.coreAttrs[attr].skills.length > 0))
             {
                 wasted[attr] = 'This attribute was not raised the maximum of ' +
-                    ocp.LEVELUP_BONUS_ATTR_MAX + ' points.';
+                    ocp.LEVELUP_BONUS_ATTR_MAX + ' points';
             }
         }
 

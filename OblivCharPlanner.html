@@ -11,6 +11,8 @@
 *** "for each" and array "indexOf" are JavaScript 1.6 constructs...
 *** Need to test on IE or warn if user isn't using FireFox ***
 *** Need license details and copyright info atop every file
+*** Globally replace title="" attributes with Tooltips?
+*** Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
 -->
 
 <head>
@@ -37,87 +39,86 @@
 
     <!-- Load styles (Dijit theme followed by OCP specific) -->
     <!-- *** Add charset="utf-8" to all <link> tags? -->
+    <!-- *** Want these styles too? http://o.aolcdn.com/dojo/1.3/dojo/resources/dojo.css -->
+    <link rel="stylesheet" type="text/css"
+        href="http://o.aolcdn.com/dojo/1.3/dijit/themes/soria/soria.css" />
     <!--
     <link rel="stylesheet" type="text/css" href="dojotoolkit/dijit/themes/soria/soria.css" />
     -->
-    <!-- *** What these styles too? http://o.aolcdn.com/dojo/1.3.0/dojo/resources/dojo.css -->
-    <link rel="stylesheet" type="text/css"
-        href="http://o.aolcdn.com/dojo/1.3/dijit/themes/soria/soria.css" />
     <link rel="stylesheet" type="text/css" href="styles/ocp.css" />
 
     <!-- Configure and load the Dojo toolkit -->
     <script type="text/javascript">//<![CDATA[
         djConfig = {
-            // Debugging status
-            // *** FireBug Lite doesn't show up in IE
+            // Debugging settings
             isDebug: true,
             debugAtAllCosts: false,
+            popup: false,
 
-            // Do not automatically parse Dojo markups
+            // Do not automatically parse Dojo markups (we need to load custom widgets first)
             parseOnLoad: false,
 
             // Pull in these Dojo modules automatically
+            // *** Be sure to scrub this list to ensure there's nothing unnecessary
             require: [
-// *** Be sure to scrub this list to ensure nothing we don't need
                'dojo.dnd.Source',
                'dojo.html',
                'dojo.parser',
                'dijit.Dialog',
                'dijit.form.Button',
                'dijit.form.CheckBox',
-               'dijit.form.DropDownButton',
                'dijit.form.HorizontalRule',
                'dijit.form.HorizontalRuleLabels',
-               'dijit.form.HorizontalSlider',
                'dijit.form.NumberSpinner',
                'dijit.layout.BorderContainer',
                'dijit.layout.ContentPane',
                'dijit.layout.StackContainer',
-               'dijit.layout.TabContainer',
-               'dijit.Menu',
-               'dijit.Tooltip'
-// *** Globally replace title="" attributes with Tooltips?
-// *** Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
+               'dijit.layout.TabContainer'
             ],
 
-            // After everything has been loaded, initialize everything
+            // The base URL for our custom modules is our current directory
+            // Required for XD CDN -- comment out for local Dojo installation
+            baseUrl: './',
+
+            // Our custom ocp resources are located under our ./scripts/widget directory
+            // (which makes the name of our resources ocp.widget.*)
+            // Use top for local Dojo and bottom for XD CDN installation
+            modulePaths: {
+                //'ocp': '../../scripts'
+                'ocp': 'scripts'
+            },
+
+            // Called after everything on the page and everything in djConfig.require has loaded
             addOnLoad: function() {
-                //console.log('Doing addOnLoad initialization...');
-                // Now that the widgets in ocp.widget have been defined
-                // (via direct loading in a <script> tag), parse the Dojo markups
-                /*
-                var dojoTypeNodes = dojo.query('[dojoType]');
-                dojo.forEach(dojoTypeNodes, function (node) {
-                    var results = dojo.parser.instantiate([node]);
-                    console.log('parsed node=', node, ', results=', results);
+                //console.log('First addOnLoad initialization...');
+
+                // Since the page's contents (including the ocp*.js files) have been loaded
+                // and executed, the ocp top-level variable/namespace has been created
+                // so we can load the ocp.widget.* resources into it.
+                dojo.require('ocp.widget.LabeledHorizontalSlider');
+                dojo.require('ocp.widget.TitledContentPane');
+
+                // If we are using an XD CDN, the XD loader loads the modules asynchronously
+                // behind the scenes while the dojo.require call returns immediately.
+                // To get notified when the requires have actually been loaded,
+                // do another addOnLoad hook.
+                dojo.addOnLoad(function () {
+                    //console.log('Second addOnLoad initialization...');
+                    // With our custom widgets now defined in the ocp.* namespace,
+                    // parse everything and initialize OCP
+                    dojo.parser.parse();
+                    ocp.initialize();
                 });
-                */
-                var instances = dojo.parser.parse();
-                var cont = dijit.byId('inputStackContainer');
-                if ('selectedChildWidget' in cont) {
-                    console.log('Parsing passed. cont.selectedChildWidget.title=',
-                        cont.selectedChildWidget.title);
-                } else {
-                    console.log('Parsing failed!');
-                }
-                // With all markups processed, initialize the OCP scripts
-                //ocp.initialize();
             }
         };
     //]]></script>
     <!--
     <script type="text/javascript" src="dojotoolkit/dojo/dojo.js"></script>
-    *** Intermittent parsing failures only seem to appear when pulling from the CDN...
     -->
     <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"></script>
 
     <!-- Load the OCP scripts in order (no initialization allowed yet) -->
     <script type="text/javascript" src="scripts/ocp.js"></script>
-
-    <!-- Load the OCP custom Dojo widgets.
-         Note that by loading these explicitly, they don't need to be dojo.require'd. -->
-    <script type="text/javascript" src="scripts/ocp-widget.js"></script>
-
     <script type="text/javascript" src="scripts/ocp-input.js"></script>
     <script type="text/javascript" src="scripts/ocp-race.js"></script>
     <script type="text/javascript" src="scripts/ocp-birth.js"></script>
@@ -143,28 +144,21 @@
 
     <!-- Better warn the user about beta issues -->
     <!-- Use inline styles so this warning can be easily (and hopefully soon) removed -->
-    <div style="background-color: #ccc; border: 1px solid black; padding: 4px; margin: 10px; width: 850px">
-        <span style="font-weight: bold; font-style: italic; color: red;">Warning:</span>
+    <div style="background-color: #ccc; border: 1px solid black; padding: 5px; margin: 10px; width: 880px">
         <div>
-            This is a beta that is still in development. At the moment, OCP has
-            the following notable issues and limitations:
+            <span style="font-weight: bold; font-style: italic; color: red;">Warning:</span>
+            This <b>beta</b> is still in development and has the following known issues and limitations:
             <ol>
                 <li>
                     FireFox 3.0.* is the only officially supported browser. All
                     other browsers may or may not work (IE is known NOT to work).
                 </li>
                 <li>
-                    This uses the Dojo Toolkit from the AOL CDN. This has several
-                    benefits, but it means that you must allow JavaScript from both
-                    this server and from o.aol.cdn for OCP to work.
+                    This uses the Dojo Toolkit from the AOL CDN so you must allow
+                    JavaScript from both this server and from o.aol.cdn.
                 </li>
                 <li>
-                    There is an intermittent timing issue that causes the page to
-                    render incorrectly (the page looks garbled with a blue background).
-                    If this happens, just reload the page.
-                </li>
-                <li>
-                    There is a small memory leak across page reloads. If you do many,
+                    There is a small memory leak on page loading. After doing many,
                     many page reloads, you should close and reopen your browser.
                 </li>
             </ol>
@@ -210,7 +204,7 @@
                                 </td>
                                 <td id="raceValue" class="selectedValue">-none-</td>
                                 <td id="raceSpecials"
-                                    title="Special abilities and weaknesses for this Race.">-none-</td>
+                                    title="Special abilities and weaknesses for this Race">-none-</td>
                             </tr>
 
                             <tr>
@@ -222,7 +216,7 @@
                                 </td>
                                 <td id="birthValue" class="selectedValue">-none-</td>
                                 <td id="birthSpecials"
-                                    title="Special abilities for this Birthsign.">-none-</td>
+                                    title="Special abilities for this Birthsign">-none-</td>
                             </tr>
 
                             <tr>
@@ -341,16 +335,24 @@
             <!-- *** Put email addy link here? -->
             <div>&copy;Copyright 2009 Richard Doll</div>
             <div>Oblivion Character Planner (OCP) version <span id="ocpVersion" /></div>
+        </div>
+
+        <div id="aboutImages">
             <div>
-                All images are from
+                All images from
                 <a href="http://www.elderscrolls.com/">Elder Scrolls IV: Oblivion</a>
+            </div>
+            <div>
                 which is owned by
                 <a href="http://www.bethsoft.com/">Bethesda Softworks</a>
             </div>
         </div>
 
+        <!-- *** Gah. Probably can never use these.
+             *** W3C FAQ indicates the page/CSS referenced should validate 100% cleanly.
+             *** Between the additional tag attributes (e.g. dojoType) and the
+             *** browser specific styles (e.g. -moz-border-radius), that will never happen.
         <div id="aboutValidators">
-            <!-- *** Enable these when I'm actually compliant
             <a href="http://validator.w3.org/check?uri=referer">
                 <img src="http://www.w3.org/Icons/valid-xhtml10-blue"
                     alt="Valid XHTML 1.0 Strict" height="31" width="88" />
@@ -360,8 +362,8 @@
                     src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
                     alt="Valid CSS!" />
             </a>
-            -->
         </div>
+        -->
     </div>
 
 
@@ -413,18 +415,18 @@
             <!-- Creation of a custom class -->
             <div dojoType="dijit.layout.ContentPane" id="classCustomPane" title="Custom">
 
-                <!-- Favored Attribute inputs -->
-                <div id="classFavAttrsContainer">
+                <!-- Specialization inputs -->
+                <div id="classSpecContainer" class="classCustomInputs">
                     <!-- Contents generated by OCP -->
                 </div>
 
-                <!-- Specialization inputs -->
-                <div id="classSpecContainer">
+                <!-- Favored Attribute inputs -->
+                <div id="classFavAttrsContainer" class="classCustomInputs">
                     <!-- Contents generated by OCP -->
                 </div>
 
                 <!-- Skill inputs -->
-                <div id="classSkillContainer">
+                <div id="classSkillContainer" class="classCustomInputs">
                     <!-- Contents generated by OCP -->
                 </div>
 

@@ -22,22 +22,11 @@ ocp.input = {
 
 
     // Public: Return whether using a new (true) or existing character (false)
-    // *** Store isNewChar value instead of looking up all the time?
-    failureCount: 0,
     get isNewChar () {
         // We're using a new character unless the Existing Char input pane is selected
         // This way if something goes wrong, we'll return "using a new char"
         // which is the more important use case for OCP.
-//***console.log('ocp.input.isNewChar', this._stackStackContainer);
-        if (! ('selectedChildWidget' in this._stackContainer)) {
-            if (this.failureCount++ == 0) {
-                console.warn('no selectedChildWidget!');
-            }
-            return true;
-        }
-        return (this._stackContainer.selectedChildWidget.title == 'Existing Character'
-            ? false : true);
-        // *** return !this._existingPane.selected;
+        return !this._existingPane.selected;
     },
 
 

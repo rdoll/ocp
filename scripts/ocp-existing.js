@@ -481,7 +481,7 @@ ocp.existing.skillDialog = {
                                 'timeoutChangeRate="0.6" smallDelta="1" largeDelta="10" ' +
                                 'constraints="{min:' + min + ', max:' + max + ', places:0}" ' +
                                 'onChange="ocp.existing.skillDialog.spinnerChanged(\'' + skill + '\')" ' +
-                                '/>' +
+                            '/>' +
                         '</td>' +
                         '<td class="majorCheckContainer">' +
                             '<input dojoType="dijit.form.CheckBox" type="checkbox" ' +
@@ -489,7 +489,7 @@ ocp.existing.skillDialog = {
                                 'name="majors" value="' + skill + '" ' +
                                 (isMajor ? 'checked="checked" ' : '') +
                                 'onChange="ocp.existing.skillDialog.checkboxChanged(\'' + skill + '\')" ' +
-                                '/>' +
+                            '/>' +
                         '</td>' +
                     '</tr>';
             }

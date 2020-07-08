@@ -474,6 +474,7 @@ ocp.cclass.classDialog = {
     _favCheckbox: {},
     _specRadio: {},
     _majorCheckbox: {},
+    _majorLabel: {},
 
     // Private: Whether the dialog has been initialized
     _dialogInitialized: false,
@@ -515,6 +516,7 @@ ocp.cclass.classDialog = {
     _initializeOverview: function() {
 
         // Build a div for each predefined class
+        // *** Put two per row (one left and one right) like birthsigns?
         var over = '';
         for (var cclass in ocp.cclass._data) {
             var data = ocp.cclass._data[cclass];
@@ -650,41 +652,18 @@ ocp.cclass.classDialog = {
         // Current custom data (so we can set defaualts)
         var customData = ocp.cclass._customData;
 
-// *** All of this needs beautification and CSS-ification
-        // Initialize the favored attributes
-        var cus = '<div>Favored Attributes:</div>';
-        for (var attr in ocp.coreAttrs) {
-            var isFav = (customData.favoredAttrs.indexOf(attr) == -1 ? false : true);
-            cus +=
-                '<input dojoType="dijit.form.CheckBox" type="checkbox" ' +
-                    'id="favCheck_' + attr + '" ' +
-                    (isFav ? 'checked="checked" ' : '') +
-                    'onChange="ocp.cclass.classDialog.favCheckboxChanged(\'' + attr + '\')" ' +
-                 '/>' +
-                 '<label for="favCheck_' + attr + '">' + ocp.coreAttrs[attr].name + '</label>';
-        }
-
-        // Insert the results (parsing the code for Dojo markups)
-        dojo.html.set(dojo.byId('classFavAttrsContainer'), cus, { parseContent: true });
-
-        // Now that they are all created, store references to all fav attr checkboxes
-        for (var attr in ocp.coreAttrs) {
-            this._favCheckbox[attr] = dijit.byId('favCheck_' + attr);
-        }
-
-
         // Initialize the specialization
-        var cus = '<div>Specialization:</div>';
+        var cus = '<div class="customInputHeader">Specialization:</div>';
         for (var spec in ocp.specs) {
             var isSpec = (customData.specialization == spec ? true : false);
+            var inputId = 'specRadio_' + spec;
             cus +=
                 '<input dojoType="dijit.form.RadioButton" type="radio" ' +
-                    'id="specRadio_' + spec + '" ' +
+                    'id="' + inputId + '" class="customInputSpec"' +
                     (isSpec ? 'checked="checked" ' : '') +
-                    // *** Don't need this, right?
-                    //'onChange="ocp.cclass.classDialog.specRadioChanged(\'' + spec + '\')" ' +
+                    'onChange="ocp.cclass.classDialog.specRadioChanged(\'' + spec + '\')" ' +
                  '/>' +
-                 '<label for="specRadio_' + spec + '">' + spec + '</label>';
+                 '<label class="classSpecLabel" for="' + inputId + '">' + spec + '</label>';
         }
 
         // Insert the results (parsing the code for Dojo markups)
@@ -696,52 +675,92 @@ ocp.cclass.classDialog = {
         }
 
 
+        // Initialize the favored attributes
+        var cus = '<div class="customInputHeader">Favored Attributes:</div>';
+        for (var attr in ocp.coreAttrs) {
+            var isFav = (customData.favoredAttrs.indexOf(attr) == -1 ? false : true);
+            var inputId = 'favCheck_' + attr;
+            cus +=
+                '<input dojoType="dijit.form.CheckBox" type="checkbox" ' +
+                    'id="' + inputId + '" class="customInputFav" ' +
+                    (isFav ? 'checked="checked" ' : '') +
+                    'onChange="ocp.cclass.classDialog.favCheckboxChanged(\'' + attr + '\')" ' +
+                 '/>' +
+                 '<label for="' + inputId + '">' + ocp.coreAttrs[attr].name + '</label>';
+        }
+
+        // Insert the results (parsing the code for Dojo markups)
+        dojo.html.set(dojo.byId('classFavAttrsContainer'), cus, { parseContent: true });
+
+        // Now that they are all created, store references to all fav attr checkboxes
+        for (var attr in ocp.coreAttrs) {
+            this._favCheckbox[attr] = dijit.byId('favCheck_' + attr);
+        }
+
+
         // Initialize the major skills
-        var cus = '<div>Major Skills:</div>';
-        for (var spec in ocp.specs) {
+        var cus =
+            '<div class="customInputHeader">Major Skills:</div>' +
+            '<div class="customInputFootnote">' +
+                'Note: Skills for the selected specialization are ' +
+                '<span class="skillIsSpecialized">highlighted</span>.' +
+            '</div>';
 
-            // *** Pull in some comments from existing?
+        // Since the specialization is shown by italics, group the skills by attribute
+        for (var attr in ocp.coreAttrs) {
+            var coreAttr = ocp.coreAttrs[attr];
 
-            // Divide major skills by specialization
-            // *** Move to CSS
-            cus += '<div style="display: inline-block">' +
-                '<table>' +
-                '<thead>' +
-                    '<tr>' +
-                        '<th>' + spec + ' Skills</th>' +
-                        '<th>Major?</th>' +
-                    '</tr>' +
-                '</thead>' +
-                '<tbody>';
-            for each (var skill in ocp.specs[spec].skills) {
-                var isMajor = (customData.majorSkills.indexOf(skill) == -1 ? false : true);
-                cus +=
-                    '<tr>' +
-                        '<td>' +
-                            '<label for="classMajorCheck_' + skill + '">' +
-                                ocp.skills[skill].name +
-                            '</label>' +
-                        '</td>' +
-                        '<td>' +
-                            '<input dojoType="dijit.form.CheckBox" type="checkbox" ' +
-                                'id="classMajorCheck_' + skill + '" ' +
-                                (isMajor ? 'checked="checked" ' : '') +
-                                'onChange="ocp.cclass.classDialog.majorCheckboxChanged(\'' +
-                                    skill + '\')" ' +
+            // Only show attributes that have skills
+            if (coreAttr.skills.length > 0) {
+
+                // Build a table of all skills for this attribute
+                cus += '<div class="customMajorInputs">' +
+                    '<table>' +
+                    '<thead>' +
+                        '<tr>' +
+                            '<th class="majorAttrHeader">' + coreAttr.name + ' Skills</th>' +
+                            '<th class="majorCheckHeader">Major?</th>' +
+                        '</tr>' +
+                    '</thead>' +
+                    '<tbody>';
+
+                // Build a row for each skill
+                for each (var skill in coreAttr.skills) {
+                    var isMajor = (customData.majorSkills.indexOf(skill) == -1 ? false : true);
+                    var inputId = 'classMajorCheck_' + skill;
+                    cus +=
+                        '<tr>' +
+                            '<td>' +
+                                '<label for="' + inputId + '" id="' + inputId + '_label">' +
+                                    ocp.skills[skill].name +
+                                '</label>' +
+                            '</td>' +
+                            '<td class="majorCheckContainer">' +
+                                '<input dojoType="dijit.form.CheckBox" type="checkbox" ' +
+                                    'id="' + inputId + '" ' +
+                                    (isMajor ? 'checked="checked" ' : '') +
+                                    'onChange="ocp.cclass.classDialog.majorCheckboxChanged(\'' +
+                                        skill + '\')" ' +
                                 '/>' +
-                        '</td>' +
-                    '</tr>';
+                            '</td>' +
+                        '</tr>';
+                }
+                cus += '</tbody></table></div>';
             }
-            cus += '</tbody></table></div>';
         }
 
         // Insert the results (parsing the code for Dojo markups)
         dojo.html.set(dojo.byId('classSkillContainer'), cus, { parseContent: true });
 
-        // Now that they are all created, store references to all major checkboxes
+        // Now that they are all created, store references to all major checkboxes and labels
         for (var skill in ocp.skills) {
             this._majorCheckbox[skill] = dijit.byId('classMajorCheck_' + skill);
+            this._majorLabel[skill] = dojo.byId('classMajorCheck_' + skill + '_label');
         }
+
+        // Pretend that the value of the currently selected specialization changed
+        // so the appropriate styles can be applied to the major skill labels
+        this.specRadioChanged(customData.specialization);
 
 
         // With everything created, set an initial validity
@@ -803,6 +822,7 @@ ocp.cclass.classDialog = {
             // If we are still valid, tell the user all is well
             if (isValid) {
                 msg = '<div class="dialogStatusValid">All custom class settings are valid.</div>';
+                // *** Add a warning if all skills for an attribute are marked as major?
             }
 
             // Enable/disable the submit button based on our validity
@@ -815,6 +835,24 @@ ocp.cclass.classDialog = {
             this._isValid = isValid;
             //console.debug('exiting classDialog._updateValidity', this._isValid);
         }
+    },
+
+
+    // Public: A specialization radio button changed
+    specRadioChanged: function (spec) {
+        var selected = this._specRadio[spec].checked;
+        console.debug('entered classDialog.specRadioChanged', spec, selected);
+
+        // For the skills affected, add or remove the "is specialized" class
+        for each (var skill in ocp.specs[spec].skills) {
+            if (selected) {
+                dojo.addClass(this._majorLabel[skill], 'skillIsSpecialized');
+            } else {
+                dojo.removeClass(this._majorLabel[skill], 'skillIsSpecialized');
+            }
+        }
+
+        // There is no need to update validity since radio buttons must always be valid
     },
 
 

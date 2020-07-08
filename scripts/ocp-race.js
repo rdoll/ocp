@@ -519,7 +519,7 @@ ocp.race = {
                 if (firstSkill) {
                     det += '<td rowspan="' + ocp.coreAttrs[attr].skills.length +
                         '" class="vertical" title="Skills that affect ' +
-                            ocp.coreAttrs[attr].name + '.">' +
+                            ocp.coreAttrs[attr].name + '">' +
                         ocp.verticalize(attr) + '</td>';
                 }
 

@@ -44,9 +44,9 @@ ocp.results = {
             '<thead>' +
                 '<tr class="last">' +
                     '<th>Attribute</th>' +
-                    '<th title="Starting values for the selected Race and Gender.">Race</th>' +
-                    '<th title="Bonuses for the selected Birthsign.">Birth</th>' +
-                    '<th title="Bonuses for selected class Favored Attributes.">Fav</th>' +
+                    '<th title="Starting values for the selected Race and Gender">Race</th>' +
+                    '<th title="Bonuses for the selected Birthsign">Birth</th>' +
+                    '<th title="Bonuses for selected class Favored Attributes">Fav</th>' +
                     '<th>Total</th>' +
                 '</tr>' +
             '</thead>';
@@ -114,9 +114,9 @@ ocp.results = {
                 '<tr class="last">' +
                     '<th colspan="2">Skill</th>' +
                     '<th title="Base skill values for the selected class: ' + ocp.SKILL_MAJOR_MIN +
-                        ' for Majors and ' + ocp.SKILL_MIN + ' for Minors.">Base</th>' +
-                    '<th title="Bonuses for the selected class Specialization.">Spec</th>' +
-                    '<th title="Bonuses for the selected Race.">Race</th>' +
+                        ' for Majors and ' + ocp.SKILL_MIN + ' for Minors">Base</th>' +
+                    '<th title="Bonuses for the selected class Specialization">Spec</th>' +
+                    '<th title="Bonuses for the selected Race">Race</th>' +
                     '<th>Total</th>' +
                 '</tr>' +
             '</thead>';
@@ -135,7 +135,7 @@ ocp.results = {
                     if (firstSkill) {
                         res += '<td rowspan="' + ocp.coreAttrs[attr].skills.length +
                                 '" class="vertical" title="Skills that affect ' +
-                                ocp.coreAttrs[attr].name + '.">' +
+                                ocp.coreAttrs[attr].name + '">' +
                             ocp.verticalize(attr) + '</td>';
                     }
 
@@ -397,15 +397,15 @@ ocp.results = {
                 '</tr>' +
                 '<tr class="last">' +
                     '<th>Attribute</th>' +
-                    '<th title="Starting total value.">Start</th>' +
-                    '<th title="Maximum achievable by leveling.">Max</th>' +
-                    '<th title="Level the maximum value was achieved.">Level</th>' +
-                    '<th title="Total skill points you can level up for this attribute.">Avail</th>' +
-                    '<th title="Skill points required to reach the maximum value.">Used</th>' +
-                    '<th title="Spare skill points not required to level this attribute.">Spare</th>' +
+                    '<th title="Starting total value">Start</th>' +
+                    '<th title="Maximum achievable by leveling">Max</th>' +
+                    '<th title="Level the maximum value was achieved">Level</th>' +
+                    '<th title="Total skill points you can level up for this attribute">Avail</th>' +
+                    '<th title="Skill points required to reach the maximum value">Used</th>' +
+                    '<th title="Spare skill points not required to level this attribute">Spare</th>' +
                     '<th title="Spare skill points that are for major skills">Sp Maj</th>' +
                     '<th title="Skill points you can waste each level (assuming this exact leveling ' +
-                        'pattern).">Sp/Lv</th>' +
+                        'pattern)">Sp/Lv</th>' +
                 '</tr>' +
             '</thead>';
 
@@ -418,14 +418,14 @@ ocp.results = {
             // The class for attributes that failed to reach max level
             var worseClass = (data[attr].max < attrMax
                 ? 'class="numeric worse" ' +
-                    'title="Failed to reach the maximum possible value of ' + attrMax + '."'
+                    'title="Failed to reach the maximum possible value of ' + attrMax + '"'
                 : 'class="numeric"');
 
             // The class for maxed attributes
             var maxedClass = (firstTotals[attr] < attrMax
                 ? 'class="numeric"'
                 : 'class="numeric maxed" ' +
-                    'title="Not included in totals since ' + attrName + ' cannot be leveled."');
+                    'title="Not included in totals since ' + attrName + ' cannot be leveled"');
 
             anal +=
                 '<tr>' +

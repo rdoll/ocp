@@ -5,7 +5,6 @@ export SRC_FILES="\
     OblivCharPlanner.html \
     styles/ocp.css \
     scripts/ocp.js \
-    scripts/ocp-widget.js \
     scripts/ocp-input.js \
     scripts/ocp-race.js \
     scripts/ocp-birth.js \
@@ -14,6 +13,8 @@ export SRC_FILES="\
     scripts/ocp-order.js \
     scripts/ocp-level.js \
     scripts/ocp-results.js \
+    scripts/widget/TitledContentPane.js \
+    scripts/widget/LabeledHorizontalSlider.js \
     "
 
 # Start up the editor on all files
