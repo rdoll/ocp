@@ -185,12 +185,12 @@ ocp.level = {
         }
 
         // Based on the order, determine which attributes to level
-        // *** This could be optimized to order the attributes based on the
-        // *** total number of points available to level; e.g. if str has
-        // *** bla at 100, minor blu at 99, and major han at 50, the minor
-        // *** blu at 99 will ensure onlyMajors is false -- but it essentially
-        // *** is only majors. Should order the attrs by the number of majors
-        // *** they must raise to get their max bonus.
+        // TODO: This could be optimized to order the attributes based on the
+        // TODO: total number of points available to level; e.g. if str has
+        // TODO: bla at 100, minor blu at 99, and major han at 50, the minor
+        // TODO: blu at 99 will ensure onlyMajors is false -- but it essentially
+        // TODO: is only majors. Should order the attrs by the number of majors
+        // TODO: they must raise to get their max bonus.
         var attrsToLevel = [];
         var onlyWithMajors = [];
         var attrsFound = 0;
@@ -381,12 +381,12 @@ ocp.level = {
                             // so don't track the bonus -- just raise the skill
                             leveled[skill] += skillMax;
 
-                            // *** With Male Argonian, The Mage, and Warrior, this wasted
-                            // *** message pops out on level 23's Blunt skill. It looks like
-                            // *** Str was validly raised 2 to max, but then we needed more
-                            // *** major skill points, so we burnt the other 8 -- which
-                            // *** puts this wasted message out.
-                            // *** Could detect this case or make the message more generic...
+                            // TODO: With Male Argonian, The Mage, and Warrior, this wasted
+                            // TODO: message pops out on level 23's Blunt skill. It looks like
+                            // TODO: Str was validly raised 2 to max, but then we needed more
+                            // TODO: major skill points, so we burnt the other 8 -- which
+                            // TODO: puts this wasted message out.
+                            // TODO: Could detect this case or make the message more generic...
 
                             // If the attr for this skill is not at max,
                             // then we wasted the attr bonus for this skillup
@@ -618,8 +618,8 @@ ocp.level = {
             return false;
         }
 
-        // *** Can check that no attr got more than 10 skill points?
-        // *** Or can the algoritm use a minor for the attr and waste a major for the levelup?
+        // TODO: Can check that no attr got more than 10 skill points?
+        // TODO: Or can the algoritm use a minor for the attr and waste a major for the levelup?
 
 
         // All checks passed, so return success
@@ -642,7 +642,7 @@ ocp.level = {
         // min values for every skill and attribute (and because those inputs are not
         // validated for "being possible"), the failsafe has to accomodate this.
         // With all min values, we can reach level 63.
-        // *** With a custom class, make sure level 53 can be reached without tripping failsafe
+        // TODO: With a custom class, make sure level 53 can be reached without tripping failsafe
         var failsafe = (ocp.input.isNewChar ? ocp.LEVEL_MAX : 63) + 1;
         while ((--failsafe > 0) && this._canLevel(current)) {
 

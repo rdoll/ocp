@@ -61,28 +61,6 @@ noscript div {
     font-size: 75%;
 }
 
-
-/* Put some space between points in the home list */
-#home li + li {
-    margin-top: 0.5em;
-}
-
-
-/* Put some space between instruction points */
-#instructions li + li {
-    margin-top: 0.5em;
-}
-
-/* The name of a specific part of the OCP planner */
-#instructions .sectionName {
-    font-weight: bold;
-}
-
-
-/*
-** About footer section
-*/
-
 /* The main page footer with about information */
 #aboutFooter {
     margin-top: 1em;
@@ -116,8 +94,154 @@ noscript div {
 
 
 /*---------------------------------------------------------------------------*\
+|* Styles for all modules (except the planner which uses ocp-planner.css)
+\*---------------------------------------------------------------------------*/
+
+/*
+** Home module
+*/
+
+#home .moduleTitle + p, #home .moduleSubtitle + p {
+    margin-top: 0;
+}
+
+#home .homeOcpReason {
+    color: red;
+    margin: 1em 2em;
+}
+
+/* Align list bullets with the start of normal text */
+#home ul {
+    padding-left: 1.5em;
+}
+
+/* Put some space between list points */
+#home li + li {
+    margin-top: 0.5em;
+}
+
+
+/*
+** Instructions module
+*/
+
+/* Put some space between instruction points */
+#instructions li + li {
+    margin-top: 0.5em;
+}
+
+/* The name of a specific part of the OCP planner */
+#instructions .sectionName {
+    font-weight: bold;
+}
+
+
+/*
+** Release Notes module
+*/
+
+/* Definition terms are the names of the issues */
+#knownIssues dt {
+    font-weight: bold;
+    margin-left: 28px;
+    display: list-item;
+}
+
+/* Set a list image for every type of issue */
+#knownIssues .type_bug {
+    list-style-image: url(../images/icons/bug-issue.png);
+}
+#knownIssues .type_function {
+    list-style-image: url(../images/icons/function-issue.png);
+}
+#knownIssues .type_feature {
+    list-style-image: url(../images/icons/feature-issue.png);
+}
+
+/* Align the details of each issue with its name */
+#knownIssues dd {
+    margin-left: 28px;
+}
+
+/* Add some space between issues */
+#knownIssues dd + dt {
+    margin-top: 0.5em;
+}
+
+
+/* Add some space between versions */
+#changeLog .versionContainer + .versionContainer {
+    margin-top: 1em;
+}
+
+/* Decorate the title of each version */
+/* TODO: Is this green underline too much like a visited link? */
+#changeLog .versionTitle {
+    font-weight: bold;
+    color: green;
+    text-decoration: underline;
+}
+
+/* Don't let the icon of the first change touch the underline of the title */
+#changeLog dl {
+    margin: 2px 0 0 0;
+}
+
+/* Definition terms are the names of the changes */
+#changeLog dt {
+    font-weight: bold;
+    margin-left: 28px;
+    display: list-item;
+}
+
+/* Set a list image for every type of change */
+#changeLog .type_bug {
+    list-style-image: url(../images/icons/bug-change.png);
+}
+#changeLog .type_function {
+    list-style-image: url(../images/icons/function-change.png);
+}
+#changeLog .type_feature {
+    list-style-image: url(../images/icons/feature-change.png);
+}
+
+/* Align the details with its name and lessen the presence of the details */
+#changeLog dd {
+    margin-left: 28px;
+    font-size: smaller;
+}
+
+
+/*---------------------------------------------------------------------------*\
 |* Generic styles for all content
 \*---------------------------------------------------------------------------*/
+
+/*
+** Module common styles
+*/
+
+/* The title of a major section of a module */
+.moduleTitle {
+    font-size: larger;
+    font-weight: bold;
+    border-bottom: 1px solid #999;
+    margin-bottom: 0.5em;
+}
+
+/* The subtitle of a major section of a module */
+.moduleSubtitle {
+    font-weight: bold;
+    /* border-bottom: 1px dotted #999; */
+    text-decoration: underline;
+    margin: 1em 0 0.5em 0;
+}
+
+/* Add a major amount of emphasis */
+.majorEmphasis {
+    font-weight: bold;
+    font-style: italic;
+}
+
 
 /*
 ** Dynamic loading specific styles
@@ -137,6 +261,7 @@ noscript div {
 /* This class is used to identify the containers managed by ocp.loader */
 .loaderManagedContainer {
 }
+
 
 /*
 ** Dijit stack container and controller styles

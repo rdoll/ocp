@@ -145,7 +145,7 @@ ocp.existing = {
         // Whenever the slider has changed, update our value and notify of a change
         // Note: The newValue is not subject to ocp.widget.LabeledHorizontalSlider's
         //       forceIntegral feature, so be safe and force integral here.
-        // *** Should update ocp.widget.LabeledHorizontalSlider to fix this?
+        // TODO: Should update ocp.widget.LabeledHorizontalSlider to fix this?
         this._level = Math.floor(newValue);
         ocp.notifyChanged();
     },
@@ -497,8 +497,8 @@ ocp.existing.skillDialog = {
                 ski +=
                     '<tr>' +
                         '<td>' +
-                            // *** Setting for="existingMajorCheck_..." allows clicking
-                            // *** on this label to toggle the major checkbox.
+                            // TODO: Setting for="existingMajorCheck_..." allows clicking
+                            // TODO: on this label to toggle the major checkbox.
                             '<label for="skillSpinner_' + skill + '" class="selectedName">' +
                                 ocp.skills[skill].name + ':' +
                             '</label>' +

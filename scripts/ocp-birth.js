@@ -281,7 +281,7 @@ ocp.birth = {
 
 
     // Private: Update our generated content
-    // *** Should add attributes to list of specials?
+    // TODO: Should add attributes to list of specials?
     _update: function() {
 
         // Update selected label

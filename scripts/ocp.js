@@ -65,7 +65,7 @@ var ocp = {
     // Public: Define the abbr and full names of all core attributes
     //         Leveling the skills listed increases the level bonus for this stat
     //         Min is set during initialization
-    // *** int collides with potential future reserved word -- rename itl?
+    // TODO: int collides with potential future reserved word -- rename itl?
     coreAttrs: {
         str: { name:'Strength',     skills:[ 'bla', 'blu', 'han' ], min:0, max:100 },
         int: { name:'Intelligence', skills:[ 'alc', 'con', 'mys' ], min:0, max:100 },
@@ -219,7 +219,34 @@ var ocp = {
     },
 
 
-    // Public: Initialize ourselves
+    // Public: Retrieve the wanted attributes from the given DOM Node
+    //         Attributes can be required (true in wantedAttrs) or optional (false)
+    // Throws: An error when a required attribute is missing from the node
+    getDomNodeAttrs: function (domNode, wantedAttrs) {
+        var attrs = {};
+
+        for (var attrName in wantedAttrs) {
+            if (dojo.hasAttr(domNode, attrName)) {
+
+                // The node has this attr, so add it to the return results
+                // TODO: Use getAttribute instead of dojo.attr() because of
+                // TODO: Dojo 1.3.2 bug http://trac.dojotoolkit.org/ticket/8991
+                attrs[attrName] = domNode.getAttribute(attrName);
+            } else {
+
+                // This attr doesn't exist -- barf if it is required
+                if (wantedAttrs[attrName]) {
+                    throw 'Error: ' + domNode.nodeName + ' element missing required ' +
+                        attrName + ' attribute in ' + domNode.baseURI;
+                }
+            }
+        }
+
+        return attrs;
+    },
+
+
+    // Initialize ourselves and the main content (but not the planner)
     initialize: function() {
         // Initialize the version numbers in the about info
         this._initializeVersions();
@@ -300,11 +327,11 @@ var ocp = {
     },
 
 
-    // Public: Some character data has changed, so update all results
+    // Public: Some planner character data has changed, so update all results
     notifyChanged: function() {
         console.debug('entered notifyChanged');
 
-        // Update our children in the correct order
+        // Update the planner's children in the correct order
         this.input.notifyChanged();
         this.race.notifyChanged();
         this.birth.notifyChanged();

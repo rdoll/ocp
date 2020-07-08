@@ -59,7 +59,7 @@ dojo.declare('ocp.widget.LabeledHorizontalSlider',
         // Whenever the value of this slider changes, update the corresponding label
         _setValueAttr: function (/*Number*/ value, /*Boolean, optional*/ priorityChange) {
             // Let the parent set the new value first, then update the label
-            // *** Should force value integral here?
+            // TODO: Should force value integral here?
             this.inherited(arguments);
             this._setLabel();
         }

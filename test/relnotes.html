@@ -1,0 +1,192 @@
+<!--
+    (C) Copyright 2009 by Richard Doll
+
+    License:
+    You are free to use, copy, or modify this software provided it remains free
+    of charge for all users, the source remains open and unobfuscated, and the
+    author, copyright, license, and warranty information remains intact and
+    clearly visible.
+
+    Warranty:
+    All content is provided as-is. The user assumes all liability for any
+    direct or indirect damages from usage.
+-->
+
+<!-- Details about OCP itself -->
+<!--
+<div id="about">
+    About info here...
+</div>
+-->
+
+<style type="text/css">
+.moduleTitle {
+    font-size: larger;
+    font-weight: bold;
+    border-bottom: 1px solid #999;
+    margin-bottom: 0.5em;
+}
+
+/*
+#knownissues dt {
+    margin-left: 28px;
+    / *
+    list-style-image: url("http://192.168.226.128/icons/ball.red.gif");
+    list-style-image:
+        url(http://192.168.226.128/icon-packages/famfamfam_silk_icons_v013/icons/bug.png);
+    list-style-image: url(dojotoolkit/dijit/themes/soria/images/warning.png);
+    * /
+    list-style-image: url(images/icons/bug-open.png);
+    display: list-item;
+}
+*/
+
+#knownissues dt {
+    font-weight: bold;
+    margin-left: 28px;
+    display: list-item;
+}
+
+#knownissues .bugIssue {
+    list-style-image: url(images/icons/bug-issue.png);
+}
+#knownissues .functionIssue {
+    list-style-image: url(images/icons/function-issue.png);
+}
+#knownissues .featureIssue {
+    list-style-image: url(images/icons/feature-issue.png);
+}
+
+#knownissues dd {
+    margin-left: 28px;
+}
+
+#knownissues dd + dt {
+    margin-top: 0.5em;
+}
+
+
+#changelog .releaseVersion + .releaseVersion {
+    margin-top: 1em;
+}
+
+#changelog .versionTitle {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+#changelog dl {
+    margin: 1px 0 0 0;
+}
+
+#changelog dt {
+    /* font-weight: bold; */
+    margin-left: 28px;
+    display: list-item;
+}
+
+/* TODO: It'd be nice if these used a check/tick instead of a plus sign */
+#changelog .bugChange {
+    list-style-image: url(images/icons/bug-change.png);
+}
+#changelog .functionChange {
+    list-style-image: url(images/icons/function-change.png);
+}
+#changelog .featureChange {
+    list-style-image: url(images/icons/feature-change.png);
+}
+
+#changelog dd {
+    margin-left: 28px;
+}
+</style>
+
+<div id="relnotes">
+    <div id="knownissues">
+        <div class="moduleTitle">Known Issues</div>
+        <div>The following known issues and limitations exist in the current version of OCP:</div>
+        <!-- Need a legend? -->
+        <dl>
+            <dt class="bugIssue">
+                Clicking Nullis from Instructions doesn't work
+            </dt>
+            <dd>
+                The details for this issue. This will include any possible workarounds and/or
+                ways to avoid hitting it in the first place.
+            </dd>
+
+            <dt class="functionIssue">
+                Opera fails to render the custom class dialog tab
+            </dt>
+            <dd>
+                The details for this issue. This will include any possible workarounds and/or
+                ways to avoid hitting it in the first place.
+            </dd>
+
+            <dt class="featureIssue">
+                IE crashes when running the awesomeness of OCP
+            </dt>
+            <dd>
+                The details for this issue. This will include any possible workarounds and/or
+                ways to avoid hitting it in the first place.
+            </dd>
+        </dl>
+    </div>
+
+    <div id="changelog">
+        <div class="moduleTitle">Change Log</div>
+        <!-- Need a legend? -->
+        <div class="releaseVersion">
+            <div class="versionTitle">
+                Version 0.7.0 beta released 27 Jul 2009
+            </div>
+            <dl>
+                <dt class="bugChange">
+                    Clicking Nullis from Instructions doesn't work
+                </dt>
+                <dd>
+                    The details for this issue. This will include any possible workarounds and/or
+                    ways to avoid hitting it in the first place.
+                </dd>
+
+                <dt class="functionChange">
+                    Opera fails to render the custom class dialog tab
+                </dt>
+                <dd>
+                    The details for this issue. This will include any possible workarounds and/or
+                    ways to avoid hitting it in the first place.
+                </dd>
+
+                <dt class="featureChange">
+                    IE crashes when running the awesomeness of OCP
+                </dt>
+                <dd>
+                    The details for this issue. This will include any possible workarounds and/or
+                    ways to avoid hitting it in the first place.
+                </dd>
+            </dl>
+        </div>
+
+        <div class="releaseVersion">
+            <div class="versionTitle">
+                Version 0.6.1 beta released 17 Jul 2009
+            </div>
+            <dl>
+                <dt class="bugChange">
+                    Clicking Nullis from Instructions doesn't work
+                </dt>
+                <dd></dd>
+
+                <dt class="functionChange">
+                    Opera fails to render the custom class dialog tab
+                </dt>
+                <dd></dd>
+
+                <dt class="featureChange">
+                    IE crashes when running the awesomeness of OCP
+                </dt>
+                <dd></dd>
+            </dl>
+        </div>
+    </div>
+</div>

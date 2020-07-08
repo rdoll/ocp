@@ -17,7 +17,7 @@
 **
 ** Everything related to classes.
 ** Note: This is named cclass (for Character Class) to avoid the potential future keyword "class".
-** *** Could change cclass to clazz?
+** TODO: Could change cclass to clazz?
 **
 ** All of these images were coverted to JPG from the data-mined in-game resources at
 ** http://www.elderstats.com/about/?p=credits
@@ -31,7 +31,7 @@ ocp.cclass = {
     IMAGE_DIR: ocp.IMAGE_ROOT_DIR + 'class/',
 
     // Private: Predefined classes
-    // *** Sort favoredAttrs to match ocp.coreAttrs order? Same with skills?
+    // TODO: Sort favoredAttrs to match ocp.coreAttrs order? Same with skills?
     _data: {
         'Acrobat': {
             specialization: 'Stealth',
@@ -235,9 +235,9 @@ ocp.cclass = {
     // Private: Currently selected custom class info
     //          When _custom is true, this data supercedes _predefined
     //          Note: No rhyme or reason behind default values
-    // *** Lots of code could be simplified if I added _customData to _data
-    // *** Would use new .custom:boolean property to mark predefined vs. custom
-    // *** Would preclude ever being able to set a custom name, tho (name is _data index)
+    // TODO: Lots of code could be simplified if I added _customData to _data
+    // TODO: Would use new .custom:boolean property to mark predefined vs. custom
+    // TODO: Would preclude ever being able to set a custom name, tho (name is _data index)
     _custom: false,
     _customData: {
         specialization: '',
@@ -431,7 +431,7 @@ ocp.cclass = {
     selectCustom: function (spec, favs, majors) {
         console.debug('entered selectCustom:', spec, favs, majors);
 
-        // *** Add validation here?
+        // TODO: Add validation here?
 
         // Assign the new value
         this._selectCustom(spec, favs, majors);
@@ -535,7 +535,7 @@ ocp.cclass.classDialog = {
     _initializeOverview: function() {
 
         // Build a div for each predefined class
-        // *** Put two per row (one left and one right) like birthsigns?
+        // TODO: Put two per row (one left and one right) like birthsigns?
         var over = '';
         for (var cclass in ocp.cclass._data) {
             var data = ocp.cclass._data[cclass];
@@ -626,7 +626,7 @@ ocp.cclass.classDialog = {
             det +=
                 '<tr class="' + (rowCount++ % 6 < 3 ? 'even' : 'odd') + '">' +
                     '<td>' +
-                        // *** Clean up the look of this -- it doesn't match the rest of the UI
+                        // TODO: Clean up the look of this -- it doesn't match the rest of the UI
                         '<a href="javascript:ocp.cclass.selectPredefined(\'' + cclass + '\')" ' +
                             'title="Select ' + cclass + '">' +
                             cclass +
@@ -850,7 +850,7 @@ ocp.cclass.classDialog = {
             // If we are still valid, tell the user all is well
             if (isValid) {
                 msg = '<div class="dialogStatusValid">All custom class settings are valid.</div>';
-                // *** Add a warning if all skills for an attribute are marked as major?
+                // TODO: Add a warning if all skills for an attribute are marked as major?
             }
 
             // Enable/disable the submit button based on our validity

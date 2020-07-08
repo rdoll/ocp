@@ -61,10 +61,12 @@ ocpValidateVersions || return 1
 
 
 # Define the files for the project
-unset OCP_SRC_HTML OCP_SRC_CSS OCP_SRC_JS OCP_SRC_HTML
+unset OCP_SRC_HTML OCP_SRC_CSS OCP_SRC_JS OCP_SRC_MISC
 while read _file ; do
     _file="$OCP_TOP/$_file"
     if [ ".${_file%.html}" != ".$_file" ] ; then
+        export OCP_SRC_HTML="$OCP_SRC_HTML $_file"
+    elif [ ".${_file%.xml}" != ".$_file" ] ; then
         export OCP_SRC_HTML="$OCP_SRC_HTML $_file"
     elif [ ".${_file%.css}" != ".$_file" ] ; then
         export OCP_SRC_CSS="$OCP_SRC_CSS $_file"
@@ -79,7 +81,7 @@ partials/home.html
 partials/planner.html
 partials/instructions.html
 partials/faq.html
-partials/changelog.html
+partials/relnotes.xml
 partials/about.html
 styles/ocp.css
 styles/planner.css
@@ -97,7 +99,7 @@ scripts/ocp-nullis.js
 scripts/widget/TitledContentPane.js
 scripts/widget/LabeledHorizontalSlider.js
 setup.bash
-NOTES.txt
+test/NOTES.txt
 EOF
 unset _file
 export OCP_SRC="$OCP_SRC_HTML $OCP_SRC_CSS $OCP_SRC_JS"
@@ -285,9 +287,9 @@ alias wccwd='wcdir .'
 alias wcsrc='wcdir "$OCP_TOP"'
 
 # Diff versus current source
-# *** Be awesome if these could compare sub-dirs
-# *** (e.g. while in .../ver2/scripts, diffcwd would only compare
-# *** .../ver1/scripts to ../ver2/scripts)
+# TODO: Be awesome if these could compare sub-dirs
+# TODO: (e.g. while in .../ver2/scripts, diffcwd would only compare
+# TODO: .../ver1/scripts to ../ver2/scripts)
 function diffdir {
     if [ $# -lt 2 ] ; then
         echo "Error: diffdir requires at least two arguments."

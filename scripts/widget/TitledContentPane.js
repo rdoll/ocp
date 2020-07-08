@@ -52,11 +52,10 @@ dojo.declare('ocp.widget.TitledContentPane',
 
 
         // If the content is real and a pre-processing method exists, invoke it
-        // Regardless, set the content to this data
+        // Regardless, set the new content via the inherited method
         _setContent: function (content, isFake) {
             if ((!isFake) && (this.preprocessContent)) {
-                console.debug('_setContent: content=', content, ', isFake=', isFake);
-                this.preprocessContent(content);
+                content = this.preprocessContent(content);
             }
             this.inherited(arguments);
         }

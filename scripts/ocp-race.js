@@ -21,13 +21,13 @@
 ** All of these images were converted to JPG from the individual race details pages under
 ** http://www.elderscrolls.com/codex/races_map.htm
 ** Note: The JPG conversion eliminated the transparency present in the source GIFs.
-** *** The background used to replace transparency is not the same for all race images.
+** TODO: The background used to replace transparency is not the same for all race images.
 **
 ** Descriptions also taken from the individual race details pages under
 ** http://www.elderscrolls.com/codex/races_map.htm
 **
-** *** Add height/weight info (esp height since it affects movement speed)
-** *** Show resists, water breathing, and night-eye in details table?
+** TODO: Add height/weight info (esp height since it affects movement speed)
+** TODO: Show resists, water breathing, and night-eye in details table?
 */
 
 ocp.race = {
@@ -451,7 +451,7 @@ ocp.race = {
         det += '<colgroup span="2" />';
         var firstRace = true;
         for (var race in this._data) {
-//          *** raceData's width doesn't work here -- using th.raceName instead
+//          TODO: raceData's width doesn't work here -- using th.raceName instead
 //          det += '<colgroup span="2" class="raceData' +
 //              (firstRace ? '' : ' first') + '" />';
             det += '<colgroup span="2"' +

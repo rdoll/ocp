@@ -17,7 +17,7 @@
 /*===========================================================================*\
 |* planner.css - Oblivion Character Planner planner styles
 |*
-|* *** This is getting large -- split into smaller files?
+|* TODO: This is getting large -- split into smaller files?
 \*===========================================================================*/
 
 /*---------------------------------------------------------------------------*\
@@ -25,7 +25,7 @@
 \*---------------------------------------------------------------------------*/
 
 /* Set up the main pane for the planner */
-/* *** With all attrs and skills at max, leveling details gets a horizontal scrollbar */
+/* TODO: With all attrs and skills at max, leveling details gets a horizontal scrollbar */
 #planner {
     width: 920px;
     height: 670px;
@@ -73,7 +73,7 @@
 }
 
 /* A list of attribute details */
-/* *** All 100's for the coreAttrs exceeds one line */
+/* TODO: All 100's for the coreAttrs exceeds one line */
 #plannerInputPane .attrList {
     margin: 0 0 0 1em;
     padding: 0;
@@ -134,8 +134,8 @@
 }
 
 /* Add a little space to the first column in the starting stats pane's tables */
-/* *** colgroup margin/padding/width doesn't seem to work */
-/* *** does this still work in the skills table now that we added the Attr verticalized? */
+/* TODO: colgroup margin/padding/width doesn't seem to work */
+/* TODO: does this still work in the skills table now that we added the Attr verticalized? */
 #resultsInitialPane tr > th:first-child, #resultsInitialPane tr > td:first-child {
     padding-right: 1em;
 }
@@ -148,8 +148,8 @@
 }
 
 /* Add a little space to the first column in the analysis pane's tables */
-/* *** colgroup margin/padding/width doesn't seem to work */
-/* *** does this still work in the skills table now that we added the Attr verticalized? */
+/* TODO: colgroup margin/padding/width doesn't seem to work */
+/* TODO: does this still work in the skills table now that we added the Attr verticalized? */
 #resultsAnalysisPane tr > th:first-child, #resultsAnalysisPane tr > td:first-child {
     padding-right: 0.5em;
 }
@@ -177,7 +177,7 @@
 }
 
 /* Major skills get a special highlight in the initial skills table */
-/* *** Maybe make all major skills bold and italics globally? */
+/* TODO: Maybe make all major skills bold and italics globally? */
 #resultsInitialSkills tr.major {
     font-weight: bold;
 }
@@ -234,7 +234,7 @@
 }
 
 /* The details -- set an explicit width to fit side-by-side with the image */
-/* *** Is there any way to let this auto-size without dropping below the image? */
+/* TODO: Is there any way to let this auto-size without dropping below the image? */
 #raceOverviewPane .raceDetails {
     display: inline-block;
     width: 620px;
@@ -280,12 +280,12 @@
 }
 
 /* Evenly size all race column data in the details table */
-/* *** This doesn't work, but the th setting does...
+/* TODO: This doesn't work, but the th setting does...
 #raceDetailsTable colgroup.raceData {
     width: 165px;
 }
 */
-/* *** Oddly, many columns are a little smaller than this.... */
+/* TODO: Oddly, many columns are a little smaller than this.... */
 #raceDetailsTable th.raceName {
     width: 65px;
 }
@@ -416,7 +416,7 @@
 }
 
 /* The details -- set an explicit width to fit side-by-side with the image */
-/* *** Is there any way to let this auto-size without dropping below the image? */
+/* TODO: Is there any way to let this auto-size without dropping below the image? */
 #classOverviewPane .classDetails {
     display: inline-block;
     width: 585px;
@@ -432,7 +432,7 @@
 
 /* The description isn't that important */
 #classOverviewPane .classDescription {
-/*    font-size: smaller; *** Delete style or at least update comment? */
+/*    font-size: smaller; TODO: Delete style or at least update comment? */
     margin-bottom: 1em;
 }
 
@@ -639,7 +639,7 @@
 }
 
 /* The name of something you can select */
-/* *** delete this? */
+/* TODO: delete this? */
 #skillContainer .selectedName {
 /*    font-weight: bold; */
 }

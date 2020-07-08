@@ -188,7 +188,7 @@ ocp.results = {
 
 
     // Private: Re-display all leveling details
-    // *** It'd be nice if this didn't use literals for column counts
+    // TODO: It'd be nice if this didn't use literals for column counts
     _updateLeveling: function () {
 
         // The new leveling contents
@@ -385,8 +385,8 @@ ocp.results = {
 
         /*
         ** Now generate the HTML for the new analysis
-        ** *** Add "key level snapshots"? e.g. level 10 stats, level 15 stats, level 20 stats, ...
-        ** *** How to handle this for existing characters that may be past some key levels?
+        ** TODO: Add "key level snapshots"? e.g. level 10 stats, level 15 stats, level 20 stats, ...
+        ** TODO: How to handle this for existing characters that may be past some key levels?
         */
 
         // Helper function that returns the number of spare skill

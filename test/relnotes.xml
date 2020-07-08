@@ -1,0 +1,93 @@
+<!--
+    (C) Copyright 2009 by Richard Doll
+
+    License:
+    You are free to use, copy, or modify this software provided it remains free
+    of charge for all users, the source remains open and unobfuscated, and the
+    author, copyright, license, and warranty information remains intact and
+    clearly visible.
+
+    Warranty:
+    All content is provided as-is. The user assumes all liability for any
+    direct or indirect damages from usage.
+-->
+
+<!--
+    OCP Release Notes
+
+    This XML file is processed before being displayed in a pretty HTML format.
+    The types for issues and changes are identical. In issues, it means the item
+    is missing or broken and in changes it means the item has been added or fixed.
+
+    A function is small part of a feature (e.g. not validating something) and
+    a feature is a large piece of functionality. Function and feature items are
+    only listed in the issues list if they are intended to be supported.
+-->
+
+<ocp>
+    <knownissues>
+        <issue type="bug" name="Some bug">
+            Lots and lots of details here.
+            And even more details here.
+        </issue>
+        <issue type="bug" name="Some bug 2">
+            One line of details.
+        </issue>
+        <issue type="function" name="Some limitation">Some limit info</issue>
+        <issue type="feature" name="Some missing feature"></issue>
+        <issue type="feature" name="Another missing feature" />
+    </knownissues>
+
+    <knownissues>
+        <issue type="bug" name="2nd block bug">End of line...</issue>
+    </knownissues>
+
+    <changelog>
+        <version name="0.7.1.test" type="beta" date="TBD">
+            <change type="bug" name="Bug 1">
+                Any details on bug 1
+                And more details on bug 1
+            </change>
+            <change type="function" name="Enhancement 1">
+                Details on enhance 1
+                And more details on enhance 1
+            </change>
+            <change type="feature" name="New Feature 1">
+                Details on feature 1
+                And more details on feature 1
+            </change>
+        </version>
+
+        <version name="0.7.1" type="beta" date="TBD">
+            <change type="bug" name="Bug 1">
+                Any details on bug 1
+            </change>
+            <change type="function" name="Enhancement 1">
+                Details on enhance 1
+            </change>
+            <change type="feature" name="New Feature 1">
+                Details on feature 1
+            </change>
+        </version>
+
+        <version name="0.7.0" type="beta" date="27 Jul 2009">
+            <change type="bug" name="Bug 2">Any details on bug 2</change>
+            <change type="function" name="Enhancement 2">Details on enhance 2</change>
+            <change type="feature" name="New Feature 2">Details on feature 2</change>
+        </version>
+
+        <version name="0.6.0" type="beta" date="17 Jul 2009">
+            <change type="bug" name="Bug 3"></change>
+            <change type="function" name="Enhancement 3"></change>
+            <change type="feature" name="New Feature 3"></change>
+        </version>
+    </changelog>
+
+    <changelog>
+        <version name="0.5.0" type="beta" date="17 Jul 2009">
+            <change type="bug" name="Bug 4"/>
+            <change type="function" name="Enhancement 4" />
+            <change type="feature" name="New Feature 4" />
+        </version>
+    </changelog>
+</ocp>

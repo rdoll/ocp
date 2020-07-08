@@ -131,6 +131,12 @@ ocp.nullis = {
         });
         wasted[11] = { bla:'', res:'', mer:'', spc:'' };
 
+        totals[12] = nextLevel(totals[totals.length - 1], {
+            spe:5, end:5, luc:1, hea:19, mag:0, fat:5, enc:0,
+            bla:1, mar:5, sec:4, sne:9, acr:6, ath:4, lig:5, arm:7, blo:2, hvy:1, mer:6, spc:1
+        });
+        wasted[12] = { bla:'', mer:'', spc:'' };
+
         var maxLevel = totals.length - 1;
 
         for (var level = 1; level <= maxLevel; level++) {
