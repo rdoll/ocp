@@ -101,7 +101,7 @@ ocp.order = {
         });
 
         /* This works, but the order in the map never changes
-        source.forInItems( function (item, id, source) {
+        source.forInItems(function (item, id, source) {
             // From closure: newOrder
             newOrder.push(item.data.attr);
         });

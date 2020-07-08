@@ -280,6 +280,12 @@ ocp.race = {
     // Private: Min/max limits of attributes for all races combined
     _limits: null,
 
+    // Private: The race dialog
+    _raceDialog: null,
+
+    // Private: The current gender selection dialog opened
+    _genderDialog: null,
+
 
     // Private: Gets an attribute value for a race or returns 0 if none
     _getAttr: function (race, gender, attr) {
@@ -349,18 +355,31 @@ ocp.race = {
     // Public: Initialize
     initialize: function() {
 
+        // Initialize our data
+        this._raceDialog = dijit.byId('raceDialog');
+
         // Initialize the min/max limits
         this._initializeLimits();
 
         // Hook the race dialog to initialize it the first time it's shown
         var _this = this;
-        var handle = dojo.connect(dijit.byId('raceDialog'), 'onShow',
+        var handle = dojo.connect(this._raceDialog, 'onShow',
             function (/* event */) {
                 // From closure: _this, handle
                 // Disconnect so we only do this once
                 dojo.disconnect(handle);
                 handle = null;
                 _this._initializeDialog();
+        });
+
+        // When the race dialog is closed, hide any gender dialog
+        dojo.connect(this._raceDialog, 'onCancel', function () {
+            ocp.race.closeGenderDialog();
+        });
+
+        // When the current tab changes, hide any gender dialog
+        dojo.subscribe('raceTabContainer-selectChild', function () {
+            ocp.race.closeGenderDialog();
         });
 
         // Select an initial race
@@ -420,6 +439,8 @@ ocp.race = {
                 '<div class="raceOverview">' +
                     '<img src="' + this.IMAGE_DIR + this._data[race].image + '" ' +
                         'class="raceImage" alt="[' + race + ' Image]" ' +
+                        'title="Select ' + race + '" ' +
+                        'onClick="ocp.race.openGenderDialog(\'' + race + '\', event)" ' +
                     '/>' +
                     '<div class="raceDetails">' +
                         '<div class="raceName">' + race + '</div>' +
@@ -479,8 +500,8 @@ ocp.race = {
                     '<button dojoType="dijit.form.Button" ' +
                         'type="submit"' +
                         'title="Select ' + gender + ' ' + race + '" ' +
-                        'onClick="ocp.race.select(\'' +
-                            race + '\', \'' + gender + '\')">' +
+                        'onClick="ocp.race.select(\'' + race + '\', \'' + gender + '\')" ' +
+                    '>' +
                         gender.charAt(0) +
                     '</button></th>';
             }
@@ -499,9 +520,9 @@ ocp.race = {
                     var gender = attributes[genderIndex];
                     var extra = '';
                     if (attr != 'luc') {  // Luck is the same for everyone, not better/worse
-                        extra = (gender[attr] > 40
+                        extra = (gender[attr] > ocp.RACE_ATTR_NORM
                             ? 'better'
-                            : (gender[attr] < 40 ? 'worse' : ''));
+                            : (gender[attr] < ocp.RACE_ATTR_NORM ? 'worse' : ''));
                     }
                     det += '<td class="numeric ' + extra + '">' + gender[attr] + '</td>';
                 }
@@ -576,6 +597,106 @@ ocp.race = {
     },
 
 
+    // Public: Open a gender selection dialog for the selected overview image
+    openGenderDialog: function(race, event) {
+        console.debug('entered openGenderDialog:', race, event);
+
+        // Store the currently open dialog's race (if any)
+        var currentRace = this._genderDialog ? this._genderDialog.race : undefined;
+
+        // Close any currently open dialog
+        this.closeGenderDialog();
+
+        // If the new race is different from the current race, open the new dialog
+        if (currentRace != race) {
+
+            // Note that TooltipDialog's are supposed to be controlled by another widget
+            // (typically a dijit.form.DropDownButton). Rather than mess with creating a
+            // fake/invisible button, just work with the TooltipDialog directly.
+
+            // Create a tooltip dialog storing our race
+            var dialog = new dijit.TooltipDialog({
+                race: race,
+                content:
+                    '<div class="raceGenderDialog">' +
+                        '<div>Gender of your ' + race + ' character?</div>' +
+                        '<button dojoType="dijit.form.Button" ' +
+                            'type="submit" ' +
+                            'title="Select Male ' + race + '" ' +
+                            'onclick="ocp.race.selectGenderDialog(\'' + race +
+                                '\', \'Male\')" ' +
+                        '>' +
+                            'Male' +
+                        '</button>' +
+                        '<button dojoType="dijit.form.Button" ' +
+                            'type="submit" ' +
+                            'title="Select Female ' + race + '" ' +
+                            'onclick="ocp.race.selectGenderDialog(\'' + race +
+                                '\', \'Female\')" ' +
+                        '>' +
+                            'Female' +
+                        '</button>' +
+                    '</div>'
+            });
+
+            // Initialize and prep the dialog for display
+            dialog.startup();
+            dijit.popup.prepare(dialog.domNode);
+
+            // Save the current focus in the race dialog
+            dialog.savedFocus = dijit.getFocus(this._raceDialog);
+
+            // Display the dialog at the overall position the user clicked
+            dijit.popup.open({
+                popup: dialog,
+                parent: dijit.byId('raceOverviewPane'), // Fake parent is the overview pane
+                x: event.clientX,
+                y: event.clientY,
+                orient: 'L',
+                onClose: function () {
+                    console.debug('genderDialog onClose');
+                },
+                onCancel: function () {
+                    console.debug('genderDialog onCancel');
+                    ocp.race.closeGenderDialog();
+                },
+                onExecute: function () {
+                    // This never seems to get called, but keep just in case
+                    console.debug('genderDialog onExecute');
+                    ocp.race.closeGenderDialog();
+                }
+            });
+
+            // Store the dialog for later referencing
+            this._genderDialog = dialog;
+        }
+    },
+
+
+    // Public: Select a race and gender from the gender selection dialog and close everything
+    selectGenderDialog: function(race, gender) {
+        console.debug('entered selectGenderDialog:', race, gender);
+        ocp.race.select(race, gender);
+        this.closeGenderDialog();
+        this._raceDialog.hide();
+    },
+
+
+    // Public: Close an open gender selection dialog (and restore focus)
+    closeGenderDialog: function() {
+        if (this._genderDialog) {
+            console.debug('entered closeGenderDialog');
+            dijit.popup.close(this._genderDialog);
+            // TODO: If this got called because the user switched to the Details tab,
+            // TODO: this actually sets the focus to the Overview tab -- which is wrong.
+            dijit.focus(this._genderDialog.savedFocus);
+            this._genderDialog.destroyRecursive();
+            delete this._genderDialog;
+            this._genderDialog = null;
+        }
+    },
+
+
     // Private: Select race/gender without error checking or notification
     _select: function(race, gender) {
         console.debug('entered _select:', gender, race);
@@ -599,6 +720,9 @@ ocp.race = {
 
                 // Notify that something has changed
                 ocp.notifyChanged();
+
+                // Clear any lingering gender selection dialog (tho there shouldn't be one)
+                this.closeGenderDialog();
             } else {
                 var msg = 'Unknown gender "' + gender + '" selected for race "' + race + '".';
                 console.error(msg);

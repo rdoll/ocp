@@ -14,11 +14,11 @@
 
 <!-- Frequently Asked Questions -->
 <div id="faq">
-    <div id="faqButtons">
+    <div class="expCollButtons">
         <button dojoType="dijit.form.Button"
-            onclick="ocp.faqExpandAll(true)">Expand All</button>
+            onclick="ocp.expCollTitlePanes('#faq .faqItem', true)">Expand All</button>
         <button dojoType="dijit.form.Button"
-            onclick="ocp.faqExpandAll(false)">Collapse All</button>
+            onclick="ocp.expCollTitlePanes('#faq .faqItem', false)">Collapse All</button>
     </div>
 
     <div dojoType="dijit.TitlePane" class="faqItem" open="false"
@@ -104,7 +104,7 @@
             It was obvious that a tool was needed, but the only one I found was purely for setup
             -- it didn't do any analysis. For me, the key question is "Can this character
             configuration maximize all attributes with a less-than-perfect playstyle?" While
-            playing the game, I don't want to be a slave to the occassional stray Mercantile,
+            playing the game, I don't want to be a slave to the occasional stray Mercantile,
             Acrobatics, or Athletics skill up. After considering the options for a tool with this
             kind of analysis, I settled on a web browser application so it would be easily
             accessible to all Oblivion users.
@@ -116,8 +116,8 @@
         <p>
             Nullis is my first Oblivion character and one that I created using OCP. He is a Male
             Khajiit specializing in Stealth Bow attacks -- a kind of medieval sniper. Because of
-            OCP, I was able to craft a custom class that allows me to maximize all attributes
-            while being able to safely waste a few skill points each level.
+            OCP, I was able to craft a custom class and leveling plan that allows me to maximize
+            all attributes while being able to safely waste a few skill points each level.
         </p>
         <p>
             For fun, I added the complete details of Nullis into OCP. When you

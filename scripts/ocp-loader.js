@@ -54,7 +54,9 @@ ocp.loader = {
             var container = this._managedModules[moduleId]._container;
             if (container.isLoaded) {
 
-                // The container's contents have already been loaded, so just run the function
+                // The container's contents have already been loaded, so ensure it is displayed
+                // and then run the function
+                ocp.setMainModule(moduleId);
                 runFunc();
             } else {
 
@@ -85,13 +87,29 @@ ocp.loader = {
                     dojo.forEach(handles, dojo.disconnect);
                     handles = null;
                 }));
-            }
 
-            // Switch to the given module, which will load it
-            dijit.byId('ocpStackContainer').selectChild(moduleId);
+                // Switch to the given module, which will load it
+                ocp.setMainModule(moduleId);
+            }
         } else {
             throw 'ocp.loader.runAfterLoaded is not managing moduleId "' + moduleId + '".';
         }
+    },
+
+
+    // Public: Set the module as the main module and shows the given submodule
+    showSubmodule: function (moduleId, subModId) {
+
+        // Allow the submodule ID to be abbreviated
+        if (!subModId.match(new RegExp('^' + moduleId))) {
+            subModId = moduleId + subModId;
+        }
+
+        // After the module is loaded, switch to the given submodule
+        this.runAfterLoaded(moduleId + 'ContentPane', function () {
+            // From closure: moduleId, subModId
+            dijit.byId(moduleId).selectChild(subModId);
+        });
     }
 };
 
@@ -101,6 +119,10 @@ ocp.loader = {
 */
 
 ocp.loader.relnotes = {
+
+    // Private: Location of our images
+    IMAGE_DIR: ocp.IMAGE_ROOT_DIR + 'icons/',
+
 
     // Public: Initialize ourselves
     initialize: function() {
@@ -119,9 +141,23 @@ ocp.loader.relnotes = {
         // The processed HTML content
         var htmlDom = dojo.create('div', { id: 'relnotes' });
 
-        // Process the Known Issues and Change Log into the HTML results
-        this._processKnownIssues(xmlDom, htmlDom);
-        this._processChangeLog(xmlDom, htmlDom);
+        // Capture any processing errors so we can clean up
+        try {
+            // Process the Known Issues and Change Log into the HTML results
+            this._processKnownIssues(xmlDom, htmlDom);
+            this._processChangeLog(xmlDom, htmlDom);
+        } catch (err) {
+            // There was a processing error. So the content can be loaded again,
+            // destroy all widgets and DOM nodes that did get processed.
+            console.debug('destroying htmlDom', htmlDom);
+            dijit.findWidgets(htmlDom).forEach(function (widget) {
+                widget.destroyRecursive(false);
+            });
+            dojo.destroy(htmlDom);
+
+            // Regenerate the error so it can be handled by the loader
+            throw err;
+        }
 
         console.debug('leaving relnotes.preprocessContent', htmlDom);
         return htmlDom;
@@ -147,11 +183,13 @@ ocp.loader.relnotes = {
                 innerHTML:
                     'The following known issues and limitations exist in this version of OCP:'
             }, kiHtmlDom);
-            var kiHtmlListNode = dojo.create('dl', null, kiHtmlDom);
+            var kiHtmlTableBody = dojo.create('tbody', null,
+                dojo.create('table', null, kiHtmlDom));
             var _this = this;
-            kiIssueNodes.forEach( function (issueNode) {
-                // From closure: _this, kiHtmlListNode
-                _this._processIssueOrChange(issueNode, kiHtmlListNode);
+            kiIssueNodes.forEach(function (issueNode) {
+                // From closure: _this, kiHtmlTableBody
+                _this._processIssueOrChange(issueNode, kiHtmlTableBody, 'open',
+                    'Known bug or limitation', 'Known feature omission or deficiency');
             });
         } else {
 
@@ -173,15 +211,40 @@ ocp.loader.relnotes = {
         }, htmlDom);
         dojo.create('div', { class: 'moduleTitle', innerHTML: 'Change Log' }, clHtmlDom);
 
+        // Expand/collapse all buttons
+        var buttCont = dojo.create('div', { class: 'expCollButtons' }, clHtmlDom);
+        new dijit.form.Button({
+            label: 'Expand All',
+            onClick: function () {
+                ocp.expCollTitlePanes('#changeLog .versionItem', true);
+            }
+        }, dojo.create('span', null, buttCont));
+        new dijit.form.Button({
+            label: 'Collapse All',
+            onClick: function () {
+                ocp.expCollTitlePanes('#changeLog .versionItem', false);
+            }
+        }, dojo.create('span', null, buttCont));
+
         // Walk through all change log versions
         var clVerNodes = dojo.query('ocp changelog version', xmlDom);
         if (clVerNodes.length > 0) {
 
             // There are versions -- walk through them
             var _this = this;
-            clVerNodes.forEach( function (verNode) {
+            clVerNodes.forEach(function (verNode) {
                 // From closure: _this, clHtmlDom
                 _this._processVersion(verNode, clHtmlDom);
+            });
+
+            // Open the first version to show its contents (all versions start closed)
+            var openedFirst = false;
+            dojo.query('.versionItem', clHtmlDom).forEach(function (verItemHtmlNode) {
+                // From closure: openedFirst
+                if (!openedFirst) {
+                    dijit.getEnclosingWidget(verItemHtmlNode).attr('open', true);
+                    openedFirst = true;
+                }
             });
         } else {
 
@@ -195,10 +258,7 @@ ocp.loader.relnotes = {
     // Private: Process a Change Log's Version node into pretty HTML
     _processVersion: function (verNode, clHtmlNode) {
 
-        // Container for this version
-        var verHtmlDom = dojo.create('div', { class: 'moduleSubsection' }, clHtmlNode);
-
-        // Create the header for this version from its attributes
+        // Derive the header for this version from its attributes
         var verAttrs = ocp.getDomNodeAttrs(verNode,
             { name: true, type: false, scope: true, date: false });
         var verText = 'Version ' + verAttrs.name +
@@ -210,23 +270,30 @@ ocp.loader.relnotes = {
                 (verAttrs.scope == 'public' ? ' publicly released' : ' privately completed') +
                 ('date' in verAttrs ? ' on ' + verAttrs.date : '');
         }
-        dojo.create('div', {
+        var titlePane = new dijit.TitlePane({
             id: 'changelogVersion_' + verAttrs.name.replace(/\W/g, '_'),
-            class: 'versionTitle',
-            innerHTML: verText
-        }, verHtmlDom);
+            class: 'versionItem',
+            open: false,
+            title: verText
+        }, dojo.create('div', null, clHtmlNode));
 
         // Walk through all changes for this version
         var chgNodes = dojo.query('change', verNode);
         if (chgNodes.length > 0) {
 
             // There are changes -- walk through them
-            var verHtmlListNode = dojo.create('dl', null, verHtmlDom);
+            var verHtmlTableNode = dojo.create('table', null);
+            var verHtmlTableBody = dojo.create('tbody', null, verHtmlTableNode);
             var _this = this;
-            chgNodes.forEach( function (changeNode) {
-                // From closure: _this, verHtmlListNode
-                _this._processIssueOrChange(changeNode, verHtmlListNode);
+            chgNodes.forEach(function (changeNode) {
+                // From closure: _this, verHtmlTableBody
+                _this._processIssueOrChange(changeNode, verHtmlTableBody, 'closed',
+                    'Fixed bug or removed limitation',
+                    'Added new feature, filled deficiency, or removed unneeded feature');
             });
+
+            // Now put the version HTML into the title pane
+            titlePane.attr('content', verHtmlTableNode);
         } else {
 
             // Every version must have at least one change
@@ -239,28 +306,43 @@ ocp.loader.relnotes = {
     // Private: Process an XML Issue or Change into HTML list nodes
     //          This works because the XML for both are identical except for their tag name
     //          and the HTML for both is a definition list
-    _processIssueOrChange: function (iocXmlNode, iocHtmlListNode) {
-        //console.debug('enetered relnotes._processIssueOrChange', iocXmlNode, iocHtmlListNode);
+    _processIssueOrChange: function (iocXmlNode, iocHtmlNode, iconStatus, bugDesc, featureDesc) {
 
         // Get the issue/change Dom node attributes
         // All attributes are required and throw an error if missing
         var iocNodeAttrs = ocp.getDomNodeAttrs(iocXmlNode, { type: true, name: true });
 
         // Barf if we don't recognize the type
-        if (!/^(bug|function|feature)$/.test(iocNodeAttrs.type)) {
+        if (!/^(bug|feature)$/.test(iocNodeAttrs.type)) {
             throw 'Error: Unknown type "' + iocNodeAttrs.type +
                 '" for ' + iocXmlNode.nodeName + ' in ' + iocXmlNode.baseURI;;
         }
 
-        // Add the issue/change's name with its type as a CSS class
-        dojo.create('dt', {
-            class: 'type_' + iocNodeAttrs.type,
-            innerHTML: iocNodeAttrs.name
-        }, iocHtmlListNode);
+        // Create the table row for this issue or change
+        var iocRowNode = dojo.create('tr', null, iocHtmlNode);
 
-        // Add the issue/change's details
+        // Put the image icon in the first column
+        dojo.create('img', {
+            src: this.IMAGE_DIR + iocNodeAttrs.type + '-' + iconStatus + '.png',
+            alt: '[' + iocNodeAttrs.type + ' icon]',
+            title: (iocNodeAttrs.type == 'bug' ? bugDesc : featureDesc),
+        }, dojo.create('td', null, iocRowNode));
+
+        // Create the 2nd column for the description
+        var iocCol2Node = dojo.create('td', null, iocRowNode);
+
+        // Title of the item
+        dojo.create('div', {
+            class: 'iocItemTitle',
+            innerHTML: iocNodeAttrs.name
+        }, iocCol2Node);
+
+        // Details of the item
         // TODO: Need to allow embedded HTML for emphasis here? textContent strips it.
-        dojo.create('dd', { innerHTML: dojo.trim(iocXmlNode.textContent) }, iocHtmlListNode);
+        dojo.create('div', {
+            class: 'iocItemDetails',
+            innerHTML: dojo.trim(iocXmlNode.textContent)
+        }, iocCol2Node);
     }
 };
 

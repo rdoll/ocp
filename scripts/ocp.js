@@ -22,7 +22,7 @@
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.7.4',
+    VERSION: '0.8.1',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -58,6 +58,9 @@ var ocp = {
 
     // Public: The max number of attributes that can be leveled each levelup
     LEVELUP_ATTRS_MAX: 3,
+
+    // Public: The normal starting value for all attributes (except Luck) for all races
+    RACE_ATTR_NORM: 40,
 
     // Public: The root dir of all images
     IMAGE_ROOT_DIR: 'images/',
@@ -116,6 +119,21 @@ var ocp = {
         ill: { name: 'Illusion',     spec: 'Magic',   attr: 'per' },
         mer: { name: 'Mercantile',   spec: 'Stealth', attr: 'per' },
         spc: { name: 'Speechcraft',  spec: 'Stealth', attr: 'per' }   // Spe collides with Speed
+    },
+
+
+    // Private: The main stack container for OCP contents
+    _mainContainer: null,
+
+    // Public: Set the main container to the given module
+    setMainModule: function (moduleId) {
+
+        // Allow the module ID to be abbreviated
+        if (!moduleId.match(/ContentPane$/)) {
+            moduleId += 'ContentPane';
+        }
+
+        this._mainContainer.selectChild(moduleId);
     },
 
 
@@ -261,6 +279,9 @@ var ocp = {
     initialize: function() {
         console.debug('entered initialize');
 
+        // Grab a handle to the main container
+        this._mainContainer = dijit.byId('ocpStackContainer');
+
         // Initialize the version numbers in the about info
         this._initializeVersions();
 
@@ -330,20 +351,20 @@ var ocp = {
     _initializeResizeHooks: function () {
 
         // The main module container
-        var mainContainer = dijit.byId('ocpStackContainer');
+        var mainCont = this._mainContainer;
 
         // After the main module container calls it's resize, we get called
-        dojo.connect(mainContainer, 'resize', function () {
-            // Closure: mainContainer
-            //console.log('mainContainer resize');
+        dojo.connect(mainCont, 'resize', function () {
+            // Closure: mainCont
+            //console.log('mainCont resize');
 
             // Resize the currently selected child
             // The first resize does most of the work, but if we started with a vertical scrollbar
             // that was removed after the first resize, the space for where the scrollbar was
             // remains. So we do a second resize to handle this case. It's a little expensive,
             // but we shouldn't be getting lots of resize events so it's acceptable.
-            mainContainer.selectedChildWidget.resize();
-            mainContainer.selectedChildWidget.resize();
+            mainCont.selectedChildWidget.resize();
+            mainCont.selectedChildWidget.resize();
         });
     },
 
@@ -385,9 +406,9 @@ var ocp = {
     },
 
 
-    // Public: Expand or collapse all of the FAQ's answers
-    faqExpandAll: function (expanded) {
-        dojo.query('#faq .faqItem').forEach( function (titlePane) {
+    // Public: Expand or collapse all title panes that match the given query
+    expCollTitlePanes: function (query, expanded) {
+        dojo.query(query).forEach(function (titlePane) {
             // From closure: expanded
             dijit.byId(titlePane.id).attr('open', expanded);
         });

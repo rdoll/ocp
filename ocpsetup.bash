@@ -139,6 +139,7 @@ index.html
 partials/home.html
 partials/planner.html
 partials/instructions.html
+partials/advice.html
 partials/faq.html
 partials/relnotes.xml
 partials/about.html

@@ -27,7 +27,7 @@ html, body {
     border: 0;
     margin: 0;
 */
-    font-family: Verdana, Helvetica, Times;
+    font-family: Verdana, Arial, Helvetica, Times;
     font-size: 12px;
 }
 
@@ -164,48 +164,62 @@ html, body {
 
 
 /*
-** FAQ module
+** Advice module
 */
 
+/* Put some space between advice points */
+#advice li + li {
+    margin-top: 0.5em;
+}
+
+/* A footnote worthy of a little highlighting*/
+#advice .adviceNote {
+    font-style: italic;
+}
+
+/* The first span inside a footnote gets special decoration to denote the type of note */
+#advice .adviceNote > span:first-child {
+    font-weight: bold;
+}
+
+/* Key terms in the advice get special decoration */
+#advice .adviceKeyword {
+    font-style: italic;
+}
+
+/* A key point gets special highlighting */
+#advice .adviceKeyPoint {
+    color: green;
+    font-weight: bold;
+    font-style: italic;
+    margin: 1em 2em;
+}
+
+/* The title of a list entry */
+#advice .adviceListTitle {
+    font-weight: bold;
+    display: block;
+}
+
+/* The first span in a keyword list item gets highlighted */
+#advice .adviceKeywordList li span {
+    font-weight: bold;
+}
+
+
+/*
+** FAQ module
+*/
 
 /* Initialize a counter to number the questions */
 #faq {
     counter-reset: faqQuestion;
 }
 
-/* The expand/collapse buttons are a little less important than usual buttons */
-#faqButtons {
-    font-size: smaller;
-    margin-bottom: 0.5em;
-}
-
-/* Clear the borders and background of a FAQ item's title */
-#faq .faqItem .dijitTitlePaneTitle {
-    background: #FFFFFF !important;
-    border: 0 !important;
-    outline: 0 !important;
-}
-
 /* Add the question counter to the question */
 #faq .faqItem .dijitTitlePaneTextNode:before {
     content: counter(faqQuestion) ". ";
     counter-increment: faqQuestion;
-}
-
-/* Clear the borders for the answer */
-#faq .faqItem .dijitTitlePaneContentOuter {
-    border: 0 !important;
-}
-
-/* Clear the outline when an answer is selected and align it with the question */
-#faq .faqItem .dijitTitlePaneContentInner {
-    padding: 0 2em !important;
-    outline: 0 !important;
-}
-
-/* Add spacing between FAQ items */
-#faq .faqItem + .faqItem {
-    margin-top: 0.5em;
 }
 
 /* Remove all preset paragraph margins, but add spacing between them in a single answer */
@@ -221,70 +235,20 @@ html, body {
 ** Release Notes module
 */
 
-/* Definition terms are the names of the issues */
-#knownIssues dt {
+/* Highlight the title of each issue or change */
+#relnotes .iocItemTitle {
     font-weight: bold;
-    margin-left: 28px;
-    display: list-item;
 }
 
-/* Set a list image for every type of issue */
-#knownIssues .type_bug {
-    list-style-image: url(../images/icons/bug-issue.png);
-}
-#knownIssues .type_function {
-    list-style-image: url(../images/icons/function-issue.png);
-}
-#knownIssues .type_feature {
-    list-style-image: url(../images/icons/feature-issue.png);
+/* Align all table cells to their tops */
+#relnotes td {
+    vertical-align: top;
+    padding-top: 0.5em;
 }
 
-/* Align the details of each issue with its name */
-#knownIssues dd {
-    margin-left: 28px;
-}
-
-/* Add some space between issues */
-#knownIssues dd + dt {
+/* Add some space above the known issues list */
+#knownIssues table {
     margin-top: 0.5em;
-}
-
-
-/* Decorate the title of each version */
-/* TODO: Is this green underline too much like a visited link? */
-#changeLog .versionTitle {
-    font-weight: bold;
-    color: green;
-    text-decoration: underline;
-}
-
-/* Don't let the icon of the first change touch the underline of the title */
-#changeLog dl {
-    margin: 2px 0 0 0;
-}
-
-/* Definition terms are the names of the changes */
-#changeLog dt {
-    font-weight: bold;
-    margin-left: 28px;
-    display: list-item;
-}
-
-/* Set a list image for every type of change */
-#changeLog .type_bug {
-    list-style-image: url(../images/icons/bug-change.png);
-}
-#changeLog .type_function {
-    list-style-image: url(../images/icons/function-change.png);
-}
-#changeLog .type_feature {
-    list-style-image: url(../images/icons/feature-change.png);
-}
-
-/* Align the details with its name and lessen the presence of the details */
-#changeLog dd {
-    margin-left: 28px;
-    font-size: smaller;
 }
 
 
@@ -347,6 +311,65 @@ html, body {
 \*---------------------------------------------------------------------------*/
 
 /*
+** Menu bar and menu item styles
+*/
+
+/* Ensure the main window can have the menu bar directly on top of it */
+#ocpStackContainer {
+    margin-top: 0;
+}
+
+/* The menu bar's bottom border overlaps the top border of main container for a seamless look */
+#mainMenuBar {
+    margin-bottom: -1px;
+}
+
+/* Align the first menu item with the content pane's title bar */
+#mainMenuBar .mainMenuItem:first-child {
+    margin-left: 5px;
+}
+
+/* Main menu items with no subitems get a button look */
+#mainMenuBar .mainMenuItem {
+    border-radius: 8px;
+    -moz-border-radius: 8px;
+    -webkit-border-radius: 8px;
+    border: 2px solid #64d;
+    margin: 2px;
+}
+
+/* Main menu items with subitems get a "I have more below me" look */
+#mainMenuBar .mainMenuPopupItem {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    -moz-border-radius-topleft: 8px;
+    -moz-border-radius-topright: 8px;
+    -webkit-border-top-left-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    border: 2px solid #64d;
+    margin: 2px;
+}
+
+/* When main menu items (and not the subitems) are hovered/selected, highlight them */
+#mainMenuBar .dijitMenuItemHover, #mainMenuBar .dijitMenuItemSelected {
+    border-color: green;
+    background-color: white !important;
+}
+
+/* When any menu item is hovered/selected, change its color */
+.dijitMenuItemHover, .dijitMenuItemSelected {
+    color: green !important;
+}
+
+/* Set the font characteristics of all menu items to match our text */
+.dijitMenuItem, .dijitMenuItemLabel {
+    font-family: Verdana, Arial, Helvetica, Times !important;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/*
 ** Module common styles
 */
 
@@ -392,6 +415,12 @@ html, body {
 /* Major skills get highlighted */
 .majorSkill {
     font-weight: bold;
+}
+
+/* The expand/collapse all buttons are a little less important than usual buttons */
+.expCollButtons {
+    font-size: smaller;
+    margin-bottom: 0.5em;
 }
 
 
@@ -441,6 +470,32 @@ html, body {
 /* Put a few extra pixels between tabs atop a tab container */
 .soria .dijitTab + .dijitTab {
     margin-left: 4px;
+}
+
+
+/*
+** Dijit TitlePane styles
+*/
+
+/* Clear the borders and colors of a title pane's title */
+.soria .dijitTitlePaneTitle {
+    background: #FFFFFF !important;
+    border: 0 !important;
+    outline: 0 !important;
+    color: #64d !important;
+}
+
+/* Clear the borders for the title pane's content */
+.soria .dijitTitlePaneContentOuter {
+    border: 0 !important;
+}
+
+/* Clear the outline when an content is selected and align it with the title */
+/* The margin adds spacing between an opened pane and the next item */
+.soria .dijitTitlePaneContentInner {
+    margin-bottom: 0.5em;
+    padding: 0 2em !important;
+    outline: 0 !important;
 }
 
 

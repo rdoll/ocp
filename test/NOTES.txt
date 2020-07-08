@@ -1,8 +1,13 @@
-- advice
-- rel notes expand/collapse (make ocp.faqExpandAll generic)
+Dojo error on the *first* (and only first) selection of a gender from the dialog:
+    _3 is null
+    anonymous()                                  dojo.js (line 42)
+    anonymous()                                  dojo.js (line 16)
+    [Break on this error] (42 out of range 16)   dojo.js (line 42)
 
-Maybe change bug/function/feature in Known Issues and Change Log to
-    bug/feature for the type and minor/major/critical for the impact.
+In race gender selection sub-dialog, show stat differences? Or keep all stats in details?
+
+With Arial, Helvetica, and Times (instead of Verdana), there are vertical scrollbars in the
+  Leveling Order and Leveling Results panels.
 
 Migrate the hacks in the SetNullis* functions into their
 appropriate files; e.g. add an ocp.order.setOrder(newOrder) ??
@@ -22,15 +27,33 @@ Magicka regeneration rate (derived from Magicka and Willpower)?
 Select a http://creativecommons.org/ license, add it to file headers,
 and add an icon to the footer for it.
 
-In Change Log, tag each release as public release or dev release and
-use a top level toggle to control showing/hiding them?
-
-FAQ's non-expanded titles are a little gray. Override to black?
-
 Standardize all race and birthsign specials with their real name and their exact effects.
 
 Would be nice if I could support HTML markup in Rel Notes XML descriptions.
 This would be most useful if 0.7.4's new home change could have links.
+
+#faq and #changeLog .dijitTitlePane* styles are almost identical. If icons change,
+see if I can combine these into one set of generic styles.
+
+Replace M/F in Race Details with Male and Female icons. &#x2642; and &#x2640; chars look
+crappy -- need icons.
+
+Replace all title="" tooltips (found with a CSS [title] query) with dijit.Tooltips?
+Use a post-processor to do the conversion?
+Need a style (dashed underline?) to show a tooltip is available?
+
+From http://www.dojotoolkit.org/book/dojo-book-0-9/part-2-dijit/user-assistance-and-feedback/tooltip
+
+  Tooltips are displayed when the associated item receives focus or a mouseover event. Be careful
+  when assigning tooltips to arbitrary elements such as spans of text which may not receive keyboard
+  focus because users of assistive technology or keyboard only users will not benefit from the
+  tooltip. If the tooltip information is important, make certain that the item which triggers
+  display of the tooltip can receive focus via the keyboard. This can be accomplished by adding a
+  tabindex="0" attribute onto the trigger element to put it into the tab order of the page.
+
+  For all red things in results, ensure tooltips can be tabbed into.
+
+http://mbaierl.com/blog/2009/04/display-dojo-tooltips-based-on-title.html
 -----
 
 In ocp.results._updateLeveling, I cache the ocp.input.isMajor results saving 1,000 calls.
@@ -95,10 +118,6 @@ This currently fails in IE for several reasons, but major ones are:
 + IE doesn't support getters which are used all over the place
 Even with these fixed, the styles are still not properly rendered in IE.
 
-TODO: Globally replace title="" attributes with Tooltips?
-TODO: Use some kind of decoration to indicate a tooltip is available (dashed underline?)?
-TODO: Can use [title] CSS selector to find them all...
-
 TODO: Nice set of images (and nice credit page) at http://www.elderstats.com/about/?p=credits
 
 &apos; unsupported in IE?!? Standardize on something for all HTML apostrophes.
@@ -157,6 +176,6 @@ Publishing Checklist:
 - relnotes.xml has the correct info for this version including the release date
 - index.html and ocp.css uses o.aolcdn.com instead of local dojotoolkit
     + includes djConfig baseUrl and modulePaths changes
+    + remove dojotoolkit link and test locally first
 - Comment out ocp.loader.hookManagedContainer's preventing caching
-- .htaccess updated to make this version "latest"
-- Upload all except dojotoolkit link, setup.bash file, and test directory
+- Upload all except ocpsetup.bash file and test directory

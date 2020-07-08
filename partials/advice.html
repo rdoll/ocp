@@ -1,0 +1,582 @@
+<!--
+    (C) Copyright 2009 by Richard Doll, All Rights Reserved.
+
+    License:
+    You are free to use, copy, or modify this software provided it remains free
+    of charge for all users, the source remains open and unobfuscated, and the
+    author, copyright, license, and warranty information remains intact and
+    clearly visible.
+
+    Warranty:
+    All content is provided as-is. The user assumes all liability for any
+    direct or indirect damages from usage.
+-->
+
+<!-- Advice -->
+<div dojoType="dijit.layout.TabContainer" id="advice">
+
+    <!-- Overview -->
+    <div dojoType="dijit.layout.ContentPane" id="adviceOverview" title="Overview"
+        selected="true">
+        <div class="moduleSection">
+            <p>
+                Between the complexity of Oblivion's leveling model and the variety of gameplay
+                possibilities, it is very difficult to give advice. However, in this section I will
+                try to give you a few guidelines and suggestions from my own personal experience
+                and observations. Perhaps most important is this:
+            </p>
+            <p class="adviceKeyPoint">
+                There is no wrong way to create or level your character!
+            </p>
+            <p>
+                Don't get bogged down in the numbers unless that's what appeals to you. Oblivion is
+                a game that can be conquered many, many different ways. Remember to focus on having
+                fun first!
+            </p>
+            <p>
+                Fun aside, the following sections should help give you a framework from which you
+                can make an informed decision for your character's long-term potency. Basically,
+                the process goes like this:
+            </p>
+            <ol>
+                <li>
+                    You can't plan for the unknown, so first learn about
+                    <a href="javascript:ocp.loader.showSubmodule('advice', 'Mechanics')">Oblivion's
+                    Mechanics</a>.
+                </li>
+                <li>
+                    Break down the general playstyle you have in mind into a
+                    <a href="javascript:ocp.loader.showSubmodule('advice', 'Profile')">Gameplay
+                    Profile</a> that details exactly how you will conquer Oblivion's challenges.
+                </li>
+                <li>
+                    Using a major skills paradigm (Most Used Skills as Majors, Least Used Skills as
+                    Majors, etc), create a
+                    <a href="http://www.uesp.net/wiki/Oblivion:Character_Creation#Custom_Classes">
+                        Custom Class</a> based on your profile.
+                </li>
+                <li>
+                    Create a tentative attribute leveling order based on your profile and the
+                    <a href="http://www.uesp.net/wiki/Oblivion:Efficient_Leveling#Leveling_.2B5.2F.2B5.2F.2B5_vs_.2B5.2F.2B5.2F.2B1">
+                    Leveling Paradigm</a> (+5/+5/+5 vs +5/+5/+1) you've chosen.
+                </li>
+                <li>
+                    Follow the
+                    <a href="javascript:ocp.loader.showSubmodule('instructions', 'Overview')">
+                    Instructions</a> to enter and then tweak your information in OCP until you are
+                    satisfied with your character's setup and leveling plan.
+                </li>
+                <li>
+                    Read through the
+                    <a href="javascript:ocp.loader.showSubmodule('advice', 'Concerns')">Key
+                    Concerns</a> to ensure you don't make any common mistakes.
+                </li>
+            </ol>
+            <p>
+                If you get stuck, poke around the Internet looking for Oblivion character
+                templates. For example, there is a fairly detailed FAQ with several templates in
+                GameFAQ's
+                <a href="http://www.gamefaqs.com/console/xbox360/file/941875/42063">Character Build
+                FAQ (PC)</a> document. It is doubtful that any template will match
+                <span class="majorEmphasis">exactly</span> what you have in mind, but if you input
+                the template info into OCP, you can see the exact impact of your tweaks.
+            </p>
+            <p>
+                Finally, as an abolsute last resort, don't forget that you can adjust the game's
+                difficulty or (on the PC version) use the console to fix any mistakes you've made
+                while leveling. If you are using OCP to plan your character, you probably don't
+                want to resort to these tactics, but it's probably better to tweak something rather
+                than scrap all the work you put into your level 35+ character.
+            </p>
+        </div>
+    </div>
+
+    <!-- Oblivion's Mechanics -->
+    <div dojoType="dijit.layout.ContentPane" id="adviceMechanics" title="Oblivion's Mechanics">
+        <div class="moduleSection">
+            <p>
+                If you are going to build a potent character, you have to understand what
+                constitutes your potency. You can learn some of this information from just playing
+                the game, but to really understand things you need to dig into the formulas and
+                algorithms used. Here are a few references (in the rough order you should read
+                them) that should help:
+            </p>
+            <ol>
+                <li>
+                    You won't get anywhere if you don't understand your core attributes, derived
+                    attributes, and skills. These are explained in the game manual, but UESP's
+                    <a href="http://www.uesp.net/wiki/Oblivion:Attributes">Attributes</a> and
+                    <a href="http://www.uesp.net/wiki/Oblivion:Skills">Skills</a> pages provide
+                    some additional insights. Pay particular attention to how
+                    <a href="http://www.uesp.net/wiki/Oblivion:Luck">Luck</a> works since it
+                    affects all skills and has a dramatic impact on your leveling plan.
+                </li>
+                <li>
+                    Although they are listed in the game manual and OCP itself, UESP's
+                    <a href="http://www.uesp.net/wiki/Oblivion:Races">Races</a>,
+                    <a href="http://www.uesp.net/wiki/Oblivion:Birthsigns">Birthsigns</a>, and
+                    <a href="http://www.uesp.net/wiki/Oblivion:Classes">Classes</a> pages have some
+                    good tips about these selections.
+                </li>
+                <li>
+                    UESP's <a href="http://www.uesp.net/wiki/Oblivion:Leveling">Leveling</a> page
+                    explains the basic leveling mechanics (with some examples) and explains the
+                    &quot;<a
+                        href="http://www.uesp.net/wiki/Oblivion:Leveling#The_Leveling_Problem">Leveling
+                        Problem</a>.&quot;
+                </li>
+                <li>
+                    UESP's
+                    <a href="http://www.uesp.net/wiki/Oblivion:Efficient_Leveling">Efficient
+                    Leveling</a> page explores how to maximize attribute bonuses from skill ups.
+                    The
+                    <a href="http://www.uesp.net/wiki/Oblivion:Efficient_Leveling#Leveling_.2B5.2F.2B5.2F.2B5_vs_.2B5.2F.2B5.2F.2B1">
+                        Leveling Paradigm</a>
+                    section is an important part of deciding your attribute Leveling Order.
+                </li>
+                <li>
+                    UESP's
+                    <a href="http://www.uesp.net/wiki/Oblivion:Increasing_Attributes">Increasing
+                        Attributes</a> and
+                    <a href="http://www.uesp.net/wiki/Oblivion:Increasing_Skills">Increasing
+                        Skills</a> pages gives you an analysis of every attribute and skill. When
+                    you start forming your <span class="adviceKeyword">Gameplay Profile</span>, the
+                    skill up difficulty information will be key.
+                </li>
+                <li>
+                    UESP's
+                    <a href="http://www.uesp.net/wiki/Oblivion:Character_Creation">Character
+                    Creation</a> page tries to sum up all character creation and leveling issues
+                    into one coherent discussion. Of particular importance is the
+                    <a href="http://www.uesp.net/wiki/Oblivion:Character_Creation#Custom_Classes">
+                        Custom Classes</a>
+                    section that describes the different major skill paramdigms.
+                </li>
+            </ol>
+            <p class="adviceNote">
+                <span>Note:</span> If you are totally new to Oblivion, there is no way you will be
+                able to understand all of Oblivion's mechanics. But that's ok -- just learn what
+                you can. Remember that just by using OCP you are helping to ensure your character
+                will be adequately powerful by game's end.
+            </p>
+        </div>
+    </div>
+
+    <!-- Gameplay Profile -->
+    <div dojoType="dijit.layout.ContentPane" id="adviceProfile" title="Gameplay Profile">
+        <div class="moduleSection">
+            <p>
+                With so many different ways to solve problems in Oblivion, if you try to do them
+                all, you'll end up a Jack of all Traits and Master of None. It's best to pick a few
+                ways to solve Oblivion's problems and stick with them. Which solutions you opt for
+                is your <span class="adviceKeyword">Gameplay Profile</span>.
+            </p>
+            <p>
+                For each of the following obstacles, you should select one primary solution. The
+                goal is to align your solutions among a select set of skills and attributes. You
+                can then focus your efforts on those and largely ignore the rest. Don't forget that
+                choosing to avoid the problem (e.g. not having any way to avoid fights because you
+                want to kill everything!) or waiting until you are a higher level to address a
+                problem (e.g. paying NPCs to recharge items later in the game because you can
+                easily afford it) is perfectly viable.
+            </p>
+            <ol>
+                <li>
+                    <span class="adviceListTitle">Offense (Killing Things)</span>
+                    You always need a way to kill stuff. You should concentrate on a single skill
+                    and its associated attribute(s): either Blade (Strength), Blunt (Strength),
+                    Hand-to-Hand (Strength), Marksmanship (Agility), or Destruction (Intelligence
+                    and Willpower). If you choose Blade, Blunt, or Marksmanship, you can get a
+                    sizeable first attack bonus if you attack while Sneaking (Agility). Also, if
+                    you want an edge when fighting multiple enemies, a summoned minion from
+                    Conjuration spells (Intelligence and Willpower) and/or an Atronach Familiar
+                    (from the Atronach Altars in the Frostcrag Spire official plug-in) can be very
+                    helpful.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Defense (Staying Alive)</span>
+                    While killing stuff, you will inevitably be hit. You can specialize in Light
+                    Armor (Speed), Heavy Armor (Endurance), Block (Endurance), or Shield/Resistance
+                    spells (Alteration) to help keep you alive during a fight. Note that higher
+                    Health (which comes from Endurance) is usually a priority for all but the most
+                    aggressive players.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Avoiding Fights</span>
+                    If you want to avoid a fight, you'll need a way to detect enemies and a way to
+                    get past them. For detection, you can supplement simply seeing them with Detect
+                    Life/Night-Eye potions (Alchemy), spells (Mysticism), enchanted items, or the
+                    Khajiit Night-Eye racial ability. Aside from just moving around them, to avoid
+                    enemies you can use Sneak (Agility) or Chameleon/Invisibility potions
+                    (Alchemy), spells (Illusion), or enchanted items.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Dealing with Darkness</span>
+                    Whether you are crawling into dungeons or just out in the world on a cloudy
+                    night, you'll have to deal with finding things in darkness. Aside from the
+                    freely available torches in the game, you can use Light spells (Illusion) or
+                    enchanted items to create visible light. If you prefer a more stealthy
+                    approach, you can use Night-Eye potions (Alchemy), spells (Mysticism),
+                    enchanted items, or the Khajiit racial ability.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Recovery</span>
+                    Both during and after a fight, you'll need a way to heal yourself, recover
+                    Magicka (if applicable), recover Fatigue (if applicable), cure
+                    diseases/poisons/etc, and restore damaged attributes/skills. For all of these,
+                    you can use potions (Alchemy) or Restoration (Intelligence and Willpower)
+                    spells. Although it won't cure damaged attributes/skills nor can you do it
+                    while enemies are nearby, you can recover all Health, Magicka, and Fatigue by
+                    simply Waiting.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Making Money</span>
+                    Whether it's for gear, reagents, or to open up official plug-in areas, you'll
+                    need cash. The three best ways to make cash are by selling potions you've made
+                    via Alchemy, selling stuff you've stolen to a Fence, and by selling the loot
+                    from fallen enemies. Whether stealing or looting items, remember that the more
+                    you can carry, the more you are earning. You can increase your Encumbrance by
+                    increasing your Strength from leveling, Restoration spells, and item
+                    enchantments or by Feather potions (Alchemy), spells (Alteration), and item
+                    enchantments.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Unlocking Things</span>
+                    There are plenty of chests and locked doors throughout Tamriel and you'll
+                    generally want to open them all. You can use Alteration spells to open locks,
+                    but it is far easier to always have a few lockpicks (which are fairly easy and
+                    cheap to acquire even for non-Thieves Guild members) and just learn how to
+                    patiently open any lock with a low lockpicking skill.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Getting Information</span>
+                    There are a few times where you'll need to earn some trust with someone to
+                    advance a quest. You can do this with Bribes (if you are rich), the Speechcraft
+                    (Personality) skill game, Charm spells (Illusion), Fortify Personality spells
+                    (Restoration), or enchanted items. However, even with a low Personality and a
+                    low Speechcraft skill, you can (with some practice) play the Speechcraft game
+                    and then throw in 50ish gold in Bribes to make this generally not a concern.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Repairing Items</span>
+                    As you attack and take damage, your weapons and armor will need repairs. Since
+                    the potency of your armor and weapons decreases as they wear, you'll probably
+                    want to ensure they are fully repaired. Pure casters or those relying on
+                    Conjured gear (from Conjuration spells) can safely rely on NPCs for infrequent
+                    repairs, but everyone else should probably count on using their Armorer
+                    (Endurance) skill.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Enchanted Items</span>
+                    If you want to rely on using enchanted items in your higher levels, you'll want
+                    access to an Enchantment Altar. The only two altars are in the Mage's Guild
+                    (which requires going through the very long recommendation process to access)
+                    and in the Frostcrag Spire official plug-in (which just requires some cash to
+                    activate). To recharge your enchanted weapons, you can rely on NPC vendors if
+                    you are rich enough, but most likely you'll want to Soul Trap enemies into soul
+                    gems via Mysticism spells (Intelligence and Willpower) or a weapon enchant
+                    (which is very handy if you aren't otherwise Mysticism oriented and don't mind
+                    switching weapons).
+                </li>
+            </ol>
+            <p class="adviceNote">
+                <span>Note:</span> Scrolls are not considered a viable solution here because they
+                cannot be reliably found in loot or bought from vendors. Although, scrolls you do
+                find make great supplemental solutions, especially when you consider using them
+                does not generate any skill XP.
+            </p>
+            <p>
+                There are a few other minor obstacles in Oblivion (e.g. breathing under water), but
+                they don't really require specific character planning. You can usually find a
+                solution without impacting your character's creation and leveling plan.
+            </p>
+        </div>
+    </div>
+
+    <!-- Key Concerns -->
+    <div dojoType="dijit.layout.ContentPane" id="adviceConcerns" title="Key Concerns">
+        <div class="moduleSection">
+            <p>
+                It is very easy to get overwhelmed by the multitude of character creation options,
+                so this section will outline a few common do's and dont's. However, keep one
+                overriding key point in mind:
+            </p>
+            <p class="adviceKeyPoint">
+                These are generalizations, not rules. So long as you plan for the issue, you can
+                find a way to safely violate these guidelines.
+            </p>
+            <p>
+                The following are key points for creating your character and forming your leveling
+                plan:
+            </p>
+            <ul>
+                <li>
+                    <span class="adviceListTitle">Avoid 3 major skills per attribute</span>
+                    If you make all three skills for any attribute majors, you cannot reach the
+                    maximum bonus for that attribute if <span class="majorEmphasis">any</span>
+                    other major skill gets raised. Unfortunately, 19 of the 21 default classes (all
+                    except Rogue and Pilgrim) have one (or even two!) attributes with all 3 major
+                    skills. For example, if you choose the predefined Warrior class for a
+                    &quot;sword and board&quot; gameplay style, leveling one point in Athletics,
+                    Armorer, Block, or Heavy Armor (all skills you'd want to use), means you cannot
+                    reach the max +5 bonus for Strength because Blade, Blunt, and Hand-to-Hand are
+                    all majors (and the 9th point in these skills would increase your level).
+                </li>
+                <li>
+                    <span class="adviceListTitle">Always use a custom class</span>
+                    Aside from 19 of the 21 predefined classes having 3 major skills for a single
+                    attribute, most of them have poor combinations of major skills and poor favored
+                    attributes. Your class has the single biggest impact on you character's
+                    leveling experience, so take the time and do it right by creating a good custom
+                    class that fits your gameplay style.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Stack Luck at lower levels</span>
+                    Looking at how <a href="http://www.uesp.net/wiki/Oblivion:Luck">Luck</a> above
+                    50 impacts every usage of every skill, there is arguably no more important
+                    attribute at the lower levels. Starting with the +10 Luck from The Thief
+                    birthsign and getting the +5 bonus for making Luck a favored attribute in your
+                    custom class effectively raises every one of your skills by 6 points. However,
+                    since Luck adjusted skills cannot go above 100, at higher levels Luck becomes
+                    less and less important; so if you are going to care about Luck at all, do it
+                    from the start.
+                </li>
+                <li>
+                    <span class="adviceListTitle">Ensure &quot;unused&quot; major skills are
+                    easy to level</span>
+                    If you want to make a few major skills ones that you will rarely ever use (so
+                    you can better control when you level), make sure they are skills that can be
+                    easily leveled. UESP's
+                    <a href="http://www.uesp.net/wiki/Oblivion:Increasing_Skills">Increasing
+                        Skills</a> page does a great job breaking down how easy or hard it will be
+                    to intentionally increase every skill.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Nullis Example -->
+    <div dojoType="dijit.layout.ContentPane" id="adviceNullis" title="Nullis Example">
+        <div class="moduleSection">
+            <p>
+                To help illustrate the methods outlined in the Advice section, I'll run through the
+                process with my example toon
+                <a href="javascript:ocp.nullis.safeSetNow()">Nullis</a>.
+            </p>
+
+            <div class="moduleSubsection">
+                <div class="moduleSubtitle">Gameplay Profile</div>
+                <p>
+                    My general idea for Nullis was a stealthy, ranged assassin. I wouldn't rely
+                    heavily on magic or melee, but if I could find you at range, you'd probably be
+                    dead before you reached me. Plugging this general playstyle into the profile
+                    yielded the following:
+                </p>
+                <ol>
+                    <li>
+                        <span class="adviceListTitle">Offense (Killing Things)</span>
+                        My main way of killing things would be with a bow starting from Stealth.
+                        This means I'll focus on the Marksmanship and Stealth skills and the
+                        Agility attribute.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Defense (Staying Alive)</span>
+                        When someone reaches me in combat (or when I'm facing multiple enemies at
+                        once), I'll use my Light Armor (which is for the Speed attribute) to help
+                        mitigate the damage. And since I will be hit sometimes, Health (and
+                        therefore Endurance) will be a priority.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Avoiding Fights</span>
+                        I'll use Stealth to avoid any fights, but I'll use the Khajiit Night-Eye
+                        racial ability to see enemies that I want to avoid and that I want to kill
+                        from range. At the higher levels, adding some Detect Life enchanted items
+                        will ensure I can even find enemies around corners and behind obstacles.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Dealing with Darkness</span>
+                        I'll use my Khajiit Night-Eye racial most of the time, but I'll rely on
+                        Torches when it is safe to do so.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Recovery</span>
+                        At the lower levels, I'll use potions mainly from vendors and loot. At
+                        higher levels when I'll take more damage, I will level Alchemy and make my
+                        own.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Making Money</span>
+                        At lower levels, I'll rely exclusively on dungeon loot for cash. At higher
+                        levels, I'll supplement my ability to bring back loot with Strength/Feather
+                        enchanted items. I'll also be making Alchemy potions in excess that I can
+                        sell for cash.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Unlocking Things</span>
+                        Being thief-ish, I'll have plenty of lockpicks to use whenever necessary.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Getting Information</span>
+                        At the lower levels, I'll use Bribes and the Speechcraft game with a low
+                        Personality and a low Speechcraft skill. At higher levels, I'll use a
+                        custom Charm spell that only lasts a few seconds, but yields a high
+                        Disposition.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Repairing Items</span>
+                        I'll be repairing my own gear constantly so my Armorer skill and Endurance
+                        attribute will get lots of activity.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Enchanted Items</span>
+                        I bought the Frostcrag Spire official plug-in, so at higher levels I will
+                        use the Enchantment and Spellmaking Altars from it. Once I start using
+                        enchanted weapons, I'll use a special bow with a Soul Trap enchant to
+                        acquire souls as needed.
+                    </li>
+                </ol>
+            </div>
+
+            <div class="moduleSubsection">
+                <div class="moduleSubtitle">Custom Class</div>
+                <p>
+                    With my profile in mind, I decided to use One Major Skill per Attribute as my
+                    custom class paradigm. This was appealing to me because I wouldn't level too
+                    fast or too slow and I could ensure that I'd have a major skill to level for
+                    every attribute; even when I'm leveling the least used attributes in the higher
+                    levels.
+                </p>
+                <p>
+                    For my major skills, I chose a mix of skills I would use (on the attributes I
+                    wanted to level first), skills that I may use in later levels but were easy to
+                    level up, and skills I would never use except for leveling up. Here is the
+                    summary:
+                </p>
+                <ul>
+                    <li>
+                        <span class="adviceListTitle">Blunt (Strength)</span>
+                        May be used at higher levels, but otherwise won't be a primary skill. It is
+                        very easy to control leveling (just don't equip a Blunt weapon) and ranges
+                        from easy to hard to level (it takes a large number of hits to increase at
+                        higher skill levels).
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Conjuration (Intelligence)</span>
+                        May use at higher levels to help deal with multiple mobs at once or to
+                        skill up a weapon skill (e.g. Blunt), but otherwise won't be used. This is
+                        trivial to raise, tho.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Destruction (Willpower)</span>
+                        Probably will never be used, but this is trivial to level with a custom
+                        created spell that damages yourself for 1 point per cast.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Marksmanship (Agility)</span>
+                        My main damage skill and attribute will get raised constantly until I max
+                        them.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Athletics (Speed)</span>
+                        At higher levels, it is ridiculously annoying to raise Athletics. Making it
+                        a major skill helps, but at the lower levels I had to go into Sneak to
+                        avoid unintentionally raising this. This was a little annoying, but seems
+                        like a worthy trade off to me.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Heavy Armor (Endurance)</span>
+                        The idea here was that I could control leveling this by suiting up in Heavy
+                        Armor and letting the
+                        <a href="http://www.uesp.net/wiki/Oblivion:Battlehorn_Castle_%28place%29">
+                            Battlehorn Castle</a> official plug-in's trainer
+                        <a href="http://www.uesp.net/wiki/Oblivion:Shagrol_gro-Uzug">Shagrol
+                            gro-Uzug</a>
+                        beat on me to raise it. Unfortunately, since you don't take any damage from
+                        his attacks, this doesn't raise your Heavy Armor skill. In retrospect, I
+                        should have chosen the Block skill here because it can be raised by
+                        sparring him.
+                    </li>
+                    <li>
+                        <span class="adviceListTitle">Illusion (Personality)</span>
+                        I probably won't use any of these spells, but this is trivial to level
+                        anytime.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="moduleSubsection">
+                <div class="moduleSubtitle">Leveling Order</div>
+                <p>
+                    For my attribute Leveling Order, I didn't want my first few levels to go as
+                    fast as the +5/+5/+1 model would provide, but I didn't want to completely
+                    ignore Luck for a full +5/+5/+5 model. My solution was to do +5/+5/+5 for the
+                    first three attributes and by making Luck my fourth attribute, the remaining
+                    levels would be +5/+5/+1. This results in the following Leveling Order:
+                </p>
+                <ol class="adviceKeywordList">
+                    <li><span>Agility</span> - Which gives my Marksmanship more damage</li>
+                    <li><span>Speed</span> - Useful for kiting mobs, but really here because I'll
+                        always be using its associated skills</li>
+                    <li><span>Endurance</span> - Because you gotta have lots of Health</li>
+                    <li><span>Luck</span> - For the general plus-to-everything it gives</li>
+                    <li><span>Strength</span> - Useful if I want to melee, but mainly for higher
+                        Encumbrance to carry more loot</li>
+                    <li><span>Intelligence</span> - For more Magicka when I might cast a few spells
+                        in the higher levels</li>
+                    <li><span>Willpower</span> - Largely useless for me, but more important than
+                        Personality</li>
+                    <li><span>Personality</span> - Last since it is all but useless</li>
+                </ol>
+                <p class="adviceNote">
+                    <span>Note:</span> In retrospect, I would probably have tried for a full
+                    +5/+5/+1 model by swapping Speed and Luck. I'd need to make sure I had enough
+                    Spare Skill Points in Speed because I'd be using those skills constantly at the
+                    lower levels, but the swap would get me to max level one level earlier (43
+                    instead of 44).
+                </p>
+            </div>
+
+            <div class="moduleSubsection">
+                <div class="moduleSubtitle">Results</div>
+                <p>
+                    My choice for race was made simple by wanting to use the Khajiit's racial
+                    Night-Eye ability for seeing in the dark. My birthsign choice was similarly
+                    simple: The Thief gives me a bonus to 3 of my top 4 attributes. So putting it
+                    all together, I arrived at this:
+                </p>
+                <ul class="adviceKeywordList">
+                    <li><span>Race:</span> Khajiit</li>
+                    <li><span>Birthsign:</span> The Thief</li>
+                    <li><span>Custom Class Specialization:</span> Stealth</li>
+                    <li><span>Custom Class Favored Attributes:</span> Endurance and Luck</li>
+                    <li><span>Custom Class Major Skills:</span> Blunt, Conjuration,
+                        Destruction, Marksmanship, Athletics, Heavy Armor, and Illusion</li>
+                    <li><span>Leveling Order:</span> Agility, Speed, Endurance, Luck, Strength,
+                        Intelligence, Willpower, and Personality</li>
+                </ul>
+                <p>
+                    If you <a href="javascript:ocp.nullis.safeSetNow();">load Nullis' data</a> and
+                    switch to <span class="plannerSection">New Character</span>, you'll see these
+                    exact values which yield the following
+                    <span class="plannerSection">Analysis</span>:
+                </p>
+                <ul class="adviceKeywordList">
+                    <li><span>Max Level:</span> 44 (all attributes reached 100)</li>
+                    <li><span>Max Health:</span> 588 (Endurance maxed at level 14)</li>
+                    <li><span>Max Magicka:</span> 200 (at level 26)</li>
+                    <li><span>Max Encumbrance:</span> 500 (at level 23)</li>
+                    <li><span>Spare Skill Points per Level:</span> 3.47 and higher</li>
+                </ul>
+                <p>
+                    The max level is fairly low (many character configurations max at high 40's/low
+                    50's), but since anything over 40 is largely meaningless, this keeps the excess
+                    to a minimum. All attributes get maxed at 100, so this character will reach the
+                    maximum possible potency. Since Endurance gets max'ed fairly early, Health is
+                    solid. And with over 3 Spare Skill Points per Level for every attribute, I
+                    don't have to sweat extraneous skillups. Overall, a solid design that should
+                    lead to a fun gameplay experience with more than enough character potency.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

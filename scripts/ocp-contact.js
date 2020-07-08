@@ -149,7 +149,7 @@ ocp.contact = {
         var _this = this;
         var ucTop = parseInt(dojo.style(this._unpackedContainer, 'top'));
         var ucLeft = parseInt(dojo.style(this._unpackedContainer, 'left'));
-        dojo.query('span', this._unpackedContainer).forEach( function (spanNode) {
+        dojo.query('span', this._unpackedContainer).forEach(function (spanNode) {
             // From closure: _this, ucTop, ucLeft
 
             // Get the location of this letter's span relative to the unpackedContainer
