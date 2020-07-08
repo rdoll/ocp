@@ -1,4 +1,18 @@
 /*
+** (C) Copyright 2009 by Richard Doll
+**
+** License:
+** You are free to use, copy, or modify this software provided it remains free
+** of charge for all users, the source remains open and unobfuscated, and the
+** author, copyright, license, and warranty information remains intact and
+** clearly visible.
+**
+** Warranty:
+** All content is provided as-is. The user assumes all liability for any
+** direct or indirect damages from usage.
+*/
+
+/*
 ** ocp-birth.js
 **
 ** Everything related to birth signs.

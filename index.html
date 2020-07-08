@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+
+<!--
+    Author: Richard Doll
+    Developed on FireFox 3.0/3.5 using Dojo 1.3, XHTML 1.1, CSS 2.1, and JavaScript 1.5.
+
+    (C) Copyright 2009 by Richard Doll
+
+    License:
+    You are free to use, copy, or modify this software provided it remains free
+    of charge for all users, the source remains open and unobfuscated, and the
+    author, copyright, license, and warranty information remains intact and
+    clearly visible.
+
+    Warranty:
+    All content is provided as-is. The user assumes all liability for any
+    direct or indirect damages from usage.
+-->
+
+<head>
+    <!-- HTTP header info -->
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=utf-8" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta http-equiv="Content-Language" content="en" />
+
+    <!-- Title -->
+    <title>Oblivion Character Planner</title>
+
+    <!-- Describe this document -->
+    <meta name="author" content="Richard Doll" />
+    <meta name="copyright" content="Copyright &copy; 2009 by Richard Doll" />
+    <!-- *** Put my email addy in here?
+    <link rev="made" href="mailto:someone@somewhere.com" />
+     -->
+    <meta name="description"
+        content="Plans a new or existing The Elder Scrolls IV: Oblivion character's leveling progress." />
+    <meta name="keywords"
+        content="TES4, TES 4, TESIV, TES IV, The Elder Scrolls, Elder Scrolls, Oblivion,
+            character, planner, plan, forecast, progress, level, leveling, power level, power leveling" />
+
+    <!-- Load styles (Dijit theme followed by OCP specific) -->
+    <!-- *** Add charset="utf-8" to all <link> tags? -->
+    <!-- *** Want these styles too? http://o.aolcdn.com/dojo/1.3/dojo/resources/dojo.css -->
+    <!--
+    <link rel="stylesheet" type="text/css"
+        href="http://o.aolcdn.com/dojo/1.3/dijit/themes/soria/soria.css" />
+    -->
+    <link rel="stylesheet" type="text/css" href="dojotoolkit/dijit/themes/soria/soria.css" />
+    <link rel="stylesheet" type="text/css" href="styles/ocp.css" />
+
+    <!-- Configure and load the Dojo toolkit -->
+    <script type="text/javascript">//<![CDATA[
+        djConfig = {
+            // Debugging settings
+            isDebug: true,
+            debugAtAllCosts: false,
+            popup: false,
+
+            // Do not automatically parse Dojo markups (we need to load custom widgets first)
+            parseOnLoad: false,
+
+            // Pull in these Dojo modules automatically
+            // *** Be sure to scrub this list to ensure there's nothing unnecessary
+            require: [
+               'dojo.dnd.Source',
+               'dojo.html',
+               'dojo.parser',
+               'dijit.Dialog',
+               'dijit.form.Button',
+               'dijit.form.CheckBox',
+               'dijit.form.HorizontalRule',
+               'dijit.form.HorizontalRuleLabels',
+               'dijit.form.NumberSpinner',
+               'dijit.layout.BorderContainer',
+               'dijit.layout.ContentPane',
+               'dijit.layout.StackContainer',
+               'dijit.layout.TabContainer'
+            ],
+
+            // The base URL for our custom modules is our current directory
+            // Required for XD CDN -- comment out for local Dojo installation
+            //baseUrl: './',
+
+            // Our custom ocp resources are located under our ./scripts/widget directory
+            // (which makes the name of our resources ocp.widget.*)
+            // Use top for local Dojo and bottom for XD CDN installation
+            modulePaths: {
+                'ocp': '../../scripts'
+                //'ocp': 'scripts'
+            },
+
+            // Called after everything on the page and everything in djConfig.require has loaded
+            addOnLoad: function() {
+                //console.log('First addOnLoad initialization...');
+
+                // Since the page's contents (including the ocp*.js files) have been loaded
+                // and executed, the ocp top-level variable/namespace has been created
+                // so we can load the ocp.widget.* resources into it.
+                dojo.require('ocp.widget.LabeledHorizontalSlider');
+                dojo.require('ocp.widget.TitledContentPane');
+
+                // If we are using an XD CDN, the XD loader loads the modules asynchronously
+                // behind the scenes while the dojo.require call returns immediately.
+                // To get notified when the requires have actually been loaded,
+                // do another addOnLoad hook.
+                dojo.addOnLoad(function () {
+                    //console.log('Second addOnLoad initialization...');
+                    // With our custom widgets now defined in the ocp.* namespace,
+                    // parse everything and initialize OCP
+                    dojo.parser.parse();
+                    ocp.initialize();
+                });
+            }
+        };
+    //]]></script>
+    <!--
+    <script type="text/javascript" src="http://o.aolcdn.com/dojo/1.3/dojo/dojo.xd.js"></script>
+    -->
+    <script type="text/javascript" src="dojotoolkit/dojo/dojo.js"></script>
+
+    <!-- Load the OCP scripts in order (no initialization allowed yet) -->
+    <script type="text/javascript" src="scripts/ocp.js"></script>
+    <script type="text/javascript" src="scripts/ocp-input.js"></script>
+    <script type="text/javascript" src="scripts/ocp-race.js"></script>
+    <script type="text/javascript" src="scripts/ocp-birth.js"></script>
+    <script type="text/javascript" src="scripts/ocp-cclass.js"></script>
+    <script type="text/javascript" src="scripts/ocp-existing.js"></script>
+    <script type="text/javascript" src="scripts/ocp-order.js"></script>
+    <script type="text/javascript" src="scripts/ocp-level.js"></script>
+    <script type="text/javascript" src="scripts/ocp-results.js"></script>
+</head>
+
+<body class="soria">
+    <h1 class="title">Oblivion Character Planner</h1>
+    <p class="titleTag">The essential Elder Scrolls IV: Oblivion character planning tool.</p>
+
+    <!-- Notify browsers that didn't run the scripts causing this page to look broken -->
+    <noscript>
+        <h3>
+            The JavaScript scripts required to operate the Oblivion Character Planner
+            could not be run.
+            <br />
+            Either your browser does not support JavaScript or you need to enable it for
+            these pages.
+        </h3>
+    </noscript>
+
+    <!--- *** Add complete usage instructions -->
+    <div id="instructions">
+        OCP is a browser-based tool that can be used to evaluate the potential maximums of any
+        new or existing TES IV: Oblivion character. Complete usage instructions will accompany
+        the full release, but here are some key points for this fully functional beta:
+        <ol>
+            <li>
+                The basic usage is to input your new or existing character's information
+                into the <span class="sectionName">Character Details</span> panel,
+                set the desired attribute order in the
+                <span class="sectionName">Leveling Order</span> panel,
+                and then view the generated results in the
+                <span class="sectionName">Leveling Results</span> panel. Then, by
+                tweaking the character data and/or leveling order, you can use the
+                automatically regenerated results to tune your character and formulate
+                a rough leveling plan.
+            </li>
+            <li>
+                The two most important parts of the <span class="sectionName">Leveling Results</span>
+                are any items with a red background (hover over them for an explanation of the
+                issue) and the Spare Skill Points values. Spare Skill Points can be increased
+                without needing their associated attribute bonus; e.g. gaining the inevitable
+                1-3 Mercantile skill points on levels where Personality is not being raised is
+                safe so long as Personality's Spare Skill Points per Level is 3 or more.
+            </li>
+            <li>
+                When <span class="sectionName">New Character</span> is selected, the values
+                of <span class="sectionName">Existing Character</span> are ignored and
+                vice-versa.
+            </li>
+            <li>
+                OCP does not take into account skills/attributes beyond the default maximum
+                of 100 nor does it account for leveling up by losing major skill points from
+                serving a jail sentence.
+            </li>
+            <li>
+                For details on why OCP is useful in addressing
+                "<a href="http://www.uesp.net/wiki/Oblivion:Leveling#The_Leveling_Problem">The
+                Leveling Problem</a>", the articles at
+                <a href="http://www.uesp.net/">Unofficial Elder Scrolls Pages</a>
+                are highly recommended (especially
+                <a href="http://www.uesp.net/wiki/Oblivion:Leveling">Leveling</a>,
+                <a href="http://www.uesp.net/wiki/Oblivion:Efficient_Leveling">Efficient Leveling</a>,
+                and
+                <a href="http://www.uesp.net/wiki/Oblivion:Character_Creation">Character Creation</a>).
+            </li>
+            <li>
+                FireFox 3.5 is the only officially supported browser in this beta release.
+                All other browsers may or may not work (IE is known not to work).
+            </li>
+            <li>
+                You must allow JavaScript on this server and from o.aolcdn.com.
+                For speed, the AOL CDN provides a "local" copy of the Dojo Toolkit.
+            </li>
+            <li>
+                The current colors/styles are minimal, yet (hopefully) informative.
+                Upon release, the colors/styles will be made much sexier.
+            </li>
+            <li>
+                As an example, you can view the complete new and existing character
+                data (including historical leveling details that is lost upon any
+                recalculation) for the toon I created and leveled using OCP as a guide:
+                <a href="javascript:ocp.setNullisNow();">Nullis</a>.
+            </li>
+        </ol>
+    </div>
+
+    <!-- Character planner -->
+    <div dojoType="dijit.layout.BorderContainer" id="plannerPane" liveSplitters="true">
+
+        <!-- The center panel is for character data input -->
+        <div dojoType="ocp.widget.TitledContentPane" id="plannerInputPane" region="center"
+            title="Character Details" splitter="true">
+
+            <!-- This div allows the stackContainter's doLayout=false to properly size the contents.
+                 Without these, the content is sized assuming the StackController is zero height;
+                 so when the StackController is actually rendered, we get scrollbars in the pane.
+                 *** Useful info in this post?
+                 *** http://www.dojotoolkit.org/forum/dijit-dijit-0-9/dijit-support/
+                 ***     fix-tabs-dolayout-false-look-right -->
+            <div>
+                <!-- Buttons for the stack container -->
+                <span dojoType="dijit.layout.StackController" id="inputStackController"
+                    containerId="inputStackContainer">
+                    <!-- Contents generated by Dojo -->
+                </span>
+
+                <!-- See anonymous div above for why doLayout=false -->
+                <div dojoType="dijit.layout.StackContainer" id="inputStackContainer"
+                    doLayout="false">
+
+                    <!-- Info for a new character -->
+                    <div dojoType="dijit.layout.ContentPane" id="inputNewCharacter"
+                        title="New Character">
+                        <!-- Value and Details contents maintained by OCP -->
+                        <table id="inputTable">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <button dojoType="dijit.form.Button" id="raceDialogButton"
+                                        onclick="dijit.byId('raceDialog').show()">
+                                        Race
+                                    </button>
+                                </td>
+                                <td id="raceValue" class="selectedValue">-none-</td>
+                                <td id="raceSpecials"
+                                    title="Special abilities and weaknesses for this Race">-none-</td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button dojoType="dijit.form.Button" id="birthDialogButton"
+                                        onclick="dijit.byId('birthDialog').show()">
+                                        Birthsign
+                                    </button>
+                                </td>
+                                <td id="birthValue" class="selectedValue">-none-</td>
+                                <td id="birthSpecials"
+                                    title="Special abilities for this Birthsign">-none-</td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button dojoType="dijit.form.Button" id="classDialogButton"
+                                        onclick="dijit.byId('classDialog').show()">
+                                        Class
+                                    </button>
+                                </td>
+                                <td id="classValue" class="selectedValue">-none-</td>
+                                <td id="classDetails">-none-</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Info for an existing character -->
+                    <div dojoType="dijit.layout.ContentPane" id="inputExistingCharacter"
+                        title="Existing Character">
+                        <!-- Value and Details contents maintained by OCP -->
+                        <table>
+                        <tbody>
+                            <tr>
+                                <td class="selectedName">Level:</td>
+                                <td id="levelValue" class="selectedValue">-none-</td>
+                                <td id="levelSliderContainer"></td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button dojoType="dijit.form.Button" id="attrDialogButton"
+                                        onclick="dijit.byId('attrDialog').show()">
+                                        Attributes
+                                    </button>
+                                </td>
+                                <td colspan="2" id="attrValues">-none-</td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <button dojoType="dijit.form.Button" id="skillDialogButton"
+                                        onclick="dijit.byId('skillDialog').show()">
+                                        Skills
+                                    </button>
+                                </td>
+                                <td colspan="2" id="skillValues">-none-</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The right panel is for the order necessary for the leveling process -->
+        <div dojoType="ocp.widget.TitledContentPane" id="plannerOrderPane" region="right"
+            title="Leveling Order">
+            <div id="attrOrderDndSource" class="dndContainer">
+                <!-- Contents inserted by OCP -->
+            </div>
+        </div>
+
+        <!-- The bottom panel displays the results -->
+        <div dojoType="ocp.widget.TitledContentPane" id="plannerResultsPane" region="bottom"
+            title="Leveling Results" splitter="true">
+
+            <!-- This div allows the stackContainter's doLayout=false to properly size the contents.
+                 Without these, the content is sized assuming the StackController is zero height;
+                 so when the StackController is actually rendered, we get scrollbars in the pane.
+                 *** Useful info in this post?
+                 *** http://www.dojotoolkit.org/forum/dijit-dijit-0-9/dijit-support/
+                 ***     fix-tabs-dolayout-false-look-right -->
+            <div>
+                <!-- Buttons for the stack container -->
+                <span dojoType="dijit.layout.StackController" containerId="resultsStackContainer">
+                    <!-- Contents generated by Dojo -->
+                </span>
+
+                <!-- See anonymous div above for why doLayout=false -->
+                <div dojoType="dijit.layout.StackContainer" id="resultsStackContainer" doLayout="false">
+
+                    <!-- Initial stats (contents managed by OCP) -->
+                    <div dojoType="dijit.layout.ContentPane" id="resultsInitialPane"
+                        title="Initial Stats">
+                        <div id="resultsInitialAttrs">
+                            -none-
+                        </div>
+                        <div id="resultsInitialSkills">
+                            -none-
+                        </div>
+                    </div>
+
+                    <!-- Leveling details (contents managed by OCP) -->
+                    <div dojoType="dijit.layout.ContentPane" id="resultsLevelingPane"
+                        title="Leveling Details">
+                        -none-
+                    </div>
+
+                    <!-- Resulting analysis (contents managed by OCP) -->
+                    <div dojoType="dijit.layout.ContentPane" id="resultsAnalysisPane"
+                        title="Analysis">
+                        -none-
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer with about info -->
+    <div id="aboutFooter">
+        <div id="aboutPrograms">
+            Using
+            <a href="http://www.dojotoolkit.org/">Dojo v<span id="dojoVersion">-none-</span></a>
+        </div>
+
+        <div id="aboutAuthors">
+            <!-- *** Put email addy link here? Encoded in some way, perhaps? -->
+            <div>&copy;Copyright 2009 Richard Doll</div>
+            <div>Oblivion Character Planner (OCP) version <span id="ocpVersion">-none-</span></div>
+        </div>
+
+        <div id="aboutImages">
+            <div>
+                All images from
+                <a href="http://www.elderscrolls.com/">Elder Scrolls IV: Oblivion</a>
+            </div>
+            <div>
+                which is owned by
+                <a href="http://www.bethsoft.com/">Bethesda Softworks</a>
+            </div>
+        </div>
+
+        <!-- *** Gah. Probably can never use these.
+             *** W3C FAQ indicates the page/CSS referenced should validate 100% cleanly.
+             *** Between the additional tag attributes (e.g. dojoType) and the
+             *** browser specific styles (e.g. -moz-border-radius), that will never happen.
+        <div id="aboutValidators">
+            <a href="http://validator.w3.org/check?uri=referer">
+                <img src="http://www.w3.org/Icons/valid-xhtml10-blue"
+                    alt="Valid XHTML 1.0 Strict" height="31" width="88" />
+            </a>
+            <a href="http://jigsaw.w3.org/css-validator/check/referer">
+                <img style="border:0;width:88px;height:31px"
+                    src="http://jigsaw.w3.org/css-validator/images/vcss-blue"
+                    alt="Valid CSS!" />
+            </a>
+        </div>
+        -->
+    </div>
+
+
+    <!-- Race selection dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="raceDialog" title="Choose Your Character's Race and Gender"
+        style="display:none">
+        <div dojoType="dijit.layout.TabContainer" id="raceTabContainer">
+
+            <!-- Overview with descriptions and pictures -->
+            <div dojoType="dijit.layout.ContentPane" id="raceOverviewPane" title="Overview">
+                <!-- Contents generated by OCP -->
+            </div>
+
+            <!-- Hard core details -->
+            <div dojoType="dijit.layout.ContentPane" id="raceDetailsPane" title="Detailed Stats">
+                <!-- Contents generated by OCP -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Birthsign selection dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="birthDialog" title="Choose Your Character's Birthsign"
+        style="display:none">
+        <div dojoType="dijit.layout.ContentPane" id="birthContainer">
+            <div id="birthIntro">
+                In Tamriel, persons born under certain constellations are said to be &quot;fortunate
+                in their aspects&quot;. Such persons are often blessed -- or cursed -- with remarkable
+                abilities or weaknesses as a result of the magical conjunctions of celestial influences.
+            </div>
+            <!-- Additional contents generated by OCP -->
+        </div>
+    </div>
+
+    <!-- Class selection dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="classDialog" title="Choose Your Character's Class"
+        style="display:none">
+        <div dojoType="dijit.layout.TabContainer" id="classTabContainer">
+
+            <!-- Overview of predefined classes with descriptions and pictures -->
+            <div dojoType="dijit.layout.ContentPane" id="classOverviewPane" title="Overview">
+                <!-- Contents generated by OCP -->
+            </div>
+
+            <!-- Hard core details of predefined classes -->
+            <div dojoType="dijit.layout.ContentPane" id="classDetailsPane" title="Detailed Stats">
+                <!-- Contents generated by OCP -->
+            </div>
+
+            <!-- Creation of a custom class -->
+            <div dojoType="dijit.layout.ContentPane" id="classCustomPane" title="Custom">
+
+                <!-- Specialization inputs -->
+                <div id="classSpecContainer" class="classCustomInputs">
+                    <!-- Contents generated by OCP -->
+                </div>
+
+                <!-- Favored Attribute inputs -->
+                <div id="classFavAttrsContainer" class="classCustomInputs">
+                    <!-- Contents generated by OCP -->
+                </div>
+
+                <!-- Skill inputs -->
+                <div id="classSkillContainer" class="classCustomInputs">
+                    <!-- Contents generated by OCP -->
+                </div>
+
+                <!-- Footer -->
+                <div class="dialogFooter">
+                    <!-- Buttons -->
+                    <div class="dialogFooterButtons">
+                        <button dojoType="dijit.form.Button" id="classDialogSubmit" type="submit"
+                            title="Accept changes and close dialog">Done</button>
+                        <button dojoType="dijit.form.Button"
+                            onclick="ocp.cclass.classDialog.undo()"
+                            title="Undo changes but keep dialog open">Undo</button>
+                        <button dojoType="dijit.form.Button" type="reset"
+                            onclick="ocp.cclass.classDialog.reset()"
+                            title="Reset everything to initial values">Reset</button>
+                        <button dojoType="dijit.form.Button"
+                            onclick="ocp.cclass.classDialog.cancel()"
+                            title="Abort changes and close dialog">Cancel</button>
+                    </div>
+
+                    <!-- Validity status of inputs -->
+                    <div id="classDialogValidity" class="dialogFooterStatus">
+                        <!-- Contents generated by OCP -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Existing character's attributes dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="attrDialog" title="Existing Character's Attributes"
+        style="display:none">
+        <div dojoType="dijit.layout.ContentPane" id="attrContainer">
+
+            <!-- Core attributes -->
+            <div id="coreAttrContainer">
+                <!-- Contents generated by OCP -->
+            </div>
+
+            <!-- Derived attributes -->
+            <div id="derivedAttrContainer">
+                <!-- Contents generated by OCP -->
+            </div>
+
+            <!-- *** Need to add a note reminding user derived attrs are not checked against
+                 *** core attrs in any way; e.g. could have str=100 but enc=150 (should be 500). -->
+
+            <!-- Buttons to manage the dialog -->
+            <div class="dialogFooter">
+                <div class="dialogFooterButtons">
+                    <button dojoType="dijit.form.Button" type="submit"
+                        title="Accept changes and close dialog">Done</button>
+                    <button dojoType="dijit.form.Button" onclick="ocp.existing.attrDialog.undo()"
+                        title="Undo changes but keep dialog open">Undo</button>
+                    <button dojoType="dijit.form.Button" onclick="ocp.existing.attrDialog.reset()"
+                        title="Reset everything to initial values">Reset</button>
+                    <button dojoType="dijit.form.Button" onclick="ocp.existing.attrDialog.cancel()"
+                        title="Abort changes and close dialog">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Existing character's skills dialog (start not displayed in case scripts are off) -->
+    <div dojoType="dijit.Dialog" id="skillDialog" title="Existing Character's Skills"
+        style="display:none">
+        <div dojoType="dijit.layout.ContentPane" id="skillContainer">
+
+            <!-- Skills -->
+            <div id="skillInputsContainer">
+                <!-- Contents generated by OCP -->
+            </div>
+
+            <!-- Footer -->
+            <div class="dialogFooter">
+                <!-- Buttons -->
+                <div class="dialogFooterButtons">
+                    <button dojoType="dijit.form.Button" id="skillDialogSubmit" type="submit"
+                        title="Accept changes and close dialog">Done</button>
+                    <button dojoType="dijit.form.Button"
+                        onclick="ocp.existing.skillDialog.undo()"
+                        title="Undo changes but keep dialog open">Undo</button>
+                    <button dojoType="dijit.form.Button" type="reset"
+                        onclick="ocp.existing.skillDialog.reset()"
+                        title="Reset everything to initial values">Reset</button>
+                    <button dojoType="dijit.form.Button"
+                        onclick="ocp.existing.skillDialog.cancel()"
+                        title="Abort changes and close dialog">Cancel</button>
+                </div>
+
+                <!-- Validity status of inputs -->
+                <div id="skillDialogValidity" class="dialogFooterStatus">
+                    <!-- Contents generated by OCP -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

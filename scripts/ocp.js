@@ -1,15 +1,27 @@
 /*
+** (C) Copyright 2009 by Richard Doll
+**
+** License:
+** You are free to use, copy, or modify this software provided it remains free
+** of charge for all users, the source remains open and unobfuscated, and the
+** author, copyright, license, and warranty information remains intact and
+** clearly visible.
+**
+** Warranty:
+** All content is provided as-is. The user assumes all liability for any
+** direct or indirect damages from usage.
+*/
+
+/*
 ** ocp.js
 **
 ** Main controller, overall namespace for everything, and cool Robocop reference :P.
-**
-** *** Nice set of images (and nice credit page) at http://www.elderstats.com/about/?p=credits
 */
 
 var ocp = {
 
     // Public: The version of the entire OCP package
-    VERSION: '0.5.0',
+    VERSION: '0.6.0',
 
     // Public: The max level you can obtain via normal means
     //         (e.g. if you go to prison and major attributes decay, you could level higher)
@@ -233,7 +245,7 @@ var ocp = {
 
     // Private: Initialize the version numbers in the main page's about section
     _initializeVersions: function () {
-        dojo.place('<span>' + this.VERSION + '</span>', 'ocpVersion', 'only');
+        dojo.place('<span>' + this.VERSION + ' beta</span>', 'ocpVersion', 'only');
         dojo.place('<span>' + dojo.version.toString() + '</span>', 'dojoVersion', 'only');
     },
 
@@ -295,8 +307,8 @@ var ocp = {
     },
 
 
-    // *** Temp for my toon
     // Public: Set starting details for my toon Nullis
+    // Note:   This isn't properly commented or implemented since it's a just for fun hack
     setNullisStart: function() {
         console.log('Setting starting data for Nullis...');
 
@@ -318,14 +330,13 @@ var ocp = {
         //ocp.order._attrs = ['agi', 'spe', 'end', 'str', 'int', 'wil', 'per', 'luc'];
         ocp.order._initializeAttrDnd();
 
-        ocp.input._stackContainer.selectChild('inputNewCharacter');
-
+        ocp.input.isNewChar = true;
         ocp.notifyChanged();
     },
 
 
-    // *** Temp for my toon
     // Public: Set existing details for my toon Nullis
+    // Note:   This isn't properly commented or implemented since it's a just for fun hack
     setNullisNow: function() {
         // Set starting values to seed totals
         this.setNullisStart();
@@ -397,17 +408,23 @@ var ocp = {
 
         totals[10] = nextLevel(totals[totals.length - 1], {
             agi:5, spe:5, end:5, hea:18, mag:0, fat:10, enc:0,
-            blu:-1, mar:7, sec:3, sne:12, acr:4, ath:3, lig:3, arm:10, mer:3, spc:3
+            bla:1, blu:-1, mar:7, sec:3, sne:12, acr:4, ath:3, lig:3, arm:10, mer:3, spc:3
         });
-        wasted[10] = { blu:'Skill reduced from being imprisoned.', mer:'', spc:'' };
+        wasted[10] = { bla:1, blu:'Skill reduced from being imprisoned.', mer:'', spc:'' };
+
+        totals[11] = nextLevel(totals[totals.length - 1], {
+            spe:5, end:5, luc:1, hea:18, mag:0, fat:5, enc:0,
+            bla:3, res:1, mar:8, sec:11, sne:20, acr:7, ath:2, lig:5, arm:8, blo:2, mer:4, spc:2
+        });
+        wasted[11] = { bla:'', res:'', mer:'', spc:'' };
 
         var maxLevel = totals.length - 1;
 
-        for (var lvl = 1; lvl <= maxLevel; lvl++) {
-            for (var skill in wasted[lvl]) {
+        for (var level = 1; level <= maxLevel; level++) {
+            for (var skill in wasted[level]) {
                 var attr = ocp.skills[skill].attr;
-                if (wasted[lvl][skill].length < 1) {
-                    wasted[lvl][skill] = 'Skill ups were wasted because ' +
+                if (wasted[level][skill].length < 1) {
+                    wasted[level][skill] = 'Skill ups were wasted because ' +
                         ocp.coreAttrs[attr].name + ' was not leveled.';
                 }
             }
@@ -429,7 +446,7 @@ var ocp = {
             ocp.existing.skillDialog.undo();
         }
 
-        ocp.input._stackContainer.selectChild('inputExistingCharacter');
+        ocp.input.isNewChar = false;
         ocp.notifyChanged();
 
         // Hack the leveling results to show the "historic" info for past levels

@@ -48,7 +48,7 @@ ocpValidateVersions || return 1
 
 # Define the files for the project
 export OCP_SRC="\
-    ocp.html \
+    index.html \
     styles/ocp.css \
     scripts/ocp.js \
     scripts/ocp-input.js \
@@ -68,7 +68,7 @@ alias nedit-all="nedit-nc -g 111x40 $OCP_SRC"
 
 
 # Backup root directory
-export OCP_BACKUP="$OCP_PROJ/backup"
+export OCP_BACKUP="$OCP_PROJ/backups"
 function cdback { cd "$OCP_BACKUP${@:+/$@}" ;}
 
 # Backup the current version
@@ -153,24 +153,86 @@ function cleandir {
 alias cleancwd='cleandir .'
 alias cleansrc='cleandir "$OCP_ROOT"'
 
-# Count lines in source text files that contain something alpha-numeric
-function countdir {
+# Count line mertics for source text files
+function countlines {
+  perl -e '
+    sub fmt (@) { printf "%7s %7s %7s %9s %7s  %s\n", @_; }
+
+    $dototal = ($#ARGV > 0);
+    fmt("AlNum", "NonEmp", "Lines", "Chars", "MaxLn", "File");
+
+    while (<>) {
+      $data{nonblank}++ if /\S/;
+      $data{alnum}++ if /\w/;
+      $len = length $_;
+      $data{chars} += $len;
+      $data{maxline} = $len if $len > $data{maxline};
+
+      if (eof) {
+        fmt($data{alnum}, $data{nonblank}, $., $data{chars}, $data{maxline},
+          $ARGV);
+        $total{lines} += $.;
+        $total{nonblank} += $data{nonblank};
+        $total{alnum} += $data{alnum};
+        $total{chars} += $data{chars};
+        $total{maxline} = $data{maxline} if $data{maxline} > $total{maxline};
+        close ARGV;
+        undef %data;
+      }
+    }
+
+    fmt($total{alnum}, $total{nonblank}, $total{lines}, $total{chars},
+      $total{maxline}, "Total") if $dototal;
+    ' ${@:+"$@"}
+}
+alias countcwd='countlines `find_text_files .`'
+alias countsrc='countlines $OCP_SRC'
+
+function oldcountdir {
     find_text_files "${@:-.}" | \
         grep -v setup.bash | \
         grep -v '\.txt$' | \
-        xargs grep -c '[:alnum:]' | \
-        awk -F: '{ tot += $2; printf "%5d\t%s\n", $2, $1 } \
-            END { printf "%5d\t%s\n", tot, "Total AlphaNum Lines" }'
+        perl -ne '
+            sub fmt (@) { printf "%7s %7s %9s %7s  %s\n", @_; }
+
+            BEGIN { fmt("AlNum", "Lines", "Chars", "MaxLn", "File"); }
+
+            chomp $_;
+
+            $alnum = `grep -c "[[:alnum:]]" "$_"` or die;
+            chomp $alnum;
+
+            $wc = `wc --lines --chars --max-line-length "$_"` or die;
+            $wc =~ s/^\s+//;
+            my($lines, $chars, $maxline) = split(/\s+/, $wc);
+
+            fmt($alnum, $lines, $chars, $maxline, $_);
+
+            $talnum += $alnum;
+            $tlines += $lines;
+            $tchars += $chars;
+            $tmaxline = $maxline if $maxline > $tmaxline;
+
+            END { fmt($talnum, $tlines, $tchars, $tmaxline, "Total"); }
+        '
 }
-alias countcwd='countdir .'
-alias countsrc='countdir "$OCP_ROOT"'
+#function oldcountdir {
+#    find_text_files "${@:-.}" | \
+#        grep -v setup.bash | \
+#        grep -v '\.txt$' | \
+#        xargs grep -c '[:alnum:]' | \
+#        awk -F: '{ tot += $2; printf "%5d\t%s\n", $2, $1 } \
+#            END { printf "%5d\t%s\n", tot, "Total AlphaNum Lines" }'
+#}
+alias oldcountcwd='oldcountdir .'
+alias oldcountsrc='oldcountdir "$OCP_ROOT"'
 
 # Count with plain wc
 function wcdir {
     find_text_files "${@:-.}" | \
         grep -v setup.bash | \
         grep -v '\.txt$' | \
-        xargs wc --chars --max-line-length --lines
+        xargs wc --lines --chars --max-line-length
 }
 alias wccwd='wcdir .'
 alias wcsrc='wcdir "$OCP_ROOT"'
@@ -186,7 +248,7 @@ function diffdir {
     else
         _dir1="$1" ; shift
         _dir2="$1" ; shift
-        diff -r "$@" "$_dir1" "$_dir2"
+        diff -r ${@:+"$@"} "$_dir1" "$_dir2"
     fi
 }
 alias diffcwd='diffdir "$OCP_ROOT" .'
@@ -196,7 +258,7 @@ function diffver {
         return 1
     else
         _ver="$1" ; shift
-        diff -r "$@" "$OCP_ROOT" "$OCP_PROJ/$_ver"
+        diff -r ${@:+"$@"} "$OCP_PROJ/$_ver" "$OCP_ROOT"
     fi
 }
 
